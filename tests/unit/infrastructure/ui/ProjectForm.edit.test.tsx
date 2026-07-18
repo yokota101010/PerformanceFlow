@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ProjectForm } from '../../../../src/infrastructure/ui/ProjectForm';
 import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/RepositoryRegistry';
+import { InMemoryProjectRepository } from '../../../../src/infrastructure/persistence/InMemoryProjectRepository';
 import { Project } from '../../../../src/domain/models';
-import React from 'react';
 
 describe('ProjectForm (編集モード)', () => {
   const mockOnSuccess = vi.fn();
@@ -13,6 +13,7 @@ describe('ProjectForm (編集モード)', () => {
 
   beforeEach(async () => {
     RepositoryRegistry.clear();
+    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
     mockOnSuccess.mockClear();
     mockOnCancel.mockClear();
 
@@ -68,7 +69,6 @@ describe('ProjectForm (編集モード)', () => {
     const submitBtn = screen.getByRole('button', { name: '保存' });
 
     await userEvent.clear(input);
-    // すでにシードとして登録されているPJ001の名前を入力
     await userEvent.type(input, '次世代基幹システム開発プロジェクト');
     await userEvent.click(submitBtn);
 

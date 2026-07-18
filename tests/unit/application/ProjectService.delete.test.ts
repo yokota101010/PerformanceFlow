@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ProjectService } from '../../../src/application/services/ProjectService';
 import { RepositoryRegistry } from '../../../src/infrastructure/persistence/RepositoryRegistry';
+import { InMemoryProjectRepository } from '../../../src/infrastructure/persistence/InMemoryProjectRepository';
 import { Project } from '../../../src/domain/models';
 
 describe('ProjectService.deleteProject (物理削除)', () => {
@@ -8,9 +9,9 @@ describe('ProjectService.deleteProject (物理削除)', () => {
 
   beforeEach(async () => {
     RepositoryRegistry.clear();
+    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
     service = new ProjectService();
 
-    // 削除テスト用の追加プロジェクト (PJ002) を準備
     const repo = RepositoryRegistry.getProjectRepository();
     await repo.save(new Project('PJ002', '新規製品開発プロジェクト'));
   });
@@ -19,7 +20,6 @@ describe('ProjectService.deleteProject (物理削除)', () => {
     await service.deleteProject('PJ002');
 
     const projects = await service.getProjects();
-    // シードの PJ001 のみ残っていること
     expect(projects).toHaveLength(1);
     expect(projects[0].id).toBe('PJ001');
   });
@@ -28,7 +28,6 @@ describe('ProjectService.deleteProject (物理削除)', () => {
     await expect(service.deleteProject('PJ001'))
       .rejects.toThrow('このプロジェクトには案件が登録されているため削除できません。');
 
-    // 削除されていないことを確認
     const projects = await service.getProjects();
     expect(projects).toHaveLength(2);
   });

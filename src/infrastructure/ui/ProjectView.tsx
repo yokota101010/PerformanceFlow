@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Project } from '../../domain/models';
 import { ProjectService } from '../../application/services/ProjectService';
 import { ProjectUseCase } from '../../application/usecases';

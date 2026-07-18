@@ -3,13 +3,14 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ProjectForm } from '../../../../src/infrastructure/ui/ProjectForm';
 import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/RepositoryRegistry';
-import React from 'react';
+import { InMemoryProjectRepository } from '../../../../src/infrastructure/persistence/InMemoryProjectRepository';
 
 describe('ProjectForm (登録フォーム)', () => {
   const mockOnSuccess = vi.fn();
 
   beforeEach(() => {
     RepositoryRegistry.clear();
+    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
     mockOnSuccess.mockClear();
   });
 
@@ -22,7 +23,6 @@ describe('ProjectForm (登録フォーム)', () => {
     await userEvent.type(input, '新規登録テストプロジェクト');
     await userEvent.click(submitBtn);
 
-    // 成功時、エラーテキストがないこと
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(mockOnSuccess).toHaveBeenCalledTimes(1);
   });
@@ -44,7 +44,6 @@ describe('ProjectForm (登録フォーム)', () => {
     const input = screen.getByLabelText('プロジェクト名');
     const submitBtn = screen.getByRole('button', { name: '登録' });
 
-    // 既に存在するシード名を入力
     await userEvent.type(input, '次世代基幹システム開発プロジェクト');
     await userEvent.click(submitBtn);
 

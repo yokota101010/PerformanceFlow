@@ -1,4 +1,3 @@
-import React from 'react';
 import { ProjectView } from './infrastructure/ui/ProjectView';
 
 /**

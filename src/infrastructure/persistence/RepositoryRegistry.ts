@@ -1,5 +1,4 @@
 import { ProjectRepository } from '../../domain/repositories';
-import { InMemoryProjectRepository } from './InMemoryProjectRepository';
 import { LocalStorageProjectRepository } from './LocalStorageProjectRepository';
 
 /**
@@ -15,21 +14,12 @@ export class RepositoryRegistry {
 
   /**
    * プロジェクトリポジトリを取得する。
-   * テスト環境 (Vitest) では InMemoryProjectRepository を、
-   * ブラウザ本番環境では LocalStorageProjectRepository を動的に切り替えて返却する (T035)。
+   * デフォルトではブラウザ用の LocalStorageProjectRepository を返却する。
+   * テスト時には明示的に registerProjectRepository() を用いて InMemoryProjectRepository 等を設定する。
    */
   static getProjectRepository(): ProjectRepository {
     if (!this.projectRepository) {
-      // Vitest 環境であるかを判定
-      const isTestEnv = 
-        typeof process !== 'undefined' && 
-        (process.env.VITEST === 'true' || process.env.NODE_ENV === 'test');
-
-      if (isTestEnv) {
-        this.projectRepository = new InMemoryProjectRepository();
-      } else {
-        this.projectRepository = new LocalStorageProjectRepository();
-      }
+      this.projectRepository = new LocalStorageProjectRepository();
     }
     return this.projectRepository;
   }

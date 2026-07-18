@@ -1,2 +1,2 @@
-export * from './types';
-export * from './Project';
+export type { Project as IProject } from './types';
+export { Project } from './Project';

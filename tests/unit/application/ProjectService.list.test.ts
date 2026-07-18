@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ProjectService } from '../../../src/application/services/ProjectService';
 import { RepositoryRegistry } from '../../../src/infrastructure/persistence/RepositoryRegistry';
+import { InMemoryProjectRepository } from '../../../src/infrastructure/persistence/InMemoryProjectRepository';
 import { Project } from '../../../src/domain/models';
 
 describe('ProjectService.getProjects (一覧取得)', () => {
@@ -8,6 +9,7 @@ describe('ProjectService.getProjects (一覧取得)', () => {
 
   beforeEach(() => {
     RepositoryRegistry.clear();
+    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
     service = new ProjectService();
   });
 
@@ -21,11 +23,9 @@ describe('ProjectService.getProjects (一覧取得)', () => {
     });
   });
 
-  it('複数登録されている場合、プロジェクトIDの昇順で取得できること', async () => {
-    // 既存リポジトリのインスタンスを取得して直接データを準備
+  it('複数登録されている場合、プロジェクトID of 昇順で取得できること', async () => {
     const repo = RepositoryRegistry.getProjectRepository();
     
-    // シードに加えて PJ003 と PJ002 を登録（順序をバラバラにする）
     await repo.save(new Project('PJ003', 'プロジェクトC'));
     await repo.save(new Project('PJ002', 'プロジェクトB'));
 
