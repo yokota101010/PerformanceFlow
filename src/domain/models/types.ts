@@ -25,3 +25,14 @@ export interface Partner {
   readonly id: string;            // 発注先ID (形式: BPnnn, 主キー)
   readonly name: string;          // 発注先名
 }
+
+/**
+ * 要員集約エンティティのデータ定義。
+ * すべてのプロパティに readonly を付与する。
+ */
+export interface Staff {
+  readonly id: string;            // 要員ID (形式: MEMnnn, 主キー)
+  readonly partnerId: string;     // 所属会社ID (発注先.発注先ID)
+  readonly name: string;          // 氏名
+  readonly costPerMonth: number;  // 単価 (月額)
+}

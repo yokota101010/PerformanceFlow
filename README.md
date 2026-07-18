@@ -1,6 +1,6 @@
-# PerformanceFlow - プロジェクト＆社員＆発注先マスタ管理 (F01 / F02 / F03)
+# PerformanceFlow - プロジェクト＆社員＆発注先＆要員マスタ管理 (F01 / F02 / F03 / F04)
 
-本プロジェクトは、システム内のプロジェクト情報を管理する「F01 プロジェクトマスタ管理」機能、稼働メンバーの単価等を管理する「F02 社員マスタ管理」機能、および取引先のパートナー企業を管理する「F03 発注先マスタ管理」機能を実装したWebフロントエンドSPAアプリケーションです。
+本プロジェクトは、システム内のプロジェクト情報を管理する「F01 プロジェクトマスタ管理」機能、稼働メンバーの単価等を管理する「F02 社員マスタ管理」機能、取引先のパートナー企業を管理する「F03 発注先マスタ管理」機能、およびパートナー企業に属するメンバー情報を管理する「F04 要員マスタ管理」機能を実装したWebフロントエンドSPAアプリケーションです。
 
 ---
 
@@ -21,6 +21,12 @@
   * **一意性バリデーション**: 同一の発注先名（取引先名）での重複登録および更新を重複エラーとしてブロック。
   * **削除制限**: 対象の発注先IDが、所属する「要員」または発注の「注文実績」のいずれかから参照されている限り、一律で削除をブロックして警告を表示。
   * **初期シードデータの自動投入**: 初回起動時、LocalStorageが空の場合に「Ａソフトウェア」および「Ｂエンジニアリング」を自動ロード。
+* **要員マスタ管理 (F04)**:
+  * **ID自動採番 (`MEMnnn`)**: 最大値に `+1` したIDを自動生成（欠番再利用なし）。最大 `MEM999` までサポート。
+  * **同姓同名の許可**: 氏名重複での新規・更新を許容し、要員IDによって一意に識別。
+  * **所属会社IDの存在検証**: 登録および更新時、指定された所属会社（発注先ID）が発注先マスタに登録されているかを厳密に検証し、存在しない場合はエラーをスロー。所属会社なし（空欄）は拒否。
+  * **削除制限**: 対象の要員IDが `注文明細` (注文実績) または `月別要員工数サマリ` (工数実績サマリ) のいずれかから参照されている限り、一律で削除をブロックして警告を表示。
+  * **初期シードデータの自動投入**: 初回起動時、LocalStorageが空の場合に坂本龍馬、高杉晋作、西郷隆盛、勝海舟の4名を自動ロード。
 * **入力値トリミング**: 名称の保存・バリデーションの直前に、前後のスペース（全角・半角）を自動的に除去。
 * **グラスモルフィズムUI**: 美しいダークテーマに調和する、半透明でモダンなカード型UIデザイン。ヘッダーのナビゲーションタブで画面を切り替えて検証可能。
 
@@ -32,7 +38,7 @@
 * **ビルドツール**: Vite
 * **テストツール**: Vitest + React Testing Library + jsdom
 * **コード品質**: ESLint + Prettier
-* **アセットインライン化**: `vite-plugin-singlefile`（単一のHTML化）
+* **アassetインライン化**: `vite-plugin-singlefile`（単一のHTML化）
 
 ---
 
@@ -61,7 +67,7 @@ npm run dev
 ```bash
 npm run test
 ```
-Vitest によるユニットテストおよびUI結合テスト（計69件）を一括で実行します。
+Vitest によるユニットテストおよびUI結合テスト（計96件）を一括で実行します。
 
 ---
 
@@ -69,12 +75,12 @@ Vitest によるユニットテストおよびUI結合テスト（計69件）を
 ```text
 src/
 ├── domain/
-│   ├── models/                  # エンティティ定義 (Project.ts, Employee.ts, Partner.ts)
-│   └── repositories/            # リポジトリ契約 (ProjectRepository.ts, EmployeeRepository.ts, PartnerRepository.ts)
+│   ├── models/                  # エンティティ定義 (Project.ts, Employee.ts, Partner.ts, Staff.ts)
+│   └── repositories/            # リポジトリ契約 (ProjectRepository.ts, EmployeeRepository.ts, PartnerRepository.ts, StaffRepository.ts, etc.)
 ├── application/
 │   ├── usecases/                # ユースケース抽象定義 (DTO含む)
-│   └── services/                # 具象ユースケースロジック (ProjectService.ts, EmployeeService.ts, PartnerService.ts)
+│   └── services/                # 具象ユースケースロジック (ProjectService.ts, EmployeeService.ts, PartnerService.ts, StaffService.ts)
 └── infrastructure/
     ├── persistence/             # LocalStorage & インメモリリポジトリ、レジストリ
-    └── ui/                      # React コンポーネント (ProjectView, EmployeeView, PartnerView)
+    └── ui/                      # React コンポーネント (ProjectView, EmployeeView, PartnerView, StaffView)
 ```

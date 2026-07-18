@@ -4,3 +4,6 @@ export * from './EmployeeWorkTimeRepository';
 export * from './PartnerRepository';
 export * from './PartnerStaffRepository';
 export * from './PartnerOrderRepository';
+export * from './StaffRepository';
+export * from './StaffOrderDetailRepository';
+export * from './StaffMonthlySummaryRepository';

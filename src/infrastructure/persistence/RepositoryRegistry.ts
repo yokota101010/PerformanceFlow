@@ -5,6 +5,9 @@ import {
   PartnerRepository,
   PartnerStaffRepository,
   PartnerOrderRepository,
+  StaffRepository,
+  StaffOrderDetailRepository,
+  StaffMonthlySummaryRepository,
 } from '../../domain/repositories';
 import { LocalStorageProjectRepository } from './LocalStorageProjectRepository';
 import { LocalStorageEmployeeRepository } from './LocalStorageEmployeeRepository';
@@ -13,6 +16,10 @@ import { InMemoryPartnerRepository } from './InMemoryPartnerRepository';
 import { InMemoryPartnerStaffRepository } from './InMemoryPartnerStaffRepository';
 import { InMemoryPartnerOrderRepository } from './InMemoryPartnerOrderRepository';
 import { LocalStoragePartnerRepository } from './LocalStoragePartnerRepository';
+import { InMemoryStaffRepository } from './InMemoryStaffRepository';
+import { LocalStorageStaffRepository } from './LocalStorageStaffRepository';
+import { InMemoryStaffOrderDetailRepository } from './InMemoryStaffOrderDetailRepository';
+import { InMemoryStaffMonthlySummaryRepository } from './InMemoryStaffMonthlySummaryRepository';
 
 /**
  * リポジトリの具象インスタンスを一元管理するレジストリクラス。
@@ -26,6 +33,10 @@ export class RepositoryRegistry {
   private static partnerRepository: PartnerRepository | null = null;
   private static partnerStaffRepository: PartnerStaffRepository | null = null;
   private static partnerOrderRepository: PartnerOrderRepository | null = null;
+
+  private static staffRepository: StaffRepository | null = null;
+  private static staffOrderDetailRepository: StaffOrderDetailRepository | null = null;
+  private static staffMonthlySummaryRepository: StaffMonthlySummaryRepository | null = null;
 
   private constructor() {
     // インスタンス化を禁止
@@ -41,9 +52,6 @@ export class RepositoryRegistry {
     return this.projectRepository;
   }
 
-  /**
-   * プロジェクトリポジトリを登録する（テスト用モック注入）。
-   */
   static registerProjectRepository(repository: ProjectRepository): void {
     this.projectRepository = repository;
   }
@@ -58,9 +66,6 @@ export class RepositoryRegistry {
     return this.employeeRepository;
   }
 
-  /**
-   * 社員リポジトリを登録する（テスト用モック注入）。
-   */
   static registerEmployeeRepository(repository: EmployeeRepository): void {
     this.employeeRepository = repository;
   }
@@ -75,16 +80,12 @@ export class RepositoryRegistry {
     return this.employeeWorkTimeRepository;
   }
 
-  /**
-   * 社員工数リポジトリを登録する（テスト用モック注入）。
-   */
   static registerEmployeeWorkTimeRepository(repository: EmployeeWorkTimeRepository): void {
     this.employeeWorkTimeRepository = repository;
   }
 
   /**
    * 発注先リポジトリを取得する。
-   * テスト環境 (vitest) の場合は InMemory を、ブラウザ環境の場合は LocalStorage をデフォルトとする (T037)。
    */
   static getPartnerRepository(): PartnerRepository {
     if (!this.partnerRepository) {
@@ -98,9 +99,6 @@ export class RepositoryRegistry {
     return this.partnerRepository;
   }
 
-  /**
-   * 発注先リポジトリを登録する（テスト用モック注入）。
-   */
   static registerPartnerRepository(repository: PartnerRepository): void {
     this.partnerRepository = repository;
   }
@@ -115,9 +113,6 @@ export class RepositoryRegistry {
     return this.partnerStaffRepository;
   }
 
-  /**
-   * 【仮】要員所属リポジトリを登録する（テスト用モック注入）。
-   */
   static registerPartnerStaffRepository(repository: PartnerStaffRepository): void {
     this.partnerStaffRepository = repository;
   }
@@ -132,11 +127,56 @@ export class RepositoryRegistry {
     return this.partnerOrderRepository;
   }
 
-  /**
-   * 【仮】発注実績リポジトリを登録する（テスト用モック注入）。
-   */
   static registerPartnerOrderRepository(repository: PartnerOrderRepository): void {
     this.partnerOrderRepository = repository;
+  }
+
+  /**
+   * 要員リポジトリを取得する。
+   * テスト環境 (Vitest) ではインメモリ、ブラウザ環境では LocalStorage 実装を返却する。
+   */
+  static getStaffRepository(): StaffRepository {
+    if (!this.staffRepository) {
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.staffRepository = new InMemoryStaffRepository();
+      } else {
+        this.staffRepository = new LocalStorageStaffRepository();
+      }
+    }
+    return this.staffRepository;
+  }
+
+  static registerStaffRepository(repository: StaffRepository): void {
+    this.staffRepository = repository;
+  }
+
+  /**
+   * 【仮】注文明細リポジトリを取得する。
+   */
+  static getStaffOrderDetailRepository(): StaffOrderDetailRepository {
+    if (!this.staffOrderDetailRepository) {
+      this.staffOrderDetailRepository = new InMemoryStaffOrderDetailRepository();
+    }
+    return this.staffOrderDetailRepository;
+  }
+
+  static registerStaffOrderDetailRepository(repository: StaffOrderDetailRepository): void {
+    this.staffOrderDetailRepository = repository;
+  }
+
+  /**
+   * 【仮】工数サマリリポジトリを取得する。
+   */
+  static getStaffMonthlySummaryRepository(): StaffMonthlySummaryRepository {
+    if (!this.staffMonthlySummaryRepository) {
+      this.staffMonthlySummaryRepository = new InMemoryStaffMonthlySummaryRepository();
+    }
+    return this.staffMonthlySummaryRepository;
+  }
+
+  static registerStaffMonthlySummaryRepository(repository: StaffMonthlySummaryRepository): void {
+    this.staffMonthlySummaryRepository = repository;
   }
 
   /**
@@ -149,5 +189,8 @@ export class RepositoryRegistry {
     this.partnerRepository = null;
     this.partnerStaffRepository = null;
     this.partnerOrderRepository = null;
+    this.staffRepository = null;
+    this.staffOrderDetailRepository = null;
+    this.staffMonthlySummaryRepository = null;
   }
 }

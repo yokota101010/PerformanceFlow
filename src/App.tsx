@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { ProjectView } from './infrastructure/ui/ProjectView';
 import { EmployeeView } from './infrastructure/ui/EmployeeView';
 import { PartnerView } from './infrastructure/ui/PartnerView';
+import { StaffView } from './infrastructure/ui/StaffView';
 
-type Tab = 'projects' | 'employees' | 'partners';
+type Tab = 'projects' | 'employees' | 'partners' | 'staffs';
 
 /**
  * アプリケーションのメインコンポーネント。
@@ -78,6 +79,22 @@ function App() {
           >
             発注先マスタ
           </button>
+          <button
+            onClick={() => setActiveTab('staffs')}
+            style={{
+              padding: '8px 16px',
+              fontSize: '14px',
+              fontWeight: 500,
+              backgroundColor: activeTab === 'staffs' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+              color: activeTab === 'staffs' ? '#3b82f6' : '#94a3b8',
+              border: activeTab === 'staffs' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            要員マスタ
+          </button>
         </nav>
 
         <div style={{ fontSize: '14px', color: '#64748b' }}>v0.1.0</div>
@@ -87,6 +104,7 @@ function App() {
         {activeTab === 'projects' && <ProjectView />}
         {activeTab === 'employees' && <EmployeeView />}
         {activeTab === 'partners' && <PartnerView />}
+        {activeTab === 'staffs' && <StaffView />}
       </main>
     </div>
   );
