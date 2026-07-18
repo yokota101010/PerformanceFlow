@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { ProjectView } from './infrastructure/ui/ProjectView';
 import { EmployeeView } from './infrastructure/ui/EmployeeView';
+import { PartnerView } from './infrastructure/ui/PartnerView';
 
-type Tab = 'projects' | 'employees';
+type Tab = 'projects' | 'employees' | 'partners';
 
 /**
  * アプリケーションのメインコンポーネント。
- * プロジェクトマスタと社員マスタの画面切り替えナビゲーションを管理する。
+ * 各マスタ管理画面の切り替えナビゲーションを管理する。
  */
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('projects');
@@ -61,13 +62,31 @@ function App() {
           >
             社員マスタ
           </button>
+          <button
+            onClick={() => setActiveTab('partners')}
+            style={{
+              padding: '8px 16px',
+              fontSize: '14px',
+              fontWeight: 500,
+              backgroundColor: activeTab === 'partners' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+              color: activeTab === 'partners' ? '#3b82f6' : '#94a3b8',
+              border: activeTab === 'partners' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            発注先マスタ
+          </button>
         </nav>
 
         <div style={{ fontSize: '14px', color: '#64748b' }}>v0.1.0</div>
       </header>
       
       <main style={{ flex: 1, padding: '40px 20px' }}>
-        {activeTab === 'projects' ? <ProjectView /> : <EmployeeView />}
+        {activeTab === 'projects' && <ProjectView />}
+        {activeTab === 'employees' && <EmployeeView />}
+        {activeTab === 'partners' && <PartnerView />}
       </main>
     </div>
   );

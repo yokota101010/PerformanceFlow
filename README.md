@@ -1,6 +1,6 @@
-# PerformanceFlow - プロジェクト＆社員マスタ管理 (F01 / F02)
+# PerformanceFlow - プロジェクト＆社員＆発注先マスタ管理 (F01 / F02 / F03)
 
-本プロジェクトは、システム内のプロジェクト情報を管理する「F01 プロジェクトマスタ管理」機能、および稼働メンバーの単価等を管理する「F02 社員マスタ管理」機能を実装したWebフロントエンドSPAアプリケーションです。
+本プロジェクトは、システム内のプロジェクト情報を管理する「F01 プロジェクトマスタ管理」機能、稼働メンバーの単価等を管理する「F02 社員マスタ管理」機能、および取引先のパートナー企業を管理する「F03 発注先マスタ管理」機能を実装したWebフロントエンドSPAアプリケーションです。
 
 ---
 
@@ -16,6 +16,11 @@
   * **同姓同名の許可**: 氏名重複での新規・更新を許容し、社員IDによって一意性を識別。
   * **単価の遡及再計算**: 社員単価の更新時、過去の工数実績レコード（他集約）に紐づく「加工費」に対しても、ロード時に動的に最新の単価を適用して遡及再計算（結果整合性・プル型オンデマンド）。
   * **削除制限**: 対象社員を参照する工数データが存在する限り、作業時間が `0` であっても一律で削除をブロック。
+* **発注先マスタ管理 (F03)**:
+  * **ID自動採番 (`BPnnn`)**: 最大値に `+1` したIDを自動生成（欠番再利用なし）。最大 `BP999` までサポート。
+  * **一意性バリデーション**: 同一の発注先名（取引先名）での重複登録および更新を重複エラーとしてブロック。
+  * **削除制限**: 対象の発注先IDが、所属する「要員」または発注の「注文実績」のいずれかから参照されている限り、一律で削除をブロックして警告を表示。
+  * **初期シードデータの自動投入**: 初回起動時、LocalStorageが空の場合に「Ａソフトウェア」および「Ｂエンジニアリング」を自動ロード。
 * **入力値トリミング**: 名称の保存・バリデーションの直前に、前後のスペース（全角・半角）を自動的に除去。
 * **グラスモルフィズムUI**: 美しいダークテーマに調和する、半透明でモダンなカード型UIデザイン。ヘッダーのナビゲーションタブで画面を切り替えて検証可能。
 
@@ -56,7 +61,7 @@ npm run dev
 ```bash
 npm run test
 ```
-Vitest によるユニットテストおよびUI結合テスト（計50件）を一括で実行します。
+Vitest によるユニットテストおよびUI結合テスト（計69件）を一括で実行します。
 
 ---
 
@@ -64,12 +69,12 @@ Vitest によるユニットテストおよびUI結合テスト（計50件）を
 ```text
 src/
 ├── domain/
-│   ├── models/                  # エンティティ定義 (Project.ts, Employee.ts)
-│   └── repositories/            # リポジトリ契約 (ProjectRepository.ts, EmployeeRepository.ts)
+│   ├── models/                  # エンティティ定義 (Project.ts, Employee.ts, Partner.ts)
+│   └── repositories/            # リポジトリ契約 (ProjectRepository.ts, EmployeeRepository.ts, PartnerRepository.ts)
 ├── application/
 │   ├── usecases/                # ユースケース抽象定義 (DTO含む)
-│   └── services/                # 具象ユースケースロジック (ProjectService.ts, EmployeeService.ts)
+│   └── services/                # 具象ユースケースロジック (ProjectService.ts, EmployeeService.ts, PartnerService.ts)
 └── infrastructure/
     ├── persistence/             # LocalStorage & インメモリリポジトリ、レジストリ
-    └── ui/                      # React コンポーネント (ProjectView, EmployeeView)
+    └── ui/                      # React コンポーネント (ProjectView, EmployeeView, PartnerView)
 ```

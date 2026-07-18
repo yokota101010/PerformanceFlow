@@ -16,3 +16,12 @@ export interface Employee {
   readonly name: string;          // 社員名
   readonly costPerHour: number;  // 単価
 }
+
+/**
+ * 発注先集約エンティティのデータ定義。
+ * すべてのプロパティに readonly を付与する。
+ */
+export interface Partner {
+  readonly id: string;            // 発注先ID (形式: BPnnn, 主キー)
+  readonly name: string;          // 発注先名
+}
