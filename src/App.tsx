@@ -3,8 +3,9 @@ import { ProjectView } from './infrastructure/ui/ProjectView';
 import { EmployeeView } from './infrastructure/ui/EmployeeView';
 import { PartnerView } from './infrastructure/ui/PartnerView';
 import { StaffView } from './infrastructure/ui/StaffView';
+import { CaseView } from './infrastructure/ui/CaseView';
 
-type Tab = 'projects' | 'employees' | 'partners' | 'staffs';
+type Tab = 'projects' | 'employees' | 'partners' | 'staffs' | 'cases';
 
 /**
  * アプリケーションのメインコンポーネント。
@@ -95,6 +96,22 @@ function App() {
           >
             要員マスタ
           </button>
+          <button
+            onClick={() => setActiveTab('cases')}
+            style={{
+              padding: '8px 16px',
+              fontSize: '14px',
+              fontWeight: 500,
+              backgroundColor: activeTab === 'cases' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+              color: activeTab === 'cases' ? '#3b82f6' : '#94a3b8',
+              border: activeTab === 'cases' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            案件管理
+          </button>
         </nav>
 
         <div style={{ fontSize: '14px', color: '#64748b' }}>v0.1.0</div>
@@ -105,6 +122,7 @@ function App() {
         {activeTab === 'employees' && <EmployeeView />}
         {activeTab === 'partners' && <PartnerView />}
         {activeTab === 'staffs' && <StaffView />}
+        {activeTab === 'cases' && <CaseView />}
       </main>
     </div>
   );

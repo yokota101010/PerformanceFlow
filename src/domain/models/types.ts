@@ -36,3 +36,15 @@ export interface Staff {
   readonly name: string;          // 氏名
   readonly costPerMonth: number;  // 単価 (月額)
 }
+
+/**
+ * 案件集約エンティティのデータ定義。
+ * 主キーは projectId と id の複合キー。すべてのプロパティに readonly を付与する。
+ */
+export interface Case {
+  readonly projectId: string;     // プロジェクトID (プロジェクト.プロジェクトID, 複合主キー)
+  readonly id: string;            // 案件ID (形式: AJnnn, 複合主キー)
+  readonly name: string;          // 案件名
+  readonly startDate: string;     // 開始日 (YYYY-MM-DD)
+  readonly endDate: string;       // 終了日 (YYYY-MM-DD)
+}

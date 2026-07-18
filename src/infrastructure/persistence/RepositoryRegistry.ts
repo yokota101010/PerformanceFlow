@@ -8,6 +8,8 @@ import {
   StaffRepository,
   StaffOrderDetailRepository,
   StaffMonthlySummaryRepository,
+  CaseRepository,
+  CaseAssignmentRepository,
 } from '../../domain/repositories';
 import { LocalStorageProjectRepository } from './LocalStorageProjectRepository';
 import { LocalStorageEmployeeRepository } from './LocalStorageEmployeeRepository';
@@ -20,6 +22,9 @@ import { InMemoryStaffRepository } from './InMemoryStaffRepository';
 import { LocalStorageStaffRepository } from './LocalStorageStaffRepository';
 import { InMemoryStaffOrderDetailRepository } from './InMemoryStaffOrderDetailRepository';
 import { InMemoryStaffMonthlySummaryRepository } from './InMemoryStaffMonthlySummaryRepository';
+import { InMemoryCaseRepository } from './InMemoryCaseRepository';
+import { LocalStorageCaseRepository } from './LocalStorageCaseRepository';
+import { InMemoryCaseAssignmentRepository } from './InMemoryCaseAssignmentRepository';
 
 /**
  * リポジトリの具象インスタンスを一元管理するレジストリクラス。
@@ -37,6 +42,9 @@ export class RepositoryRegistry {
   private static staffRepository: StaffRepository | null = null;
   private static staffOrderDetailRepository: StaffOrderDetailRepository | null = null;
   private static staffMonthlySummaryRepository: StaffMonthlySummaryRepository | null = null;
+
+  private static caseRepository: CaseRepository | null = null;
+  private static caseAssignmentRepository: CaseAssignmentRepository | null = null;
 
   private constructor() {
     // インスタンス化を禁止
@@ -133,7 +141,6 @@ export class RepositoryRegistry {
 
   /**
    * 要員リポジトリを取得する。
-   * テスト環境 (Vitest) ではインメモリ、ブラウザ環境では LocalStorage 実装を返却する。
    */
   static getStaffRepository(): StaffRepository {
     if (!this.staffRepository) {
@@ -180,6 +187,40 @@ export class RepositoryRegistry {
   }
 
   /**
+   * 案件リポジトリを取得する。
+   * ※LocalStorageCaseRepository 実装まではデフォルトで InMemoryCaseRepository を使用する (T008)。
+   */
+  static getCaseRepository(): CaseRepository {
+    if (!this.caseRepository) {
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.caseRepository = new InMemoryCaseRepository();
+      } else {
+        this.caseRepository = new LocalStorageCaseRepository();
+      }
+    }
+    return this.caseRepository;
+  }
+
+  static registerCaseRepository(repository: CaseRepository): void {
+    this.caseRepository = repository;
+  }
+
+  /**
+   * 【仮】アサイン（案件作業明細）リポジトリを取得する。
+   */
+  static getCaseAssignmentRepository(): CaseAssignmentRepository {
+    if (!this.caseAssignmentRepository) {
+      this.caseAssignmentRepository = new InMemoryCaseAssignmentRepository();
+    }
+    return this.caseAssignmentRepository;
+  }
+
+  static registerCaseAssignmentRepository(repository: CaseAssignmentRepository): void {
+    this.caseAssignmentRepository = repository;
+  }
+
+  /**
    * レジストリの状態をクリアする（テスト用）
    */
   static clear(): void {
@@ -192,5 +233,7 @@ export class RepositoryRegistry {
     this.staffRepository = null;
     this.staffOrderDetailRepository = null;
     this.staffMonthlySummaryRepository = null;
+    this.caseRepository = null;
+    this.caseAssignmentRepository = null;
   }
 }

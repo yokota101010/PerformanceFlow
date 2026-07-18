@@ -7,3 +7,5 @@ export * from './PartnerOrderRepository';
 export * from './StaffRepository';
 export * from './StaffOrderDetailRepository';
 export * from './StaffMonthlySummaryRepository';
+export * from './CaseRepository';
+export * from './CaseAssignmentRepository';
