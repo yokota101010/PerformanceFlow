@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { PartnerService } from '../../../src/application/services/PartnerService';
 import { RepositoryRegistry } from '../../../src/infrastructure/persistence/RepositoryRegistry';
 import { InMemoryPartnerRepository } from '../../../src/infrastructure/persistence/InMemoryPartnerRepository';
-import { Partner } from '../../../src/domain/models';
 
 describe('PartnerService.updatePartner (情報更新)', () => {
   let service: PartnerService;

@@ -88,7 +88,7 @@ export class RepositoryRegistry {
    */
   static getPartnerRepository(): PartnerRepository {
     if (!this.partnerRepository) {
-      const isTest = typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'test';
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
       if (isTest) {
         this.partnerRepository = new InMemoryPartnerRepository();
       } else {
