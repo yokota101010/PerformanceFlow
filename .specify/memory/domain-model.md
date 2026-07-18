@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > この仕様書は DB Architect (Schema Designer) から自動出力されました。
-> 出力日時: 2026/7/18 7:23:48
+> 出力日時: 2026/7/18 9:52:17
 
 ## 1. ドメイン集約 (Domain Aggregates)
 
@@ -88,7 +88,7 @@
 | カラム名 (物理) | データ型 | PK | FK | UQ | 区分 | カラム定義・ビジネスルール |
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
 | `プロジェクトID` | `VARCHAR(255)` | ✅ |  |  | 独立 | 形式：PJnnn<br />- PJ は固定文字列<br />- nnn は001から始まる連番 |
-| `プロジェクト名` | `VARCHAR(255)` |  |  |  | 独立 |  |
+| `プロジェクト名` | `VARCHAR(255)` |  |  | ✅ (UQ1) | 独立 |  |
 
 #### AI検証用テストデータ (Seed Data)
 
@@ -606,7 +606,15 @@ SCHEMA_DESIGNER_METADATA_START
         "uqId": "",
         "direction": "ASC",
         "keys": []
-      }
+      },
+      "uniqueKeys": [
+        {
+          "id": "uq_1784335530324",
+          "columnIds": [
+            "col_1784066590833"
+          ]
+        }
+      ]
     },
     {
       "id": "table_1784066610123",
@@ -1994,7 +2002,7 @@ SCHEMA_DESIGNER_METADATA_START
     "table_1784072777767"
   ],
   "version": "1.3",
-  "exportedAt": "2026-07-17T22:23:48.841Z"
+  "exportedAt": "2026-07-18T00:52:17.417Z"
 }
 SCHEMA_DESIGNER_METADATA_END
 -->
