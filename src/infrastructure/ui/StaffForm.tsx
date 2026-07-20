@@ -102,15 +102,19 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
 
   return (
     <form onSubmit={handleSubmit} className="glass-panel p-6 space-y-4">
+      <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
+        {editingStaff ? '要員情報の編集' : '新規要員の登録'}
+      </h3>
+
       {validationError && (
-        <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-sm flex items-center space-x-2 animate-fade-in">
-          <span>{validationError}</span>
+        <div className="alert-error">
+          {validationError}
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="space-y-1">
-          <label htmlFor="staff-name" className="block text-sm font-semibold text-slate-300">
+        <div className="form-group mb-0">
+          <label htmlFor="staff-name" className="form-label">
             氏名
           </label>
           <input
@@ -118,20 +122,20 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-slate-800/50 border border-slate-700/50 focus:border-blue-500 rounded px-3 py-2 text-slate-100 text-sm focus:outline-none transition-colors"
+            className="form-input"
             placeholder="例: 岡田以蔵"
           />
         </div>
 
-        <div className="space-y-1">
-          <label htmlFor="staff-partner" className="block text-sm font-semibold text-slate-300">
+        <div className="form-group mb-0">
+          <label htmlFor="staff-partner" className="form-label">
             所属会社
           </label>
           <select
             id="staff-partner"
             value={partnerId}
             onChange={(e) => setPartnerId(e.target.value)}
-            className="w-full bg-slate-800/50 border border-slate-700/50 focus:border-blue-500 rounded px-3 py-2 text-slate-100 text-sm focus:outline-none transition-colors"
+            className="form-select"
           >
             {partners.length === 0 ? (
               <option value="">(発注先がありません)</option>
@@ -145,8 +149,8 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
           </select>
         </div>
 
-        <div className="space-y-1">
-          <label htmlFor="staff-cost" className="block text-sm font-semibold text-slate-300">
+        <div className="form-group mb-0">
+          <label htmlFor="staff-cost" className="form-label">
             単価 (月額)
           </label>
           <input
@@ -154,23 +158,25 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
             type="number"
             value={costPerMonth}
             onChange={(e) => setCostPerMonth(e.target.value)}
-            className="w-full bg-slate-800/50 border border-slate-700/50 focus:border-blue-500 rounded px-3 py-2 text-slate-100 text-sm focus:outline-none transition-colors"
+            className="form-input"
             placeholder="金額を数値で入力"
           />
         </div>
       </div>
 
-      <div className="flex justify-end space-x-3 pt-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 rounded bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 border border-slate-600/30 transition-all text-sm"
-        >
-          キャンセル
-        </button>
+      <div className="flex justify-end space-x-3 pt-4">
+        {editingStaff && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="btn btn-secondary"
+          >
+            キャンセル
+          </button>
+        )}
         <button
           type="submit"
-          className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-slate-100 font-semibold transition-all text-sm shadow-lg shadow-blue-500/20"
+          className="btn btn-primary"
         >
           {editingStaff ? '保存' : '登録'}
         </button>

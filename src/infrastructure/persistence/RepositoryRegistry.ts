@@ -10,21 +10,33 @@ import {
   StaffMonthlySummaryRepository,
   CaseRepository,
   CaseAssignmentRepository,
+  OtherExpenseRepository,
+  MonthlyMemberWorkHoursSummaryRepository,
 } from '../../domain/repositories';
 import { LocalStorageProjectRepository } from './LocalStorageProjectRepository';
 import { LocalStorageEmployeeRepository } from './LocalStorageEmployeeRepository';
 import { InMemoryEmployeeWorkTimeRepository } from './InMemoryEmployeeWorkTimeRepository';
+import { LocalStorageEmployeeWorkTimeRepository } from './LocalStorageEmployeeWorkTimeRepository';
 import { InMemoryPartnerRepository } from './InMemoryPartnerRepository';
 import { InMemoryPartnerStaffRepository } from './InMemoryPartnerStaffRepository';
+import { LocalStoragePartnerStaffRepository } from './LocalStoragePartnerStaffRepository';
 import { InMemoryPartnerOrderRepository } from './InMemoryPartnerOrderRepository';
+import { LocalStoragePartnerOrderRepository } from './LocalStoragePartnerOrderRepository';
 import { LocalStoragePartnerRepository } from './LocalStoragePartnerRepository';
 import { InMemoryStaffRepository } from './InMemoryStaffRepository';
 import { LocalStorageStaffRepository } from './LocalStorageStaffRepository';
 import { InMemoryStaffOrderDetailRepository } from './InMemoryStaffOrderDetailRepository';
+import { LocalStorageStaffOrderDetailRepository } from './LocalStorageStaffOrderDetailRepository';
 import { InMemoryStaffMonthlySummaryRepository } from './InMemoryStaffMonthlySummaryRepository';
+import { LocalStorageStaffMonthlySummaryRepository } from './LocalStorageStaffMonthlySummaryRepository';
 import { InMemoryCaseRepository } from './InMemoryCaseRepository';
 import { LocalStorageCaseRepository } from './LocalStorageCaseRepository';
 import { InMemoryCaseAssignmentRepository } from './InMemoryCaseAssignmentRepository';
+import { LocalStorageCaseAssignmentRepository } from './LocalStorageCaseAssignmentRepository';
+import { InMemoryOtherExpenseRepository } from './InMemoryOtherExpenseRepository';
+import { LocalStorageOtherExpenseRepository } from './LocalStorageOtherExpenseRepository';
+import { InMemoryMonthlyMemberWorkHoursSummaryRepository } from './InMemoryMonthlyMemberWorkHoursSummaryRepository';
+import { LocalStorageMonthlyMemberWorkHoursSummaryRepository } from './LocalStorageMonthlyMemberWorkHoursSummaryRepository';
 
 /**
  * リポジトリの具象インスタンスを一元管理するレジストリクラス。
@@ -45,6 +57,8 @@ export class RepositoryRegistry {
 
   private static caseRepository: CaseRepository | null = null;
   private static caseAssignmentRepository: CaseAssignmentRepository | null = null;
+  private static otherExpenseRepository: OtherExpenseRepository | null = null;
+  private static monthlyMemberWorkHoursSummaryRepository: MonthlyMemberWorkHoursSummaryRepository | null = null;
 
   private constructor() {
     // インスタンス化を禁止
@@ -83,7 +97,12 @@ export class RepositoryRegistry {
    */
   static getEmployeeWorkTimeRepository(): EmployeeWorkTimeRepository {
     if (!this.employeeWorkTimeRepository) {
-      this.employeeWorkTimeRepository = new InMemoryEmployeeWorkTimeRepository();
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.employeeWorkTimeRepository = new InMemoryEmployeeWorkTimeRepository();
+      } else {
+        this.employeeWorkTimeRepository = new LocalStorageEmployeeWorkTimeRepository();
+      }
     }
     return this.employeeWorkTimeRepository;
   }
@@ -112,11 +131,16 @@ export class RepositoryRegistry {
   }
 
   /**
-   * 【仮】要員所属リポジトリを取得する。
+   * 要員所属参照リポジトリを取得する。
    */
   static getPartnerStaffRepository(): PartnerStaffRepository {
     if (!this.partnerStaffRepository) {
-      this.partnerStaffRepository = new InMemoryPartnerStaffRepository();
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.partnerStaffRepository = new InMemoryPartnerStaffRepository();
+      } else {
+        this.partnerStaffRepository = new LocalStoragePartnerStaffRepository();
+      }
     }
     return this.partnerStaffRepository;
   }
@@ -130,7 +154,12 @@ export class RepositoryRegistry {
    */
   static getPartnerOrderRepository(): PartnerOrderRepository {
     if (!this.partnerOrderRepository) {
-      this.partnerOrderRepository = new InMemoryPartnerOrderRepository();
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.partnerOrderRepository = new InMemoryPartnerOrderRepository();
+      } else {
+        this.partnerOrderRepository = new LocalStoragePartnerOrderRepository();
+      }
     }
     return this.partnerOrderRepository;
   }
@@ -159,11 +188,16 @@ export class RepositoryRegistry {
   }
 
   /**
-   * 【仮】注文明細リポジトリを取得する。
+   * 注文明細参照リポジトリを取得する。
    */
   static getStaffOrderDetailRepository(): StaffOrderDetailRepository {
     if (!this.staffOrderDetailRepository) {
-      this.staffOrderDetailRepository = new InMemoryStaffOrderDetailRepository();
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.staffOrderDetailRepository = new InMemoryStaffOrderDetailRepository();
+      } else {
+        this.staffOrderDetailRepository = new LocalStorageStaffOrderDetailRepository();
+      }
     }
     return this.staffOrderDetailRepository;
   }
@@ -173,11 +207,16 @@ export class RepositoryRegistry {
   }
 
   /**
-   * 【仮】工数サマリリポジトリを取得する。
+   * 工数サマリ参照リポジトリを取得する。
    */
   static getStaffMonthlySummaryRepository(): StaffMonthlySummaryRepository {
     if (!this.staffMonthlySummaryRepository) {
-      this.staffMonthlySummaryRepository = new InMemoryStaffMonthlySummaryRepository();
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.staffMonthlySummaryRepository = new InMemoryStaffMonthlySummaryRepository();
+      } else {
+        this.staffMonthlySummaryRepository = new LocalStorageStaffMonthlySummaryRepository();
+      }
     }
     return this.staffMonthlySummaryRepository;
   }
@@ -211,13 +250,50 @@ export class RepositoryRegistry {
    */
   static getCaseAssignmentRepository(): CaseAssignmentRepository {
     if (!this.caseAssignmentRepository) {
-      this.caseAssignmentRepository = new InMemoryCaseAssignmentRepository();
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.caseAssignmentRepository = new InMemoryCaseAssignmentRepository();
+      } else {
+        this.caseAssignmentRepository = new LocalStorageCaseAssignmentRepository();
+      }
     }
     return this.caseAssignmentRepository;
   }
 
   static registerCaseAssignmentRepository(repository: CaseAssignmentRepository): void {
     this.caseAssignmentRepository = repository;
+  }
+
+  static getOtherExpenseRepository(): OtherExpenseRepository {
+    if (!this.otherExpenseRepository) {
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.otherExpenseRepository = new InMemoryOtherExpenseRepository();
+      } else {
+        this.otherExpenseRepository = new LocalStorageOtherExpenseRepository();
+      }
+    }
+    return this.otherExpenseRepository;
+  }
+
+  static registerOtherExpenseRepository(repository: OtherExpenseRepository): void {
+    this.otherExpenseRepository = repository;
+  }
+
+  static getMonthlyMemberWorkHoursSummaryRepository(): MonthlyMemberWorkHoursSummaryRepository {
+    if (!this.monthlyMemberWorkHoursSummaryRepository) {
+      const isTest = typeof globalThis !== 'undefined' && !!(globalThis as any).vitest;
+      if (isTest) {
+        this.monthlyMemberWorkHoursSummaryRepository = new InMemoryMonthlyMemberWorkHoursSummaryRepository();
+      } else {
+        this.monthlyMemberWorkHoursSummaryRepository = new LocalStorageMonthlyMemberWorkHoursSummaryRepository();
+      }
+    }
+    return this.monthlyMemberWorkHoursSummaryRepository;
+  }
+
+  static registerMonthlyMemberWorkHoursSummaryRepository(repository: MonthlyMemberWorkHoursSummaryRepository): void {
+    this.monthlyMemberWorkHoursSummaryRepository = repository;
   }
 
   /**
@@ -235,5 +311,7 @@ export class RepositoryRegistry {
     this.staffMonthlySummaryRepository = null;
     this.caseRepository = null;
     this.caseAssignmentRepository = null;
+    this.otherExpenseRepository = null;
+    this.monthlyMemberWorkHoursSummaryRepository = null;
   }
 }

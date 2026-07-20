@@ -79,9 +79,14 @@ export class ProjectService implements ProjectUseCase {
       throw new Error(`指定されたプロジェクト（${id}）が見つかりません。`);
     }
 
-    // 2. 参照整合性チェック (T030)
-    // シードプロジェクト (PJ001) は案件が登録されているものとして削除を制限する
-    if (id === 'PJ001') {
+    // 2. 参照整合性チェック (案件および作業アサイン契約の参照チェック)
+    const caseRepo = RepositoryRegistry.getCaseRepository();
+    const cases = await caseRepo.findByProjectId(id);
+
+    const assignmentRepo = RepositoryRegistry.getCaseAssignmentRepository();
+    const assignments = await assignmentRepo.findByProjectId(id);
+
+    if (cases.length > 0 || assignments.length > 0) {
       throw new Error('このプロジェクトには案件が登録されているため削除できません。');
     }
 

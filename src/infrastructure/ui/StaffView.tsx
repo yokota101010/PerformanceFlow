@@ -84,11 +84,8 @@ export const StaffView: React.FC = () => {
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-sm flex items-center space-x-2 animate-fade-in">
-          <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <span>{error}</span>
+        <div className="alert-error">
+          {error}
         </div>
       )}
 
@@ -106,36 +103,38 @@ export const StaffView: React.FC = () => {
           ) : staffs.length === 0 ? (
             <div className="p-8 text-center text-slate-400">登録されている要員はいません。</div>
           ) : (
-            <table className="w-full text-left border-collapse">
+            <table className="modern-table">
               <thead>
-                <tr className="border-b border-slate-700/50 bg-slate-800/30">
-                  <th className="py-4 px-6 text-sm font-semibold text-slate-300">要員ID</th>
-                  <th className="py-4 px-6 text-sm font-semibold text-slate-300">氏名</th>
-                  <th className="py-4 px-6 text-sm font-semibold text-slate-300">所属会社</th>
-                  <th className="py-4 px-6 text-sm font-semibold text-slate-300 text-right">単価 (月額)</th>
-                  <th className="py-4 px-6 text-sm font-semibold text-slate-300 text-center">操作</th>
+                <tr>
+                  <th>要員ID</th>
+                  <th>氏名</th>
+                  <th>所属会社</th>
+                  <th style={{ textAlign: 'right' }}>単価 (月額)</th>
+                  <th style={{ textAlign: 'center' }}>操作</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/50">
+              <tbody>
                 {staffs.map((staff) => (
-                  <tr key={staff.id} className="hover:bg-slate-700/10 transition-colors">
-                    <td className="py-4 px-6 text-sm font-mono text-cyan-400">{staff.id}</td>
-                    <td className="py-4 px-6 text-sm font-medium text-slate-200">{staff.name}</td>
-                    <td className="py-4 px-6 text-sm text-slate-300">{getPartnerName(staff.partnerId)}</td>
-                    <td className="py-4 px-6 text-sm font-mono text-emerald-400 text-right">
+                  <tr key={staff.id}>
+                    <td style={{ fontFamily: 'monospace', fontWeight: 600, color: '#38bdf8' }}>{staff.id}</td>
+                    <td style={{ fontWeight: 500, color: '#f8fafc' }}>{staff.name}</td>
+                    <td>{getPartnerName(staff.partnerId)}</td>
+                    <td style={{ textAlign: 'right', fontFamily: 'monospace', color: '#34d399', fontWeight: 600 }}>
                       {staff.costPerMonth.toLocaleString()} 円
                     </td>
-                    <td className="py-4 px-6 text-sm text-center">
+                    <td style={{ textAlign: 'center' }}>
                       <div className="flex justify-center space-x-2">
                         <button
                           onClick={() => handleEditClick(staff)}
-                          className="px-3 py-1.5 rounded bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition-all text-xs"
+                          className="btn btn-secondary"
+                          style={{ padding: '4px 12px', fontSize: '12px' }}
                         >
                           編集
                         </button>
                         <button
                           onClick={() => handleDeleteClick(staff)}
-                          className="px-3 py-1.5 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-all text-xs"
+                          className="btn btn-danger"
+                          style={{ padding: '4px 12px', fontSize: '12px' }}
                         >
                           削除
                         </button>

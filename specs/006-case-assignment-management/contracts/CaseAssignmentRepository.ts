@@ -23,10 +23,10 @@ export interface CaseAssignmentRepository {
   findByCaseId(projectId: string, caseId: string): Promise<readonly CaseAssignment[]>;
 
   /**
-   * プロジェクトIDと作業契約IDの複合キーに一致する明細を取得する。
+   * 作業契約IDに一致する明細を取得する。
    * 存在しない場合は null を返却する。
    */
-  findById(projectId: string, id: string): Promise<CaseAssignment | null>;
+  findById(id: string): Promise<CaseAssignment | null>;
 
   /**
    * 案件作業明細を保存（新規登録または更新）する。
@@ -34,14 +34,13 @@ export interface CaseAssignmentRepository {
   save(assignment: CaseAssignment): Promise<void>;
 
   /**
-   * 指定された明細（複合キー）のデータを物理削除する。
+   * 指定された明細を物理削除する。
    */
-  delete(projectId: string, id: string): Promise<void>;
+  delete(id: string): Promise<void>;
 
   /**
-   * プロジェクト単位で次の作業契約IDを自動採番して生成する（WKnnn形式、欠番再利用なし）。
+   * システム全体で次の作業契約IDを自動採番して生成する（WKnnn形式、欠番再利用なし）。
    * 最大値が999に達した場合はエラーをスローする。
-   * @param projectId 親となるプロジェクトID
    */
-  nextIdentity(projectId: string): Promise<string>;
+  nextIdentity(): Promise<string>;
 }

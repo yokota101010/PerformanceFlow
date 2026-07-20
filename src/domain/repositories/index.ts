@@ -9,3 +9,5 @@ export * from './StaffOrderDetailRepository';
 export * from './StaffMonthlySummaryRepository';
 export * from './CaseRepository';
 export * from './CaseAssignmentRepository';
+export * from './OtherExpenseRepository';
+export * from './MonthlyMemberWorkHoursSummaryRepository';

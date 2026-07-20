@@ -101,23 +101,20 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
 
   return (
     <form onSubmit={handleSubmit} className="glass-panel p-6 space-y-4">
-      <h3 className="text-lg font-bold text-slate-200">
+      <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
         {editingCase ? '案件情報の編集' : '新規案件の登録'}
       </h3>
 
       {validationError && (
-        <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-2.5 rounded text-sm flex items-center space-x-2 animate-fade-in">
-          <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <span>{validationError}</span>
+        <div className="alert-error">
+          {validationError}
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* 親プロジェクト */}
-        <div className="space-y-1">
-          <label htmlFor="case-project-id" className="block text-sm font-semibold text-slate-300">
+        <div className="form-group mb-0">
+          <label htmlFor="case-project-id" className="form-label">
             親プロジェクト
           </label>
           <select
@@ -125,7 +122,8 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
             value={projectId}
             onChange={(e) => setProjectId(e.target.value)}
             disabled={!!editingCase}
-            className="w-full bg-slate-800/80 border border-slate-700/50 rounded-lg px-4 py-2.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="form-select"
+            style={editingCase ? { opacity: 0.6, cursor: 'not-allowed' } : undefined}
           >
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -136,8 +134,8 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
         </div>
 
         {/* 案件名 */}
-        <div className="space-y-1">
-          <label htmlFor="case-name" className="block text-sm font-semibold text-slate-300">
+        <div className="form-group mb-0">
+          <label htmlFor="case-name" className="form-label">
             案件名
           </label>
           <input
@@ -145,7 +143,7 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-slate-800/80 border border-slate-700/50 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="form-input"
             placeholder="例: 開発支援フェーズ2"
           />
         </div>
@@ -153,8 +151,8 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* 開始日 */}
-        <div className="space-y-1">
-          <label htmlFor="case-start-date" className="block text-sm font-semibold text-slate-300">
+        <div className="form-group mb-0">
+          <label htmlFor="case-start-date" className="form-label">
             開始日
           </label>
           <input
@@ -162,13 +160,13 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="w-full bg-slate-800/80 border border-slate-700/50 rounded-lg px-4 py-2.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="form-input"
           />
         </div>
 
         {/* 終了日 */}
-        <div className="space-y-1">
-          <label htmlFor="case-end-date" className="block text-sm font-semibold text-slate-300">
+        <div className="form-group mb-0">
+          <label htmlFor="case-end-date" className="form-label">
             終了日
           </label>
           <input
@@ -176,24 +174,24 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="w-full bg-slate-800/80 border border-slate-700/50 rounded-lg px-4 py-2.5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="form-input"
           />
         </div>
       </div>
 
-      <div className="flex justify-end space-x-3 pt-2">
+      <div className="flex justify-end space-x-3 pt-4">
         {editingCase && (
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 transition-all text-sm font-medium"
+            className="btn btn-secondary"
           >
             キャンセル
           </button>
         )}
         <button
           type="submit"
-          className="px-6 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-600/30 transition-all text-sm font-semibold"
+          className="btn btn-primary"
         >
           {editingCase ? '保存' : '登録'}
         </button>
