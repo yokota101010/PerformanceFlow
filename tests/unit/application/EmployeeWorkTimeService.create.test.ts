@@ -8,22 +8,32 @@ import { CaseAssignment, Employee } from '../../../src/domain/models';
 describe('EmployeeWorkTimeService.create (US2)', () => {
   const service = new EmployeeWorkTimeService();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
 
-    // モックデータ登録
-    // 社員 EMP001 (単価 9000), EMP002 (単価 8000)
     const empRepo = new InMemoryEmployeeRepository();
-    empRepo.save(new Employee('EMP001', 'トム・デマルコ', 9000));
+    await empRepo.save(new Employee('EMP001', 'トム・デマルコ'));
+    await empRepo.save(new Employee('EMP002', 'ロバート・マーチン'));
     RepositoryRegistry.registerEmployeeRepository(empRepo);
 
     // アサイン契約 WK001: 2026-08-15 〜 2026-09-30
     const assignRepo = new InMemoryCaseAssignmentRepository();
-    assignRepo.save(
+    await assignRepo.save(
       new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 1.0, 800000, 0)
     );
     RepositoryRegistry.registerCaseAssignmentRepository(assignRepo);
+
+    // 単価マスタ登録
+    const { LocalStorageEmployeeUnitPriceRepository } = await import('../../../src/infrastructure/persistence/LocalStorageEmployeeUnitPriceRepository');
+    const { EmployeeUnitPrice } = await import('../../../src/domain/models');
+    const upRepo = new LocalStorageEmployeeUnitPriceRepository();
+    await upRepo.save(new EmployeeUnitPrice('EUP002', 'EMP002', [{ unitPriceId: 'EUP002', startYearMonth: '2026-08', price: 8000 }]));
+
+    RepositoryRegistry.registerEmployeeUnitPriceRepository(upRepo);
   });
+
+
+
 
   it('正常な入力パラメータのとき、新規工数実績が登録できること', async () => {
     // EMP002 (ロバート・マーチン) は WK001 + 2026-08 の組み合わせのシードが無いため新規登録可能

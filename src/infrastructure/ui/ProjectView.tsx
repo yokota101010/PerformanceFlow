@@ -67,7 +67,14 @@ export const ProjectView: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 20px 40px 20px' }}>
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header">
+        <h2 className="page-title">プロジェクトマスタ管理</h2>
+        <p className="page-subtitle">
+          最上位組織体であるプロジェクトマスタの登録、編集、および削除を行います。
+        </p>
+      </div>
+
       {/* 登録・編集フォームの切り替え統合 */}
       <ProjectForm
         onSuccess={handleFormSuccess}

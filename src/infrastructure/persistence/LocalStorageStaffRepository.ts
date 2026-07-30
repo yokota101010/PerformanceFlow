@@ -16,10 +16,10 @@ export class LocalStorageStaffRepository implements StaffRepository {
       const data = localStorage.getItem(this.storageKey);
       if (!data || JSON.parse(data).length === 0) {
         const seed = [
-          new Staff('MEM001', 'BP001', '坂本龍馬', 1000000),
-          new Staff('MEM002', 'BP001', '高杉晋作', 700000),
-          new Staff('MEM003', 'BP002', '西郷隆盛', 850000),
-          new Staff('MEM004', 'BP002', '勝海舟', 600000),
+          new Staff('MEM001', 'BP001', '坂本龍馬'),
+          new Staff('MEM002', 'BP001', '高杉晋作'),
+          new Staff('MEM003', 'BP002', '西郷隆盛'),
+          new Staff('MEM004', 'BP002', '勝海舟'),
         ];
         localStorage.setItem(this.storageKey, JSON.stringify(seed));
       }
@@ -34,13 +34,14 @@ export class LocalStorageStaffRepository implements StaffRepository {
       if (!data) return [];
       const parsed = JSON.parse(data) as any[];
       return parsed.map(
-        (item) => new Staff(item.id, item.partnerId, item.name, item.costPerMonth)
+        (item) => new Staff(item.id, item.partnerId, item.name)
       );
     } catch (e) {
       console.error('LocalStorageStaffRepository: データの読み込みに失敗しました。', e);
       return [];
     }
   }
+
 
   private saveStaffs(staffs: Staff[]): void {
     try {

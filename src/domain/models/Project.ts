@@ -1,4 +1,5 @@
 import { Project as IProject } from './types';
+import { assertNonEmptyString } from '../validation/validator';
 
 /**
  * プロジェクト集約ルートの具象クラス。
@@ -9,7 +10,10 @@ export class Project implements IProject {
   readonly name: string;
 
   constructor(id: string, name: string) {
+    assertNonEmptyString(id, 'プロジェクトID');
+    assertNonEmptyString(name, 'プロジェクト名');
     this.id = id;
     this.name = name;
   }
 }
+

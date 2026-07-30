@@ -10,11 +10,12 @@ export class InMemoryStaffRepository implements StaffRepository {
   constructor() {
     // シードデータの初期投入
     this.staffs = [
-      new Staff('MEM001', 'BP001', '坂本龍馬', 1000000),
-      new Staff('MEM002', 'BP001', '高杉晋作', 700000),
-      new Staff('MEM003', 'BP002', '西郷隆盛', 850000),
-      new Staff('MEM004', 'BP002', '勝海舟', 600000),
+      new Staff('MEM001', 'BP001', '坂本龍馬'),
+      new Staff('MEM002', 'BP001', '高杉晋作'),
+      new Staff('MEM003', 'BP002', '西郷隆盛'),
+      new Staff('MEM004', 'BP002', '勝海舟'),
     ];
+
   }
 
   async findAll(): Promise<readonly Staff[]> {

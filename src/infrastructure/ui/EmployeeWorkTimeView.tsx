@@ -111,11 +111,14 @@ export const EmployeeWorkTimeView: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 style={{ fontSize: '24px', fontWeight: 700, margin: 0, color: '#f8fafc', borderBottom: '2px solid #0ea5e9', paddingBottom: '8px' }}>
-          社員工数入力
-        </h2>
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h2 className="page-title">社員工数入力</h2>
+          <p className="page-subtitle">
+            社員の案件・月別の実稼働時間（工数実績）の登録、編集、および削除を行います。
+          </p>
+        </div>
         <button
           onClick={handleCreateClick}
           className="btn btn-primary"

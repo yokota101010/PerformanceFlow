@@ -6,7 +6,7 @@ import { InMemoryEmployeeRepository } from '../../../../src/infrastructure/persi
 import { Employee } from '../../../../src/domain/models';
 
 describe('EmployeeForm (編集モード)', () => {
-  const targetEmployee = new Employee('EMP002', 'ロバート・マーチン', 8000);
+  const targetEmployee = new Employee('EMP002', 'ロバート・マーチン');
 
   beforeEach(() => {
     RepositoryRegistry.clear();
@@ -23,12 +23,10 @@ describe('EmployeeForm (編集モード)', () => {
     );
 
     const nameInput = screen.getByLabelText('社員名');
-    const costInput = screen.getByLabelText('単価 (円/時間)');
     const submitButton = screen.getByRole('button', { name: '保存' });
     const cancelButton = screen.getByRole('button', { name: 'キャンセル' });
 
     expect(nameInput).toHaveValue('ロバート・マーチン');
-    expect(costInput).toHaveValue(8000);
     expect(submitButton).toBeInTheDocument();
     expect(cancelButton).toBeInTheDocument();
   });
@@ -44,11 +42,9 @@ describe('EmployeeForm (編集モード)', () => {
     );
 
     const nameInput = screen.getByLabelText('社員名');
-    const costInput = screen.getByLabelText('単価 (円/時間)');
     const submitButton = screen.getByRole('button', { name: '保存' });
 
     fireEvent.change(nameInput, { target: { value: 'ロバート・C・マーチン' } });
-    fireEvent.change(costInput, { target: { value: '8500' } });
     fireEvent.click(submitButton);
 
     await waitFor(() => {
@@ -59,7 +55,6 @@ describe('EmployeeForm (編集モード)', () => {
     const repo = RepositoryRegistry.getEmployeeRepository();
     const updated = await repo.findById('EMP002');
     expect(updated?.name).toBe('ロバート・C・マーチン');
-    expect(updated?.costPerHour).toBe(8500);
   });
 
   it('キャンセルボタンを押すと onCancel コールバックが呼ばれること', () => {

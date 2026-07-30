@@ -79,10 +79,10 @@ export const MonthlyMemberWorkHoursSummaryView: React.FC<Props> = ({ useCase }) 
   }
 
   return (
-    <div className="space-y-6">
-      <div className="glass-panel p-6">
-        <h2 className="text-xl font-bold text-slate-100 mb-2">要員別工数サマリ</h2>
-        <p className="text-slate-400 text-sm">
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header">
+        <h2 className="page-title">要員別工数サマリ</h2>
+        <p className="page-subtitle">
           パートナー要員の月別の合計発注工数および稼働アサイン状況の一覧です。
         </p>
       </div>

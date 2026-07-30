@@ -6,7 +6,6 @@ import { Staff } from '../../domain/models';
 export interface CreateStaffCommand {
   readonly partnerId: string;     // 所属会社ID
   readonly name: string;          // 氏名
-  readonly costPerMonth: number;  // 単価 (月額)
 }
 
 /**
@@ -16,8 +15,8 @@ export interface UpdateStaffCommand {
   readonly id: string;            // 対象の要員ID
   readonly partnerId: string;     // 所属会社ID
   readonly name: string;          // 氏名
-  readonly costPerMonth: number;  // 単価 (月額)
 }
+
 
 /**
  * 要員マスタ管理のユースケース（書き込み/読み込み）抽象インターフェース。

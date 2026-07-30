@@ -26,9 +26,10 @@ describe('PartnerOrderView (削除操作 UI)', () => {
 
     const assignmentRepo = new InMemoryCaseAssignmentRepository();
     const { CaseAssignment } = await import('../../../../src/domain/models');
-    await assignmentRepo.save(new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 1.3, 1000000, 0));
+    await assignmentRepo.save(new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 1.3, 1000000, 0));
     RepositoryRegistry.registerCaseAssignmentRepository(assignmentRepo);
   });
+
 
   it('一覧行の「削除」ボタンをクリックした際、確認ダイアログ確認を経て物理削除が行われること', async () => {
     render(<PartnerOrderView />);

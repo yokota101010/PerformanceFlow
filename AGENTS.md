@@ -1,5 +1,6 @@
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at specs/011-member-worktime-summary/plan.md
+at specs/012-domain-crud-alignment/plan.md
 <!-- SPECKIT END -->
+

@@ -17,7 +17,7 @@ describe('CaseAssignmentService.create (新規登録とバリデーション)', 
     // プロジェクトマスタ登録
     const projectRepo = new LocalStorageProjectRepository();
     const { Project } = await import('../../../src/domain/models');
-    await projectRepo.save(new Project('PJ001', '次世代基幹システム開発プロジェクト'));
+    await projectRepo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     await projectRepo.save(new Project('PJ002', '新規社内ポータル開発プロジェクト'));
     RepositoryRegistry.registerProjectRepository(projectRepo);
 

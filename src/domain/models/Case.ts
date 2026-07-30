@@ -17,8 +17,8 @@ export class Case implements ICase {
       throw new Error('プロジェクトIDは必須です。');
     }
 
-    // 2. 案件ID形式のバリデーション (AJnnn形式)
-    if (!id || !/^AJ\d{3}$/.test(id)) {
+    // 2. 案件ID形式のバリデーション (ANKnnn または AJnnn形式)
+    if (!id || !/^(ANK|AJ)\d{3}$/.test(id)) {
       throw new Error('不正な案件ID形式です。');
     }
 

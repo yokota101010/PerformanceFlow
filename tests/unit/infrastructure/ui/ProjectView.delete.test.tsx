@@ -23,12 +23,12 @@ describe('ProjectView (削除操作統合)', () => {
     const pj2Text = await screen.findByText('新規製品開発プロジェクト');
     expect(pj2Text).toBeInTheDocument();
 
-    const rows = screen.getAllByRole('row');
-    const pj2Row = rows[2];
+    const pj2Row = pj2Text.closest('tr')!;
     const deleteBtn = pj2Row.querySelector('button[name="delete-btn"]') as HTMLButtonElement;
     expect(deleteBtn).toBeInTheDocument();
 
     await userEvent.click(deleteBtn);
+
 
     expect(window.confirm).toHaveBeenCalledWith('プロジェクト「新規製品開発プロジェクト」を削除しますか？');
 
@@ -40,7 +40,7 @@ describe('ProjectView (削除操作統合)', () => {
   it('案件が紐づいているプロジェクト (PJ001) の削除を試みると、エラーメッセージが表示され削除されないこと', async () => {
     render(<ProjectView />);
 
-    const pj1Text = await screen.findByText('次世代基幹システム開発プロジェクト');
+    const pj1Text = await screen.findByText('基幹基盤システム刷新プロジェクト');
     expect(pj1Text).toBeInTheDocument();
 
     const rows = screen.getAllByRole('row');
@@ -52,6 +52,7 @@ describe('ProjectView (削除操作統合)', () => {
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent('このプロジェクトには案件が登録されているため削除できません。');
 
-    expect(screen.getByText('次世代基幹システム開発プロジェクト')).toBeInTheDocument();
+    expect(screen.getByText('基幹基盤システム刷新プロジェクト')).toBeInTheDocument();
   });
+
 });

@@ -23,12 +23,13 @@ describe('PartnerOrderForm (新規登録 UI)', () => {
 
     const assignmentRepo = new InMemoryCaseAssignmentRepository();
     const { CaseAssignment } = await import('../../../../src/domain/models');
-    await assignmentRepo.save(new CaseAssignment('PJ001', 'WK005', 'AJ001', '2026-12-01', '2026-12-31', 1.3, 1000000, 0));
+    await assignmentRepo.save(new CaseAssignment('PJ001', 'CON005', 'ANK001', '2026-12-01', '2026-12-31', 1.3, 1000000, 0));
     RepositoryRegistry.registerCaseAssignmentRepository(assignmentRepo);
 
     const staffRepo = new InMemoryStaffRepository();
     const { Staff } = await import('../../../../src/domain/models');
-    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1', 1000000));
+    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1'));
+
     RepositoryRegistry.registerStaffRepository(staffRepo);
   });
 
@@ -43,13 +44,13 @@ describe('PartnerOrderForm (新規登録 UI)', () => {
 
     // マスタロードの待機
     const assignmentSelect = await screen.findByLabelText('作業契約 (アサイン)');
-    await screen.findByText('WK005 (2026-12-01 〜 2026-12-31)');
+    await screen.findByText('CON005 (2026-12-01 〜 2026-12-31)');
 
     const partnerSelect = screen.getByLabelText('発注先企業');
     await screen.findByText('Aソフト開発支援 (BP001)');
     
     // 作業契約の選択
-    fireEvent.change(assignmentSelect, { target: { value: 'WK005' } });
+    fireEvent.change(assignmentSelect, { target: { value: 'CON005' } });
     
     // 発注先の選択
     fireEvent.change(partnerSelect, { target: { value: 'BP001' } });
@@ -69,8 +70,9 @@ describe('PartnerOrderForm (新規登録 UI)', () => {
 
     // リポジトリにデータが保存されているか検証
     const savedOrders = await orderRepo.findAll();
-    const newOrder = savedOrders.find(o => o.caseAssignmentId === 'WK005' && o.targetMonth === '2026-12-01');
+    const newOrder = savedOrders.find(o => o.caseAssignmentId === 'CON005' && o.targetMonth === '2026-12-01');
     expect(newOrder).toBeDefined();
-    expect(newOrder?.id).toBe('ORD007'); // 自動採番の検証
+    expect(newOrder?.id).toBe('ORD009');
+
   });
 });

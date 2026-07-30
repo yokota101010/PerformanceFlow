@@ -26,15 +26,23 @@ describe('PartnerOrderForm (編集・明細追加 UI)', () => {
 
     const assignmentRepo = new InMemoryCaseAssignmentRepository();
     const { CaseAssignment } = await import('../../../../src/domain/models');
-    await assignmentRepo.save(new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 1.3, 1000000, 0));
+    await assignmentRepo.save(new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 1.3, 1000000, 0));
     RepositoryRegistry.registerCaseAssignmentRepository(assignmentRepo);
 
     const staffRepo = new InMemoryStaffRepository();
-    const { Staff } = await import('../../../../src/domain/models');
-    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1', 1000000));
-    await staffRepo.save(new Staff('MEM002', 'BP001', '要員2', 700000));
+    const { Staff, StaffUnitPrice } = await import('../../../../src/domain/models');
+    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1'));
+    await staffRepo.save(new Staff('MEM002', 'BP001', '要員2'));
     RepositoryRegistry.registerStaffRepository(staffRepo);
+
+    const { LocalStorageStaffUnitPriceRepository } = await import('../../../../src/infrastructure/persistence/LocalStorageStaffUnitPriceRepository');
+    const supRepo = new LocalStorageStaffUnitPriceRepository();
+    await supRepo.save(new StaffUnitPrice('SUP001', 'MEM001', [{ unitPriceId: 'SUP001', startYearMonth: '2026-08', price: 1000000 }]));
+    await supRepo.save(new StaffUnitPrice('SUP002', 'MEM002', [{ unitPriceId: 'SUP002', startYearMonth: '2026-08', price: 1000000 }]));
+
+    RepositoryRegistry.registerStaffUnitPriceRepository(supRepo);
   });
+
 
   it('編集モードで既存発注データと明細が正しく読み込まれ、明細追加・削除に伴い金額が動的再計算されること', async () => {
     const handleSuccess = vi.fn();
@@ -50,9 +58,9 @@ describe('PartnerOrderForm (編集・明細追加 UI)', () => {
     expect(screen.getByText('要員2')).toBeInTheDocument();
 
     // 初期合計の検証
-    // ORD001シード: 工数1.3, 金額1,150,000円
+    // ORD001シード: 工数1.3, 金額1,300,000円
     expect(screen.getByText('1.3 人月')).toBeInTheDocument();
-    expect(screen.getByText('1,150,000 円')).toBeInTheDocument();
+    expect(screen.getByText('1,300,000 円')).toBeInTheDocument();
 
     // 明細行の「除外」をクリックして要員2を削除する
     const removeBtns = screen.getAllByRole('button', { name: '除外' });
@@ -62,6 +70,7 @@ describe('PartnerOrderForm (編集・明細追加 UI)', () => {
     expect(screen.queryByText('要員2')).toBeNull();
     expect(screen.getByText('0.8 人月')).toBeInTheDocument();
     expect(screen.getByText('800,000 円')).toBeInTheDocument();
+
 
     // 保存ボタンをクリック
     const saveBtn = screen.getByRole('button', { name: '明細変更を保存' });

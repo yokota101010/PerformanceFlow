@@ -17,9 +17,10 @@ export class OtherExpense implements IOtherExpense {
     memo: string;
   }) {
     // 1. 作業契約IDの検証
-    if (!params.caseAssignmentId || !params.caseAssignmentId.startsWith('WK')) {
-      throw new Error('作業契約IDはWKから始まる有効なIDでなければなりません。');
+    if (!params.caseAssignmentId || (!params.caseAssignmentId.startsWith('CON') && !params.caseAssignmentId.startsWith('WK'))) {
+      throw new Error('作業契約IDはCONまたはWKから始まる有効なIDでなければなりません。');
     }
+
 
     // 2. 行Noの検証
     if (!Number.isInteger(params.lineNo) || params.lineNo < 1) {

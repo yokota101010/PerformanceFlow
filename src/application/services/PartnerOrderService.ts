@@ -67,6 +67,7 @@ export class PartnerOrderService implements PartnerOrderUseCase {
     }
 
     const staffRepo = RepositoryRegistry.getStaffRepository();
+    const staffUnitPriceRepo = RepositoryRegistry.getStaffUnitPriceRepository();
     const domainDetails: OrderDetail[] = [];
 
     for (const d of details) {
@@ -75,18 +76,23 @@ export class PartnerOrderService implements PartnerOrderUseCase {
         throw new Error('指定された要員が見つかりません。');
       }
 
+      const unitPriceObj = await staffUnitPriceRepo.findByStaffId(d.staffId);
+      const unitPrice = unitPriceObj ? unitPriceObj.getPriceForMonth(order.targetMonth) : 0;
+
+
       // OrderDetail コンストラクタで、工数範囲、小数点、および所属会社IDの一致を強制検証
       const detail = new OrderDetail(
         orderId,
         d.staffId,
         d.orderEffort,
-        staff.costPerMonth, // 単価 (月額)
+        unitPrice,
         order.targetMonth,
         order.partnerId,
         staff.partnerId // バリデーションチェック用の要員所属会社ID
       );
       domainDetails.push(detail);
     }
+
 
     const updatedOrder = order.copyWithDetails(domainDetails);
     await this.orderRepository.save(updatedOrder);

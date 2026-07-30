@@ -13,10 +13,9 @@ export class InMemoryCaseAssignmentRepository implements CaseAssignmentRepositor
 
   private initializeSeedData(): void {
     const seeds = [
-      new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 10.0, 800000, 5242000),
-      new CaseAssignment('PJ001', 'WK002', 'AJ001', '2026-10-01', '2026-11-15', 10.0, 800000, 5215000),
-      new CaseAssignment('PJ001', 'WK003', 'AJ002', '2026-09-13', '2026-09-30', 2.0, 700000, 2490000),
-      new CaseAssignment('PJ001', 'WK004', 'AJ002', '2026-10-01', '2026-10-31', 2.0, 700000, 2490000),
+      new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 10.0, 1200000, 0),
+      new CaseAssignment('PJ001', 'CON002', 'ANK001', '2026-10-01', '2026-11-15', 10.0, 1200000, 0),
+      new CaseAssignment('PJ001', 'CON003', 'ANK002', '2026-10-13', '2027-01-31', 4.0, 1000000, 0),
     ];
     for (const assignment of seeds) {
       this.assignments.set(assignment.id, assignment);
@@ -61,14 +60,15 @@ export class InMemoryCaseAssignmentRepository implements CaseAssignmentRepositor
   }
 
   async nextIdentity(): Promise<string> {
+
     const list = Array.from(this.assignments.values());
     if (list.length === 0) {
-      return 'WK001';
+      return 'CON001';
     }
 
     const nums = list
       .map((a) => {
-        const match = a.id.match(/^WK(\d{3})$/);
+        const match = a.id.match(/^CON(\d{3})$/) || a.id.match(/^WK(\d{3})$/);
         return match ? parseInt(match[1], 10) : 0;
       })
       .filter((n) => n > 0);
@@ -80,18 +80,18 @@ export class InMemoryCaseAssignmentRepository implements CaseAssignmentRepositor
       throw new Error('作業契約IDの発行上限に達しました。');
     }
 
-    return `WK${String(nextNum).padStart(3, '0')}`;
+    return `CON${String(nextNum).padStart(3, '0')}`;
   }
 
   /**
-   * テスト用にアサイン実績の有無をモック変更する互換ヘルパー
+   * テスト用にアサイン実績の有無をモック変更するヘルパー
    */
   setHasAssignment(projectId: string, caseId: string, hasAssignment: boolean): void {
-    const key = `${projectId}:WK999_${caseId}`;
+    const key = `${projectId}:CON999_${caseId}`;
     if (hasAssignment) {
       this.assignments.set(
         key,
-        new CaseAssignment(projectId, 'WK999', caseId, '2026-08-15', '2026-09-30', 1.0, 500000, 0)
+        new CaseAssignment(projectId, 'CON999', caseId, '2026-08-15', '2026-09-30', 1.0, 500000, 0)
       );
     } else {
       for (const [k, a] of this.assignments.entries()) {

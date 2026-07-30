@@ -92,13 +92,15 @@ export const PartnerOrderView: React.FC = () => {
   };
 
   const selectedOrder = orders.find(o => o.id === selectedOrderId);
-
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h2 style={{ fontSize: '24px', fontWeight: 700, margin: 0, color: '#f8fafc', borderBottom: '2px solid #0ea5e9', paddingBottom: '8px' }}>
-          発注管理
-        </h2>
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h2 className="page-title">発注管理</h2>
+          <p className="page-subtitle">
+            パートナー会社への月別発注・注文明細の登録、編集、および削除を行います。
+          </p>
+        </div>
         {!isFormOpen && (
           <button onClick={() => { setEditOrderId(null); setIsFormOpen(true); }} className="btn btn-primary">
             新規発注登録

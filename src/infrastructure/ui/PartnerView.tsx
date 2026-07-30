@@ -62,7 +62,14 @@ export const PartnerView: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 0 40px 0' }}>
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header">
+        <h2 className="page-title">発注先マスタ管理</h2>
+        <p className="page-subtitle">
+          取引先・パートナー会社（パートナーID・会社名等）の登録、編集、および削除を行います。
+        </p>
+      </div>
+
       {/* 登録・編集フォームの統合 (US2 / US3) */}
       <PartnerForm
         editingPartner={editingPartner}
@@ -70,150 +77,59 @@ export const PartnerView: React.FC = () => {
         onCancel={handleFormCancel}
       />
 
-      <div style={{ maxWidth: '800px', margin: '30px auto 0 auto', padding: '0 20px' }}>
-        <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>発注先一覧</h3>
+      {error && <div className="alert-error">{error}</div>}
 
-        {error && (
-          <div
-            role="alert"
-            style={{
-              color: '#ef4444',
-              padding: '12px 16px',
-              border: '1px solid rgba(239, 68, 68, 0.2)',
-              borderRadius: '8px',
-              marginBottom: '20px',
-              backgroundColor: 'rgba(239, 68, 68, 0.1)',
-              fontSize: '14px',
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>読み込み中...</div>
-        ) : partners.length === 0 ? (
-          <div
-            style={{
-              textAlign: 'center',
-              padding: '40px',
-              color: '#64748b',
-              border: '1px dashed rgba(255, 255, 255, 0.1)',
-              borderRadius: '12px',
-            }}
-          >
-            発注先が登録されていません。
-          </div>
-        ) : (
-          <div
-            style={{
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              backgroundColor: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
-            }}
-          >
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="glass-panel" style={{ padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <h3 className="section-title" style={{ margin: 0 }}>発注先一覧</h3>
+        </div>
+        <div className="overflow-x-auto">
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '24px', color: '#94a3b8' }}>読み込み中...</div>
+          ) : partners.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '24px', color: '#64748b' }}>
+              発注先が登録されていません。
+            </div>
+          ) : (
+            <table className="modern-table">
               <thead>
-                <tr style={{ backgroundColor: 'rgba(15, 23, 42, 0.5)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                  <th
-                    style={{
-                      textAlign: 'left',
-                      padding: '16px 20px',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      color: '#94a3b8',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      width: '120px',
-                    }}
-                  >
-                    発注先ID
-                  </th>
-                  <th
-                    style={{
-                      textAlign: 'left',
-                      padding: '16px 20px',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      color: '#94a3b8',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                    }}
-                  >
-                    発注先名
-                  </th>
-                  <th
-                    style={{
-                      textAlign: 'right',
-                      padding: '16px 20px',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      color: '#94a3b8',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      width: '150px',
-                    }}
-                  >
-                    操作
-                  </th>
+                <tr>
+                  <th>発注先ID</th>
+                  <th>発注先名</th>
+                  <th style={{ textAlign: 'center' }}>操作</th>
                 </tr>
               </thead>
               <tbody>
                 {partners.map((partner) => (
-                  <tr
-                    key={partner.id}
-                    style={{
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                      transition: 'background-color 0.2s',
-                    }}
-                  >
-                    <td style={{ padding: '16px 20px', fontSize: '14px', color: '#3b82f6', fontWeight: 600 }}>
+                  <tr key={partner.id}>
+                    <td style={{ color: '#38bdf8', fontWeight: 600, fontFamily: 'monospace' }}>
                       {partner.id}
                     </td>
-                    <td style={{ padding: '16px 20px', fontSize: '14px', color: '#e2e8f0' }}>{partner.name}</td>
-                    <td style={{ padding: '16px 20px', textAlign: 'right' }}>
-                      <button
-                        onClick={() => handleEditClick(partner)}
-                        style={{
-                          padding: '6px 12px',
-                          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                          color: '#10b981',
-                          border: '1px solid rgba(16, 185, 129, 0.2)',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          marginRight: '8px',
-                        }}
-                      >
-                        編集
-                      </button>
-                      <button
-                        onClick={() => handleDeleteClick(partner)}
-                        style={{
-                          padding: '6px 12px',
-                          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                          color: '#ef4444',
-                          border: '1px solid rgba(239, 68, 68, 0.2)',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                        }}
-                      >
-                        削除
-                      </button>
+                    <td style={{ color: '#f8fafc', fontWeight: 500 }}>{partner.name}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <div className="flex justify-center space-x-2" style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                        <button
+                          onClick={() => handleEditClick(partner)}
+                          className="btn btn-secondary"
+                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                        >
+                          編集
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(partner)}
+                          className="btn btn-danger"
+                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                        >
+                          削除
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

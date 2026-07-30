@@ -8,9 +8,8 @@ export class Staff implements IStaff {
   readonly id: string;
   readonly partnerId: string;
   readonly name: string;
-  readonly costPerMonth: number;
 
-  constructor(id: string, partnerId: string, name: string, costPerMonth: number) {
+  constructor(id: string, partnerId: string, name: string) {
     // 1. ID形式のバリデーション (MEMnnn形式)
     if (!id || !/^MEM\d{3}$/.test(id)) {
       throw new Error('不正な要員ID形式です。');
@@ -30,14 +29,9 @@ export class Staff implements IStaff {
       throw new Error('氏名は255文字以内で入力してください。');
     }
 
-    // 4. 単価の0以上数値チェック
-    if (typeof costPerMonth !== 'number' || isNaN(costPerMonth) || costPerMonth < 0) {
-      throw new Error('単価は0以上の整数で入力してください。');
-    }
-
     this.id = id;
     this.partnerId = partnerId;
     this.name = trimmedName;
-    this.costPerMonth = Math.floor(costPerMonth);
   }
 }
+

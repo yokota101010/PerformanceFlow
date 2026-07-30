@@ -12,9 +12,26 @@ import { FinancialSummaryView } from './infrastructure/ui/FinancialSummaryView';
 import { FinancialSummaryService } from './application/services/FinancialSummaryService';
 import { MonthlyMemberWorkHoursSummaryView } from './infrastructure/ui/MonthlyMemberWorkHoursSummaryView';
 import { MonthlyMemberWorkHoursSummaryService } from './application/services/MonthlyMemberWorkHoursSummaryService';
+import { EmployeeUnitPriceView } from './infrastructure/ui/EmployeeUnitPriceView';
+import { StaffUnitPriceView } from './infrastructure/ui/StaffUnitPriceView';
+import { EmployeeWorkTimeSummaryView } from './infrastructure/ui/EmployeeWorkTimeSummaryView';
 import { RepositoryRegistry } from './infrastructure/persistence/RepositoryRegistry';
 
-type Tab = 'projects' | 'employees' | 'partners' | 'staffs' | 'cases' | 'assignments' | 'orders' | 'workTimes' | 'otherExpenses' | 'financialSummary' | 'memberWorkTimeSummary';
+type Tab =
+  | 'projects'
+  | 'employees'
+  | 'employeeUnitPrices'
+  | 'partners'
+  | 'staffs'
+  | 'staffUnitPrices'
+  | 'cases'
+  | 'assignments'
+  | 'orders'
+  | 'workTimes'
+  | 'otherExpenses'
+  | 'financialSummary'
+  | 'employeeWorkTimeSummary'
+  | 'memberWorkTimeSummary';
 
 /**
  * アプリケーションのメインコンポーネント。
@@ -28,6 +45,18 @@ function App() {
     setSelectedAssignmentId(assignmentId);
     setActiveTab('otherExpenses');
   };
+
+  const navButtonStyle = (tab: Tab) => ({
+    padding: '8px 14px',
+    fontSize: '13px',
+    fontWeight: 500,
+    backgroundColor: activeTab === tab ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+    color: activeTab === tab ? '#3b82f6' : '#94a3b8',
+    border: activeTab === tab ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  });
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -50,196 +79,61 @@ function App() {
           Performance<span style={{ color: '#3b82f6' }}>Flow</span>
         </h1>
 
-        <nav style={{ display: 'flex', gap: '15px' }}>
-          <button
-            onClick={() => setActiveTab('projects')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'projects' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'projects' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'projects' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            プロジェクトマスタ
+        <nav style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <button onClick={() => setActiveTab('projects')} style={navButtonStyle('projects')}>
+            プロジェクト
           </button>
-          <button
-            onClick={() => setActiveTab('employees')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'employees' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'employees' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'employees' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
+          <button onClick={() => setActiveTab('employees')} style={navButtonStyle('employees')}>
             社員マスタ
           </button>
-          <button
-            onClick={() => setActiveTab('partners')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'partners' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'partners' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'partners' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
+          <button onClick={() => setActiveTab('employeeUnitPrices')} style={navButtonStyle('employeeUnitPrices')} id="nav-employee-unit-price-btn">
+            社員単価設定
+          </button>
+          <button onClick={() => setActiveTab('partners')} style={navButtonStyle('partners')}>
             発注先マスタ
           </button>
-          <button
-            onClick={() => setActiveTab('staffs')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'staffs' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'staffs' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'staffs' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
+          <button onClick={() => setActiveTab('staffs')} style={navButtonStyle('staffs')}>
             要員マスタ
           </button>
-          <button
-            onClick={() => setActiveTab('cases')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'cases' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'cases' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'cases' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
+          <button onClick={() => setActiveTab('staffUnitPrices')} style={navButtonStyle('staffUnitPrices')} id="nav-staff-unit-price-btn">
+            要員単価設定
+          </button>
+          <button onClick={() => setActiveTab('cases')} style={navButtonStyle('cases')}>
             案件管理
           </button>
-          <button
-            onClick={() => setActiveTab('assignments')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'assignments' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'assignments' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'assignments' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
+          <button onClick={() => setActiveTab('assignments')} style={navButtonStyle('assignments')}>
             アサイン契約
           </button>
-          <button
-            onClick={() => setActiveTab('orders')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'orders' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'orders' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'orders' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
+          <button onClick={() => setActiveTab('orders')} style={navButtonStyle('orders')}>
             発注管理
           </button>
-          <button
-            onClick={() => setActiveTab('workTimes')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'workTimes' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'workTimes' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'workTimes' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            社員工数入力
+          <button onClick={() => setActiveTab('workTimes')} style={navButtonStyle('workTimes')}>
+            社員工数
           </button>
-          <button
-            onClick={() => setActiveTab('otherExpenses')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'otherExpenses' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'otherExpenses' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'otherExpenses' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            id="nav-other-expenses-btn"
-          >
-            その他経費入力
+          <button onClick={() => setActiveTab('otherExpenses')} style={navButtonStyle('otherExpenses')} id="nav-other-expenses-btn">
+            経費入力
           </button>
-          <button
-            onClick={() => setActiveTab('financialSummary')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'financialSummary' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'financialSummary' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'financialSummary' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            id="nav-financial-summary-btn"
-          >
+          <button onClick={() => setActiveTab('financialSummary')} style={navButtonStyle('financialSummary')} id="nav-financial-summary-btn">
             収支サマリ
           </button>
-          <button
-            onClick={() => setActiveTab('memberWorkTimeSummary')}
-            style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: 500,
-              backgroundColor: activeTab === 'memberWorkTimeSummary' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-              color: activeTab === 'memberWorkTimeSummary' ? '#3b82f6' : '#94a3b8',
-              border: activeTab === 'memberWorkTimeSummary' ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            id="nav-member-worktime-summary-btn"
-          >
+          <button onClick={() => setActiveTab('employeeWorkTimeSummary')} style={navButtonStyle('employeeWorkTimeSummary')} id="nav-employee-worktime-summary-btn">
+            社員工数サマリ
+          </button>
+          <button onClick={() => setActiveTab('memberWorkTimeSummary')} style={navButtonStyle('memberWorkTimeSummary')} id="nav-member-worktime-summary-btn">
             要員工数サマリ
           </button>
         </nav>
 
         <div style={{ fontSize: '14px', color: '#64748b' }}>v0.1.0</div>
       </header>
-      
-      <main style={{ flex: 1, padding: '40px 20px' }}>
+
+      <main style={{ flex: 1, padding: '24px 24px', maxWidth: '1280px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         {activeTab === 'projects' && <ProjectView />}
         {activeTab === 'employees' && <EmployeeView />}
+        {activeTab === 'employeeUnitPrices' && <EmployeeUnitPriceView />}
         {activeTab === 'partners' && <PartnerView />}
         {activeTab === 'staffs' && <StaffView />}
+        {activeTab === 'staffUnitPrices' && <StaffUnitPriceView />}
         {activeTab === 'cases' && <CaseView />}
         {activeTab === 'assignments' && (
           <CaseAssignmentView onSelectAssignment={navigateToOtherExpenses} />
@@ -266,6 +160,7 @@ function App() {
             }
           />
         )}
+        {activeTab === 'employeeWorkTimeSummary' && <EmployeeWorkTimeSummaryView />}
         {activeTab === 'memberWorkTimeSummary' && (
           <MonthlyMemberWorkHoursSummaryView
             useCase={
@@ -284,3 +179,5 @@ function App() {
 }
 
 export default App;
+
+

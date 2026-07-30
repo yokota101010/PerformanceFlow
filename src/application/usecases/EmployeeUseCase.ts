@@ -5,7 +5,6 @@ import { Employee } from '../../domain/models';
  */
 export interface CreateEmployeeCommand {
   readonly name: string;          // 社員名
-  readonly costPerHour: number;  // 単価
 }
 
 /**
@@ -14,8 +13,8 @@ export interface CreateEmployeeCommand {
 export interface UpdateEmployeeCommand {
   readonly id: string;            // 対象の社員ID
   readonly name: string;          // 変更後の社員名
-  readonly costPerHour: number;  // 変更後の単価
 }
+
 
 /**
  * 社員マスタ管理のユースケース（書き込み/読み込み）抽象インターフェース。

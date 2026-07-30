@@ -21,8 +21,8 @@ describe('EmployeeService.getEmployees (一覧取得)', () => {
     expect(list[0]).toEqual({
       id: 'EMP001',
       name: 'トム・デマルコ',
-      costPerHour: 9000
     });
+
     expect(list[1].id).toBe('EMP002');
     expect(list[2].id).toBe('EMP003');
   });
@@ -31,8 +31,9 @@ describe('EmployeeService.getEmployees (一覧取得)', () => {
     const repo = RepositoryRegistry.getEmployeeRepository();
     
     // シードに加えて、順序を入れ替えて追加保存
-    await repo.save(new Employee('EMP005', 'ジェラルド・ワインバーグ', 8500));
-    await repo.save(new Employee('EMP004', 'デミ・ハリス', 7500));
+    await repo.save(new Employee('EMP005', 'ジェラルド・ワインバーグ'));
+    await repo.save(new Employee('EMP004', 'デミ・ハリス'));
+
 
     const list = await service.getEmployees();
 

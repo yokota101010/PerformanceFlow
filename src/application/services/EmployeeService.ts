@@ -32,7 +32,7 @@ export class EmployeeService implements EmployeeUseCase {
     const nextId = await repo.nextIdentity();
 
     // ドメイン層のEmployeeクラス構築時に属性バリデーションが強制スローされる (T002)
-    const employee = new Employee(nextId, trimmedName, command.costPerHour);
+    const employee = new Employee(nextId, trimmedName);
 
     // リポジトリに永続化
     await repo.save(employee);
@@ -56,7 +56,7 @@ export class EmployeeService implements EmployeeUseCase {
     const trimmedName = command.name ? command.name.replace(/^[\s　]+|[\s　]+$/g, '') : '';
 
     // イミュータブルに再構築することで属性バリデーションを強制実行
-    const updated = new Employee(command.id, trimmedName, command.costPerHour);
+    const updated = new Employee(command.id, trimmedName);
 
     // 上書き保存
     await repo.save(updated);

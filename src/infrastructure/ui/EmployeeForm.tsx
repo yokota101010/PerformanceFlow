@@ -18,7 +18,6 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   onCancel,
 }) => {
   const [name, setName] = useState<string>('');
-  const [costPerHour, setCostPerHour] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
@@ -28,10 +27,8 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   useEffect(() => {
     if (editingEmployee) {
       setName(editingEmployee.name);
-      setCostPerHour(editingEmployee.costPerHour);
     } else {
       setName('');
-      setCostPerHour(0);
     }
     setError(null);
   }, [editingEmployee]);
@@ -47,17 +44,15 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         await usecase.updateEmployee({
           id: editingEmployee.id,
           name,
-          costPerHour,
         });
       } else {
         // 新規登録の実行 (US2)
-        await usecase.createEmployee({ name, costPerHour });
+        await usecase.createEmployee({ name });
       }
 
       // フォームのクリア (新規時のみ)
       if (!editingEmployee) {
         setName('');
-        setCostPerHour(0);
       }
       onSuccess();
     } catch (err: any) {
@@ -68,21 +63,10 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto 30px auto', padding: '0 20px' }}>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          backgroundColor: 'rgba(30, 41, 59, 0.25)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '12px',
-          padding: '24px',
-          backdropFilter: 'blur(4px)',
-          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
-          {editingEmployee ? `社員情報の編集 (${editingEmployee.id})` : '社員登録'}
-        </h3>
+    <form onSubmit={handleSubmit} className="glass-panel space-y-3">
+      <h3 className="section-title">
+        {editingEmployee ? `社員情報の編集 (${editingEmployee.id})` : '社員登録'}
+      </h3>
 
         {error && (
           <div
@@ -130,35 +114,8 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             />
           </div>
 
-          <div style={{ flex: 1, minWidth: '150px' }}>
-            <label
-              htmlFor="employee-cost"
-              style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: 500, color: '#94a3b8' }}
-            >
-              単価 (円/時間)
-            </label>
-            <input
-              type="number"
-              id="employee-cost"
-              value={costPerHour}
-              onChange={(e) => setCostPerHour(Number(e.target.value))}
-              placeholder="例: 7500"
-              style={{
-                width: '100%',
-                padding: '10px 14px',
-                backgroundColor: 'rgba(15, 23, 42, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '8px',
-                color: '#f1f5f9',
-                fontSize: '14px',
-                boxSizing: 'border-box',
-                outline: 'none',
-                transition: 'border-color 0.2s',
-              }}
-            />
-          </div>
-
           <div style={{ display: 'flex', gap: '10px' }}>
+
             <button
               type="submit"
               disabled={submitting}
@@ -204,6 +161,5 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           </div>
         </div>
       </form>
-    </div>
   );
 };

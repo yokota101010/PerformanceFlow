@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { PartnerOrder, Staff, CaseAssignment } from '../../domain/models';
+import { PartnerOrder, Staff, StaffUnitPrice, CaseAssignment } from '../../domain/models';
+
 import { RepositoryRegistry } from '../persistence/RepositoryRegistry';
 import { PartnerOrderService } from '../../application/services/PartnerOrderService';
 
@@ -18,6 +19,8 @@ export const PartnerOrderForm: React.FC<PartnerOrderFormProps> = ({ editOrderId,
   const [caseAssignments, setCaseAssignments] = useState<readonly CaseAssignment[]>([]);
   const [partners, setPartners] = useState<readonly { id: string; name: string }[]>([]);
   const [allStaffs, setAllStaffs] = useState<readonly Staff[]>([]);
+  const [staffUnitPrices, setStaffUnitPrices] = useState<readonly StaffUnitPrice[]>([]);
+
   
   // フォーム基本入力値 (新規登録用)
   const [selectedAssignmentId, setSelectedAssignmentId] = useState<string>('');
@@ -53,16 +56,22 @@ export const PartnerOrderForm: React.FC<PartnerOrderFormProps> = ({ editOrderId,
         const sList = await staffRepo.findAll();
         setAllStaffs(sList);
 
+        const staffUnitPriceRepo = RepositoryRegistry.getStaffUnitPriceRepository();
+        const supList = await staffUnitPriceRepo.findAll();
+        setStaffUnitPrices(supList);
+
         // 編集モードの場合、既存発注データを読み込む
         if (editOrderId) {
           const order = await usecase.getOrderById(editOrderId);
           if (order) {
             setExistingOrder(order);
+            setTargetMonth(order.targetMonth.substring(0, 7));
             setDetails(order.details.map(d => ({ staffId: d.staffId, orderEffort: d.orderEffort })));
           } else {
             setError('編集対象の発注データが見つかりません。');
           }
         }
+
       } catch (e: any) {
         setError(e.message || 'マスタデータのロードに失敗しました。');
       }
@@ -175,13 +184,18 @@ export const PartnerOrderForm: React.FC<PartnerOrderFormProps> = ({ editOrderId,
   };
 
   const getStaffPrice = (staffId: string) => {
-    const s = allStaffs.find(x => x.id === staffId);
-    return s ? s.costPerMonth : 0;
+    const sup = staffUnitPrices.find(x => x.staffId === staffId);
+    const rawYm = targetMonth || (existingOrder ? existingOrder.targetMonth : '2026-08');
+    const ym = rawYm.substring(0, 7);
+    return sup ? sup.getPriceForMonth(ym) : 0;
   };
+
+
 
   const formatCurrency = (val: number) => {
     return val.toLocaleString('ja-JP');
   };
+
 
   // 新規登録モードのマークアップ
   if (!editOrderId) {
@@ -307,8 +321,9 @@ export const PartnerOrderForm: React.FC<PartnerOrderFormProps> = ({ editOrderId,
               >
                 <option value="">要員を選択してください</option>
                 {filteredStaffs.map(s => (
-                  <option key={s.id} value={s.id}>{s.name} (単価: {formatCurrency(s.costPerMonth)}円)</option>
+                  <option key={s.id} value={s.id}>{s.name} (設定単価: {formatCurrency(getStaffPrice(s.id))}円)</option>
                 ))}
+
               </select>
             </div>
             <div style={{ flex: 1 }}>

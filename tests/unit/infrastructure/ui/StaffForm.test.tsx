@@ -27,7 +27,6 @@ describe('StaffForm (要員登録フォーム)', () => {
     // 入力
     fireEvent.change(screen.getByLabelText('氏名'), { target: { value: '岡田以蔵' } });
     fireEvent.change(screen.getByLabelText('所属会社'), { target: { value: 'BP001' } });
-    fireEvent.change(screen.getByLabelText('単価 (月額)'), { target: { value: '500000' } });
 
     // 登録実行
     fireEvent.click(screen.getByRole('button', { name: '登録' }));
@@ -44,7 +43,6 @@ describe('StaffForm (要員登録フォーム)', () => {
   it('氏名が未入力の場合にバリデーションエラーが表示され登録が拒否されること', async () => {
     render(<StaffForm onSuccess={mockOnSuccess} onCancel={mockOnCancel} />);
 
-    fireEvent.change(screen.getByLabelText('単価 (月額)'), { target: { value: '500000' } });
     fireEvent.click(screen.getByRole('button', { name: '登録' }));
 
     const errorMsg = await screen.findByText('氏名は必須です。');

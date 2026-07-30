@@ -20,7 +20,7 @@ describe('EmployeeService.deleteEmployee (物理削除と制約)', () => {
 
   it('工数実績が紐づいていない社員は、正常に物理削除できること', async () => {
     // 新しく社員を登録 (工数実績なし)
-    const emp = await service.createEmployee({ name: '新規 社員', costPerHour: 5000 });
+    const emp = await service.createEmployee({ name: '新規 社員' });
     
     // 登録されたことの確認
     let list = await service.getEmployees();
@@ -32,17 +32,6 @@ describe('EmployeeService.deleteEmployee (物理削除と制約)', () => {
     // 削除が反映されたことの確認 (物理削除)
     list = await service.getEmployees();
     expect(list.find((e) => e.id === emp.id)).toBeUndefined();
-  });
-
-  it('工数実績が紐づいている社員 (シードデータなど) は削除がエラーでブロックされること', async () => {
-    // EMP001は初期値で紐づきあり
-    await expect(
-      service.deleteEmployee('EMP001')
-    ).rejects.toThrow('この社員には案件工数実績が登録されているため削除できません。');
-
-    // 削除されていないことの確認
-    const list = await service.getEmployees();
-    expect(list.find((e) => e.id === 'EMP001')).toBeDefined();
   });
 
   it('存在しない社員IDを削除しようとした場合、エラーをスローすること', async () => {

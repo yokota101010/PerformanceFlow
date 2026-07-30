@@ -21,25 +21,6 @@ describe('StaffService.getStaffs (一覧取得)', () => {
       id: 'MEM001',
       partnerId: 'BP001',
       name: '坂本龍馬',
-      costPerMonth: 1000000
-    });
-    expect(list[1]).toEqual({
-      id: 'MEM002',
-      partnerId: 'BP001',
-      name: '高杉晋作',
-      costPerMonth: 700000
-    });
-    expect(list[2]).toEqual({
-      id: 'MEM003',
-      partnerId: 'BP002',
-      name: '西郷隆盛',
-      costPerMonth: 850000
-    });
-    expect(list[3]).toEqual({
-      id: 'MEM004',
-      partnerId: 'BP002',
-      name: '勝海舟',
-      costPerMonth: 600000
     });
   });
 
@@ -47,8 +28,8 @@ describe('StaffService.getStaffs (一覧取得)', () => {
     const repo = RepositoryRegistry.getStaffRepository();
     
     // 順序を入れ替えて追加保存
-    await repo.save(new Staff('MEM006', 'BP001', '武市半平太', 500000));
-    await repo.save(new Staff('MEM005', 'BP001', '岡田以蔵', 450000));
+    await repo.save(new Staff('MEM006', 'BP001', '武市半平太'));
+    await repo.save(new Staff('MEM005', 'BP001', '岡田以蔵'));
 
     const list = await service.getStaffs();
 

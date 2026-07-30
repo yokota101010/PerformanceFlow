@@ -14,7 +14,6 @@ export interface Project {
 export interface Employee {
   readonly id: string;            // 社員ID (形式: EMPnnn, 主キー)
   readonly name: string;          // 社員名
-  readonly costPerHour: number;  // 単価
 }
 
 /**
@@ -34,8 +33,8 @@ export interface Staff {
   readonly id: string;            // 要員ID (形式: MEMnnn, 主キー)
   readonly partnerId: string;     // 所属会社ID (発注先.発注先ID)
   readonly name: string;          // 氏名
-  readonly costPerMonth: number;  // 単価 (月額)
 }
+
 
 /**
  * 案件集約エンティティのデータ定義。
@@ -127,5 +126,82 @@ export interface OtherExpense {
   readonly amount: number;             // 金額 (0以上の整数)
   readonly memo: string;               // 摘要 (1〜100文字)
 }
+
+/**
+ * 社員単価集約（集約ルート）のデータ定義。
+ */
+export interface EmployeeUnitPrice {
+  readonly id: string;                 // 社員単価ID (主キー)
+  readonly employeeId: string;         // 社員ID
+  readonly monthlyPrices: readonly MonthlyEmployeeUnitPrice[];
+}
+
+export interface MonthlyEmployeeUnitPrice {
+  readonly unitPriceId: string;       // 社員単価ID
+  readonly startYearMonth: string;    // 適用開始年月 (YYYY-MM形式)
+  readonly endYearMonth?: string;     // 適用終了年月 (YYYY-MM形式, 自動導出)
+  readonly price: number;             // 設定単価
+}
+
+/**
+ * 要員単価集約（集約ルート）のデータ定義。
+ */
+export interface StaffUnitPrice {
+  readonly id: string;                 // 要員単価ID (主キー)
+  readonly staffId: string;            // 要員ID
+  readonly monthlyPrices: readonly MonthlyStaffUnitPrice[];
+}
+
+export interface MonthlyStaffUnitPrice {
+  readonly unitPriceId: string;       // 要員単価ID
+  readonly startYearMonth: string;    // 適用開始年月 (YYYY-MM形式)
+  readonly endYearMonth?: string;     // 適用終了年月 (YYYY-MM形式, 自動導出)
+  readonly price: number;             // 設定単価
+}
+
+
+/**
+ * 四半期区分集約（集約ルート）のデータ定義。
+ */
+export interface QuarterCategory {
+  readonly quarterCode: string;       // 四半期コード (例: "2026-Q1", 主キー)
+  readonly fiscalYear: number;        // 年度
+  readonly quarterName: string;       // 四半期名 ("Q1", "Q2", "Q3", "Q4")
+  readonly startYearMonth: string;   // 開始年月 (YYYY-MM)
+  readonly endYearMonth: string;     // 終了年月 (YYYY-MM)
+}
+
+/**
+ * 月別要員工数サマリのデータ定義。
+ */
+export interface MonthlyStaffWorkHoursSummary {
+  readonly staffId: string;           // 要員ID
+  readonly yearMonth: string;         // 年月
+  readonly totalOrderAmount: number;  // 発注額合計
+}
+
+/**
+ * 月別案件明細原価（導出サマリ集約）のデータ定義。
+ */
+export interface MonthlyCaseDetailCost {
+  readonly yearMonth: string;         // 対象年月
+  readonly caseDetailId: string;      // 案件明細ID
+  readonly salesAmount: number;       // 売上
+  readonly employeeCost: number;      // 社員原価
+  readonly outsourcingCost: number;   // 外注原価
+  readonly otherExpenses: number;     // 経費
+  readonly grossProfit: number;       // 粗利
+}
+
+/**
+ * 四半期別案件明細業績（導出サマリ集約）のデータ定義。
+ */
+export interface QuarterlyCaseDetailPerformance {
+  readonly quarterCode: string;       // 四半期コード
+  readonly caseDetailId: string;      // 案件明細ID
+  readonly totalSales: number;        // 四半期売上
+  readonly totalGrossProfit: number;  // 四半期粗利
+}
+
 
 

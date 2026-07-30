@@ -31,14 +31,17 @@ export class InMemoryEmployeeWorkTimeRepository implements EmployeeWorkTimeRepos
    */
   resetToSeed() {
     this.items = [
-      new EmployeeWorkTime({ caseAssignmentId: 'WK001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160, staffPrice: 9000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'WK001', staffId: 'EMP001', targetMonth: '2026-09-01', workHours: 160, staffPrice: 9000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'WK002', staffId: 'EMP001', targetMonth: '2026-10-01', workHours: 160, staffPrice: 9000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'WK002', staffId: 'EMP001', targetMonth: '2026-11-01', workHours: 160, staffPrice: 9000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'WK003', staffId: 'EMP002', targetMonth: '2026-09-01', workHours: 160, staffPrice: 8000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'WK004', staffId: 'EMP002', targetMonth: '2026-10-01', workHours: 160, staffPrice: 8000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160, staffPrice: 10000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-09-01', workHours: 160, staffPrice: 10000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-10-01', workHours: 160, staffPrice: 11000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-11-01', workHours: 160, staffPrice: 11000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-10-01', workHours: 160, staffPrice: 11000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-11-01', workHours: 160, staffPrice: 11000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-12-01', workHours: 160, staffPrice: 11000 }),
+      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2027-01-01', workHours: 160, staffPrice: 11000 }),
     ];
   }
+
 
   async findAll(): Promise<readonly EmployeeWorkTime[]> {
     return [...this.items];

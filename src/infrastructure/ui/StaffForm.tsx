@@ -16,7 +16,6 @@ interface StaffFormProps {
 export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, onCancel }) => {
   const [name, setName] = useState<string>('');
   const [partnerId, setPartnerId] = useState<string>('');
-  const [costPerMonth, setCostPerMonth] = useState<string>('');
   const [partners, setPartners] = useState<readonly Partner[]>([]);
   
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -40,10 +39,8 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
     if (editingStaff) {
       setName(editingStaff.name);
       setPartnerId(editingStaff.partnerId);
-      setCostPerMonth(String(editingStaff.costPerMonth));
     } else {
       setName('');
-      setCostPerMonth('');
       if (partners.length > 0) {
         setPartnerId(partners[0].id);
       }
@@ -73,25 +70,17 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
       return;
     }
 
-    const costNum = parseInt(costPerMonth, 10);
-    if (isNaN(costNum) || costNum < 0) {
-      setValidationError('単価は0以上の整数で入力してください。');
-      return;
-    }
-
     try {
       if (editingStaff) {
         await usecase.updateStaff({
           id: editingStaff.id,
           name: trimmedName,
           partnerId,
-          costPerMonth: costNum,
         });
       } else {
         await usecase.createStaff({
           name: trimmedName,
           partnerId,
-          costPerMonth: costNum,
         });
       }
       onSuccess();
@@ -112,7 +101,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="form-group mb-0">
           <label htmlFor="staff-name" className="form-label">
             氏名
@@ -148,21 +137,8 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
             )}
           </select>
         </div>
-
-        <div className="form-group mb-0">
-          <label htmlFor="staff-cost" className="form-label">
-            単価 (月額)
-          </label>
-          <input
-            id="staff-cost"
-            type="number"
-            value={costPerMonth}
-            onChange={(e) => setCostPerMonth(e.target.value)}
-            className="form-input"
-            placeholder="金額を数値で入力"
-          />
-        </div>
       </div>
+
 
       <div className="flex justify-end space-x-3 pt-4">
         {editingStaff && (

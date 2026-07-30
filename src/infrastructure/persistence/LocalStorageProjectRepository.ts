@@ -11,9 +11,9 @@ export class LocalStorageProjectRepository implements ProjectRepository {
     // 初回起動時の自動シードデータ投入 (T034)
     if (typeof window !== 'undefined' && window.localStorage) {
       const existingData = window.localStorage.getItem(this.STORAGE_KEY);
-      if (!existingData) {
+      if (!existingData || (JSON.parse(existingData) && JSON.parse(existingData).length === 0)) {
         const seedData = [
-          new Project('PJ001', '次世代基幹システム開発プロジェクト')
+          new Project('PJ001', '基幹基盤システム刷新プロジェクト')
         ];
         window.localStorage.setItem(this.STORAGE_KEY, JSON.stringify(seedData));
       }

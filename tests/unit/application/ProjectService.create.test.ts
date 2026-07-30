@@ -42,8 +42,8 @@ describe('ProjectService.createProject (新規登録)', () => {
   });
 
   it('プロジェクト名が既に登録されている名称と重複している場合はエラーになること', async () => {
-    await expect(service.createProject({ name: '次世代基幹システム開発プロジェクト' }))
-      .rejects.toThrow('プロジェクト名「次世代基幹システム開発プロジェクト」は既に登録されています。');
+    await expect(service.createProject({ name: '基幹基盤システム刷新プロジェクト' }))
+      .rejects.toThrow('プロジェクト名「基幹基盤システム刷新プロジェクト」は既に登録されています。');
   });
 
   it('プロジェクト名が255文字を超える場合は登録が拒否されること', async () => {

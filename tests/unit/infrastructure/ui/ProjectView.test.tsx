@@ -13,7 +13,7 @@ describe('ProjectView (一覧画面)', () => {
   it('初期読み込み時にプロジェクト一覧がテーブル表示され、シードデータが表示されること', async () => {
     render(<ProjectView />);
 
-    const nameCell = await screen.findByText('次世代基幹システム開発プロジェクト');
+    const nameCell = await screen.findByText('基幹基盤システム刷新プロジェクト');
     expect(nameCell).toBeInTheDocument();
 
     const idCell = screen.getByText('PJ001');

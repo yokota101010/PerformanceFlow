@@ -29,8 +29,8 @@ describe('ProjectService.updateProject (編集・更新)', () => {
   });
 
   it('変更後の名前が自分以外の既存プロジェクト名と重複する場合はエラーになること', async () => {
-    await expect(service.updateProject({ id: 'PJ002', name: '次世代基幹システム開発プロジェクト' }))
-      .rejects.toThrow('プロジェクト名「次世代基幹システム開発プロジェクト」は既に登録されています。');
+    await expect(service.updateProject({ id: 'PJ002', name: '基幹基盤システム刷新プロジェクト' }))
+      .rejects.toThrow('プロジェクト名「基幹基盤システム刷新プロジェクト」は既に登録されています。');
   });
 
   it('変更後の名前の前後の空白がトリミングされて更新されること', async () => {

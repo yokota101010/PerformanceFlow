@@ -44,7 +44,7 @@ describe('ProjectForm (登録フォーム)', () => {
     const input = screen.getByLabelText('プロジェクト名');
     const submitBtn = screen.getByRole('button', { name: '登録' });
 
-    await userEvent.type(input, '次世代基幹システム開発プロジェクト');
+    await userEvent.type(input, '基幹基盤システム刷新プロジェクト');
     await userEvent.click(submitBtn);
 
     const errorMsg = await screen.findByRole('alert');

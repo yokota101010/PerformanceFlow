@@ -16,7 +16,7 @@ describe('OtherExpenseForm (US2)', () => {
 
     render(
       <OtherExpenseForm
-        caseAssignmentId="WK001"
+        caseAssignmentId="CON001"
         editingItem={null}
         onSuccess={handleSuccess}
         onCancel={handleCancel}
@@ -40,9 +40,10 @@ describe('OtherExpenseForm (US2)', () => {
     });
 
     const repo = RepositoryRegistry.getOtherExpenseRepository();
-    const list = await repo.findByCaseAssignmentId('WK001');
-    // シード2件 + 追加1件 = 3件
-    expect(list.length).toBe(3);
+    const list = await repo.findByCaseAssignmentId('CON001');
+    // シード1件 + 追加1件 = 2件
+    expect(list.length).toBe(2);
+
     expect(list.some(x => x.amount === 8000 && x.memo === '宅急便代')).toBe(true);
   });
 
@@ -52,12 +53,13 @@ describe('OtherExpenseForm (US2)', () => {
 
     render(
       <OtherExpenseForm
-        caseAssignmentId="WK001"
+        caseAssignmentId="CON001"
         editingItem={null}
         onSuccess={handleSuccess}
         onCancel={handleCancel}
       />
     );
+
 
     const amountInput = screen.getByLabelText('金額 (円)');
     const submitButton = screen.getByRole('button', { name: '登録' });

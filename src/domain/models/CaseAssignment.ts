@@ -31,9 +31,10 @@ export class CaseAssignment implements ICaseAssignment {
     if (!projectId) {
       throw new Error('プロジェクトIDは必須です。');
     }
-    if (!id || !/^WK\d{3}$/.test(id)) {
+    if (!id || !/^(CON|WK)\d{3}$/.test(id)) {
       throw new Error('不正な作業契約ID形式です。');
     }
+
     if (!caseId) {
       throw new Error('案件IDは必須です。');
     }

@@ -36,7 +36,8 @@ describe('EmployeeView (削除操作とUI制御)', () => {
   it('新しく追加した実績なし社員を削除した場合、正常に一覧から消去されること', async () => {
     // 実績なし社員をあらかじめ登録
     const repo = RepositoryRegistry.getEmployeeRepository();
-    await repo.save(new Employee('EMP004', '実績なし社員', 5000));
+    await repo.save(new Employee('EMP004', '実績なし社員'));
+
     
     // 工数実績リポジトリもモック (EMP004は紐づきなし)
     const workTimeRepo = RepositoryRegistry.getEmployeeWorkTimeRepository() as InMemoryEmployeeWorkTimeRepository;

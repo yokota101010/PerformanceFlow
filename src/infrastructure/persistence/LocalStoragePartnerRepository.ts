@@ -18,7 +18,8 @@ export class LocalStoragePartnerRepository implements PartnerRepository {
   private initSeeds(): void {
     if (typeof window === 'undefined') return; // SSR or テスト環境での窓未定義エラー回避
 
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
+    const json = localStorage.getItem(this.STORAGE_KEY);
+    if (!json || (JSON.parse(json) && JSON.parse(json).length === 0)) {
       const seeds = [
         new Partner('BP001', 'Ａソフトウェア'),
         new Partner('BP002', 'Ｂエンジニアリング'),

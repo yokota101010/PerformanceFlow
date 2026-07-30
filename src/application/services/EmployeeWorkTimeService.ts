@@ -41,13 +41,18 @@ export class EmployeeWorkTimeService implements EmployeeWorkTimeUseCase {
       throw new Error('指定された社員が存在しません。');
     }
 
+    const unitPriceRepo = RepositoryRegistry.getEmployeeUnitPriceRepository();
+    const unitPriceObj = await unitPriceRepo.findByEmployeeId(command.staffId);
+    const staffPrice = unitPriceObj ? unitPriceObj.getPriceForMonth(command.targetMonth) : 0;
+
+
     // 4. ドメインオブジェクト作成（バリデーション強制）
     const workTime = new EmployeeWorkTime({
       caseAssignmentId: command.caseAssignmentId,
       staffId: command.staffId,
       targetMonth: command.targetMonth,
       workHours: command.workHours,
-      staffPrice: emp.costPerHour,
+      staffPrice,
     });
 
     await repo.save(workTime);
@@ -58,9 +63,12 @@ export class EmployeeWorkTimeService implements EmployeeWorkTimeUseCase {
     const empRepo = RepositoryRegistry.getEmployeeRepository();
 
     // 1. 存在確認
-    const existing = await repo.findByKeys(command.caseAssignmentId, command.staffId, command.targetMonth);
+    const existingList = await repo.findAll();
+    const existing = existingList.find(
+      (w) => w.caseAssignmentId === command.caseAssignmentId && w.staffId === command.staffId && w.targetMonth === command.targetMonth
+    );
     if (!existing) {
-      throw new Error('対象の工数実績データが存在しません。');
+      throw new Error('指定された工数実績が存在しません。');
     }
 
     // 2. 単価取得
@@ -69,13 +77,18 @@ export class EmployeeWorkTimeService implements EmployeeWorkTimeUseCase {
       throw new Error('指定された社員が存在しません。');
     }
 
+    const unitPriceRepo = RepositoryRegistry.getEmployeeUnitPriceRepository();
+    const unitPriceObj = await unitPriceRepo.findByEmployeeId(command.staffId);
+    const staffPrice = unitPriceObj ? unitPriceObj.getPriceForMonth(command.targetMonth) : existing.staffPrice;
+
+
     // 3. 更新ドメインオブジェクト作成（バリデーション適用）
     const updated = new EmployeeWorkTime({
       caseAssignmentId: command.caseAssignmentId,
       staffId: command.staffId,
       targetMonth: command.targetMonth,
       workHours: command.workHours,
-      staffPrice: emp.costPerHour,
+      staffPrice,
     });
 
     await repo.save(updated);

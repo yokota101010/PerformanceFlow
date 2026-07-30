@@ -16,15 +16,15 @@ describe('OtherExpenseForm.edit (US3)', () => {
     const handleCancel = vi.fn();
 
     const existingItem = new OtherExpense({
-      caseAssignmentId: 'WK001',
-      lineNo: 2,
-      amount: 12000,
-      memo: '会議費'
+      caseAssignmentId: 'CON001',
+      lineNo: 1,
+      amount: 15000,
+      memo: '開発環境クラウド利用料'
     });
 
     render(
       <OtherExpenseForm
-        caseAssignmentId="WK001"
+        caseAssignmentId="CON001"
         editingItem={existingItem}
         onSuccess={handleSuccess}
         onCancel={handleCancel}
@@ -36,12 +36,12 @@ describe('OtherExpenseForm.edit (US3)', () => {
     const submitButton = screen.getByRole('button', { name: '保存' });
 
     // 初期値の確認
-    expect(amountInput.value).toBe('12000');
-    expect(memoInput.value).toBe('会議費');
+    expect(amountInput.value).toBe('15000');
+    expect(memoInput.value).toBe('開発環境クラウド利用料');
 
     // 編集入力
-    fireEvent.change(amountInput, { target: { value: '15000' } });
-    fireEvent.change(memoInput, { target: { value: '会議費（弁当）' } });
+    fireEvent.change(amountInput, { target: { value: '18000' } });
+    fireEvent.change(memoInput, { target: { value: '開発環境クラウド利用料（拡張）' } });
 
     // 保存実行
     fireEvent.click(submitButton);
@@ -51,9 +51,10 @@ describe('OtherExpenseForm.edit (US3)', () => {
     });
 
     const repo = RepositoryRegistry.getOtherExpenseRepository();
-    const updated = await repo.findByKeys('WK001', 2);
+    const updated = await repo.findByKeys('CON001', 1);
     expect(updated).toBeDefined();
-    expect(updated?.amount).toBe(15000);
-    expect(updated?.memo).toBe('会議費（弁当）');
+    expect(updated?.amount).toBe(18000);
+    expect(updated?.memo).toBe('開発環境クラウド利用料（拡張）');
+
   });
 });

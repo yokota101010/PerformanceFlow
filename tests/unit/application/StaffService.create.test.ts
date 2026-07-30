@@ -21,13 +21,11 @@ describe('StaffService.createStaff (新規登録)', () => {
     const staff = await service.createStaff({
       partnerId: 'BP001',
       name: '岡田以蔵',
-      costPerMonth: 500000
     });
 
     expect(staff.id).toBe('MEM005'); // シード4名の次
     expect(staff.name).toBe('岡田以蔵');
     expect(staff.partnerId).toBe('BP001');
-    expect(staff.costPerMonth).toBe(500000);
 
     const list = await service.getStaffs();
     expect(list).toHaveLength(5);
@@ -38,20 +36,17 @@ describe('StaffService.createStaff (新規登録)', () => {
     await service.createStaff({
       partnerId: 'BP001',
       name: '岡田以蔵',
-      costPerMonth: 500000
     });
 
     // 2人目の同姓同名登録
     const staff2 = await service.createStaff({
       partnerId: 'BP002',
       name: '  岡田以蔵  ', // スペース付き
-      costPerMonth: 550000
     });
 
     expect(staff2.id).toBe('MEM006');
     expect(staff2.name).toBe('岡田以蔵'); // トリミングされていること
     expect(staff2.partnerId).toBe('BP002');
-    expect(staff2.costPerMonth).toBe(550000);
 
     const list = await service.getStaffs();
     expect(list).toHaveLength(6);
@@ -61,7 +56,6 @@ describe('StaffService.createStaff (新規登録)', () => {
     const staff = await service.createStaff({
       partnerId: 'BP001',
       name: ' 　岡田以蔵　 ', // 半角全角混在
-      costPerMonth: 400000
     });
 
     expect(staff.name).toBe('岡田以蔵');
@@ -72,19 +66,8 @@ describe('StaffService.createStaff (新規登録)', () => {
       service.createStaff({
         partnerId: 'BP001',
         name: '   ',
-        costPerMonth: 500000
       })
     ).rejects.toThrow('氏名は必須です。');
-  });
-
-  it('異常系: 単価が負数の場合はエラーになること', async () => {
-    await expect(
-      service.createStaff({
-        partnerId: 'BP001',
-        name: '岡田以蔵',
-        costPerMonth: -1
-      })
-    ).rejects.toThrow('単価は0以上の整数で入力してください。');
   });
 
   it('異常系: 存在しない所属会社IDを指定した場合はエラーになること', async () => {
@@ -92,7 +75,6 @@ describe('StaffService.createStaff (新規登録)', () => {
       service.createStaff({
         partnerId: 'BP999', // 存在しない
         name: '岡田以蔵',
-        costPerMonth: 500000
       })
     ).rejects.toThrow('指定された所属会社（発注先）が存在しません。');
   });

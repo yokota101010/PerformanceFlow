@@ -23,7 +23,7 @@ describe('FinancialSummaryService Detail', () => {
 
     const wk001 = result.rows.find(r => r.assignmentId === 'WK001');
     expect(wk001).toBeDefined();
-    expect(wk001!.projectName).toBe('次世代基幹システム開発プロジェクト');
+    expect(wk001!.projectName).toBe('基幹基盤システム刷新プロジェクト');
     expect(wk001!.caseName).toBe('案件1: Ａソフト開発支援');
     expect(wk001!.sales).toBe(8000000);
     expect(wk001!.laborCost).toBe(2880000);

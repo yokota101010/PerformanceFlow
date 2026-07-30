@@ -34,12 +34,5 @@ describe('StaffView (要員一覧画面)', () => {
 
     const company2 = screen.getAllByText('Ｂエンジニアリング');
     expect(company2.length).toBeGreaterThanOrEqual(2); // 西郷、勝
-
-    // 単価のカンマ区切り表示確認
-    const cost1 = screen.getByText('1,000,000 円');
-    expect(cost1).toBeInTheDocument();
-
-    const cost2 = screen.getByText('700,000 円');
-    expect(cost2).toBeInTheDocument();
   });
 });

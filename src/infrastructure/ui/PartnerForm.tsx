@@ -60,21 +60,10 @@ export const PartnerForm: React.FC<PartnerFormProps> = ({
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto 30px auto', padding: '0 20px' }}>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          backgroundColor: 'rgba(30, 41, 59, 0.25)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '12px',
-          padding: '24px',
-          backdropFilter: 'blur(4px)',
-          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
-          {editingPartner ? `発注先編集 (${editingPartner.id})` : '発注先登録'}
-        </h3>
+    <form onSubmit={handleSubmit} className="glass-panel space-y-3">
+      <h3 className="section-title">
+        {editingPartner ? `発注先編集 (${editingPartner.id})` : '発注先登録'}
+      </h3>
 
         {error && (
           <div
@@ -168,6 +157,5 @@ export const PartnerForm: React.FC<PartnerFormProps> = ({
           </div>
         </div>
       </form>
-    </div>
   );
 };

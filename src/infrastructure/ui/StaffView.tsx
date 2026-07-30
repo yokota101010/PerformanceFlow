@@ -75,10 +75,10 @@ export const StaffView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="glass-panel p-6">
-        <h2 className="text-xl font-bold text-slate-100 mb-2">要員マスタ管理</h2>
-        <p className="text-slate-400 text-sm">
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header">
+        <h2 className="page-title">要員マスタ管理</h2>
+        <p className="page-subtitle">
           プロジェクトにアサインするパートナー要員の登録、編集、および削除を行います。
         </p>
       </div>
@@ -109,7 +109,6 @@ export const StaffView: React.FC = () => {
                   <th>要員ID</th>
                   <th>氏名</th>
                   <th>所属会社</th>
-                  <th style={{ textAlign: 'right' }}>単価 (月額)</th>
                   <th style={{ textAlign: 'center' }}>操作</th>
                 </tr>
               </thead>
@@ -119,10 +118,8 @@ export const StaffView: React.FC = () => {
                     <td style={{ fontFamily: 'monospace', fontWeight: 600, color: '#38bdf8' }}>{staff.id}</td>
                     <td style={{ fontWeight: 500, color: '#f8fafc' }}>{staff.name}</td>
                     <td>{getPartnerName(staff.partnerId)}</td>
-                    <td style={{ textAlign: 'right', fontFamily: 'monospace', color: '#34d399', fontWeight: 600 }}>
-                      {staff.costPerMonth.toLocaleString()} 円
-                    </td>
                     <td style={{ textAlign: 'center' }}>
+
                       <div className="flex justify-center space-x-2">
                         <button
                           onClick={() => handleEditClick(staff)}

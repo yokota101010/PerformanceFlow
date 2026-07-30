@@ -82,11 +82,12 @@ export const CaseAssignmentView: React.FC<CaseAssignmentViewProps> = ({ onSelect
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 style={{ fontSize: '24px', fontWeight: 700, margin: 0, color: '#f8fafc', borderBottom: '2px solid #0ea5e9', paddingBottom: '8px' }}>
-          案件作業契約（アサイン明細）管理
-        </h2>
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header">
+        <h2 className="page-title">アサイン契約管理</h2>
+        <p className="page-subtitle">
+          案件に対する契約条件（期間・契約金額・目標工数等）の登録、編集、および削除を行います。
+        </p>
       </div>
 
       {error && (

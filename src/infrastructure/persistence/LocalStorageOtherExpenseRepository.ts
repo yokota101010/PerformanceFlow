@@ -19,12 +19,14 @@ export class LocalStorageOtherExpenseRepository implements OtherExpenseRepositor
   }
 
   private initSeedData() {
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    if (!data || (JSON.parse(data) && JSON.parse(data).length === 0)) {
       const seed: StorageItem[] = [
-        { caseAssignmentId: 'WK001', lineNo: 1, amount: 50000, memo: '旅費交通費' },
-        { caseAssignmentId: 'WK001', lineNo: 2, amount: 12000, memo: '会議費' },
-        { caseAssignmentId: 'WK002', lineNo: 1, amount: 35000, memo: '消耗品費' },
+        { caseAssignmentId: 'CON001', lineNo: 1, amount: 15000, memo: '開発環境クラウド利用料' },
+        { caseAssignmentId: 'CON002', lineNo: 1, amount: 20000, memo: '外部打ち合わせ用会議室費' },
+        { caseAssignmentId: 'CON003', lineNo: 1, amount: 12000, memo: '現地調査用交通費' },
       ];
+
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(seed));
     }
   }

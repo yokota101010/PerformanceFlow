@@ -21,7 +21,7 @@ describe('CaseAssignmentView (アサイン契約一覧画面)', () => {
     // プロジェクトおよび案件のモックマスタ登録
     const projectRepo = new LocalStorageProjectRepository();
     const { Project } = await import('../../../../src/domain/models');
-    await projectRepo.save(new Project('PJ001', '次世代基幹システム開発プロジェクト'));
+    await projectRepo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     RepositoryRegistry.registerProjectRepository(projectRepo);
 
     const caseRepo = new InMemoryCaseRepository();

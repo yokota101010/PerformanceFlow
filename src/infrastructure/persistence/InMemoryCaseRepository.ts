@@ -8,10 +8,10 @@ export class InMemoryCaseRepository implements CaseRepository {
   private cases: Case[] = [];
 
   constructor() {
-    // シードデータの初期投入
+    // シードデータの初期投入 (domain-model.md 正本準拠)
     this.cases = [
-      new Case('PJ001', 'AJ001', '案件1: Ａソフト開発支援', '2026-08-15', '2026-11-15'),
-      new Case('PJ001', 'AJ002', '案件2: Ｂエンジニアリング開発支援', '2026-09-13', '2026-10-31'),
+      new Case('PJ001', 'ANK001', '要件定義・設計フェーズ', '2026-08-15', '2026-11-15'),
+      new Case('PJ001', 'ANK002', '開発・テストフェーズ', '2026-10-13', '2027-01-31'),
     ];
   }
 
@@ -52,12 +52,12 @@ export class InMemoryCaseRepository implements CaseRepository {
   async nextIdentity(projectId: string): Promise<string> {
     const projectCases = this.cases.filter((c) => c.projectId === projectId);
     if (projectCases.length === 0) {
-      return 'AJ001';
+      return 'ANK001';
     }
 
     const nums = projectCases
       .map((c) => {
-        const match = c.id.match(/^AJ(\d{3})$/);
+        const match = c.id.match(/^ANK(\d{3})$/) || c.id.match(/^AJ(\d{3})$/);
         return match ? parseInt(match[1], 10) : 0;
       })
       .filter((n) => n > 0);
@@ -69,7 +69,7 @@ export class InMemoryCaseRepository implements CaseRepository {
       throw new Error('案件IDの発行上限に達しました。');
     }
 
-    return `AJ${String(nextNum).padStart(3, '0')}`;
+    return `ANK${String(nextNum).padStart(3, '0')}`;
   }
 
   /**

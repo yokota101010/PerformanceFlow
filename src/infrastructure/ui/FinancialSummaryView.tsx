@@ -66,11 +66,11 @@ export const FinancialSummaryView: React.FC<FinancialSummaryViewProps> = ({ useC
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 max-w-5xl mx-auto">
       {/* ヘッダーセクション */}
-      <div className="glass-panel p-6">
-        <h2 className="text-xl font-bold text-slate-100 mb-2">業績・収支サマリ</h2>
-        <p className="text-slate-400 text-sm">
+      <div className="page-header">
+        <h2 className="page-title">業績・収支サマリ</h2>
+        <p className="page-subtitle">
           プロジェクト・案件の受注売上、発生原価（加工費・外注額・経費）、および利益率をリアルタイム集計します。
         </p>
       </div>

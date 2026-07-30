@@ -37,6 +37,10 @@ import { InMemoryOtherExpenseRepository } from './InMemoryOtherExpenseRepository
 import { LocalStorageOtherExpenseRepository } from './LocalStorageOtherExpenseRepository';
 import { InMemoryMonthlyMemberWorkHoursSummaryRepository } from './InMemoryMonthlyMemberWorkHoursSummaryRepository';
 import { LocalStorageMonthlyMemberWorkHoursSummaryRepository } from './LocalStorageMonthlyMemberWorkHoursSummaryRepository';
+import { LocalStorageEmployeeUnitPriceRepository } from './LocalStorageEmployeeUnitPriceRepository';
+import { LocalStorageStaffUnitPriceRepository } from './LocalStorageStaffUnitPriceRepository';
+import { LocalStorageQuarterCategoryRepository } from './LocalStorageQuarterCategoryRepository';
+
 
 /**
  * リポジトリの具象インスタンスを一元管理するレジストリクラス。
@@ -296,6 +300,46 @@ export class RepositoryRegistry {
     this.monthlyMemberWorkHoursSummaryRepository = repository;
   }
 
+  private static employeeUnitPriceRepository: LocalStorageEmployeeUnitPriceRepository | null = null;
+  private static staffUnitPriceRepository: LocalStorageStaffUnitPriceRepository | null = null;
+  private static quarterCategoryRepository: LocalStorageQuarterCategoryRepository | null = null;
+
+  static getEmployeeUnitPriceRepository(): LocalStorageEmployeeUnitPriceRepository {
+    if (!this.employeeUnitPriceRepository) {
+      this.employeeUnitPriceRepository = new LocalStorageEmployeeUnitPriceRepository();
+    }
+    return this.employeeUnitPriceRepository;
+  }
+
+  static getStaffUnitPriceRepository(): LocalStorageStaffUnitPriceRepository {
+    if (!this.staffUnitPriceRepository) {
+      this.staffUnitPriceRepository = new LocalStorageStaffUnitPriceRepository();
+    }
+    return this.staffUnitPriceRepository;
+  }
+
+  static getQuarterCategoryRepository(): LocalStorageQuarterCategoryRepository {
+    if (!this.quarterCategoryRepository) {
+      this.quarterCategoryRepository = new LocalStorageQuarterCategoryRepository();
+    }
+    return this.quarterCategoryRepository;
+  }
+
+  static registerEmployeeUnitPriceRepository(repository: any): void {
+    this.employeeUnitPriceRepository = repository;
+  }
+
+  static registerStaffUnitPriceRepository(repository: any): void {
+    this.staffUnitPriceRepository = repository;
+  }
+
+  static registerQuarterCategoryRepository(repository: any): void {
+    this.quarterCategoryRepository = repository;
+  }
+
+
+
+
   /**
    * レジストリの状態をクリアする（テスト用）
    */
@@ -313,5 +357,9 @@ export class RepositoryRegistry {
     this.caseAssignmentRepository = null;
     this.otherExpenseRepository = null;
     this.monthlyMemberWorkHoursSummaryRepository = null;
+    this.employeeUnitPriceRepository = null;
+    this.staffUnitPriceRepository = null;
+    this.quarterCategoryRepository = null;
   }
 }
+

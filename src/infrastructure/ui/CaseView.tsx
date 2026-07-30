@@ -73,12 +73,11 @@ export const CaseView: React.FC = () => {
   const handleFormCancel = () => {
     setEditingCase(null);
   };
-
   return (
-    <div className="space-y-6">
-      <div className="glass-panel p-6">
-        <h2 className="text-xl font-bold text-slate-100 mb-2">案件管理</h2>
-        <p className="text-slate-400 text-sm">
+    <div className="space-y-4 max-w-5xl mx-auto">
+      <div className="page-header">
+        <h2 className="page-title">案件管理</h2>
+        <p className="page-subtitle">
           プロジェクトに紐づく作業アサイン先（案件マスタ）の登録、編集、および削除を行います。
         </p>
       </div>

@@ -19,7 +19,7 @@ describe('ProjectService.getProjects (一覧取得)', () => {
     expect(projects).toHaveLength(1);
     expect(projects[0]).toEqual({
       id: 'PJ001',
-      name: '次世代基幹システム開発プロジェクト'
+      name: '基幹基盤システム刷新プロジェクト'
     });
   });
 

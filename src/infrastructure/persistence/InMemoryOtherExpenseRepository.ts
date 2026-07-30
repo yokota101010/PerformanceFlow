@@ -14,11 +14,12 @@ export class InMemoryOtherExpenseRepository implements OtherExpenseRepository {
 
   resetToSeed(): void {
     this.items = [
-      new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 1, amount: 50000, memo: '旅費交通費' }),
-      new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 2, amount: 12000, memo: '会議費' }),
-      new OtherExpense({ caseAssignmentId: 'WK002', lineNo: 1, amount: 35000, memo: '消耗品費' }),
+      new OtherExpense({ caseAssignmentId: 'CON001', lineNo: 1, amount: 15000, memo: '開発環境クラウド利用料' }),
+      new OtherExpense({ caseAssignmentId: 'CON002', lineNo: 1, amount: 20000, memo: '外部打ち合わせ用会議室費' }),
+      new OtherExpense({ caseAssignmentId: 'CON003', lineNo: 1, amount: 12000, memo: '現地調査用交通費' }),
     ];
   }
+
 
   async existsByCaseAssignmentId(projectId: string, caseAssignmentId: string): Promise<boolean> {
     void projectId;

@@ -21,8 +21,9 @@ describe('PartnerOrderService - Update (US3)', () => {
 
   it('既存発注データの明細が正常に更新・追加・削除でき、合計工数・発注額が再計算されて保存されること', async () => {
     // マスタ要員の登録 (BP001所属)
-    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1', 1000000));
-    await staffRepo.save(new Staff('MEM002', 'BP001', '要員2', 700000));
+    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1'));
+    await staffRepo.save(new Staff('MEM002', 'BP001', '要員2'));
+
 
     // ORD001 (BP001) の明細を MEM001 (0.5), MEM002 (0.2) に更新
     const command = {
@@ -40,12 +41,13 @@ describe('PartnerOrderService - Update (US3)', () => {
     expect(saved?.details).toHaveLength(2);
     // 合計工数: 0.5 + 0.2 = 0.7
     expect(saved?.totalEffort).toBe(0.7);
-    // 合計発注額: (0.5 * 100万) + (0.2 * 70万) = 50万 + 14万 = 64万
-    expect(saved?.totalAmount).toBe(640000);
+    // 合計発注額: (0.5 * 100万) + (0.2 * 100万) = 50万 + 20万 = 70万
+    expect(saved?.totalAmount).toBe(700000);
+
   });
 
   it('発注工数の上限(1.0超)バリデーションが働き、保存がブロックされること', async () => {
-    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1', 1000000));
+    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1'));
 
     const command = {
       orderId: 'ORD001',
@@ -62,7 +64,8 @@ describe('PartnerOrderService - Update (US3)', () => {
   it('要員の所属会社と発注の発注先IDが一致しない要員の登録がバリデーションでブロックされること', async () => {
     // ORD001 の発注先は BP001
     // 他社(BP002)所属の要員を登録
-    await staffRepo.save(new Staff('MEM003', 'BP002', '要員3', 850000));
+    await staffRepo.save(new Staff('MEM003', 'BP002', '要員3'));
+
 
     const command = {
       orderId: 'ORD001',

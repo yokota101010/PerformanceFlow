@@ -69,7 +69,7 @@ describe('ProjectForm (編集モード)', () => {
     const submitBtn = screen.getByRole('button', { name: '保存' });
 
     await userEvent.clear(input);
-    await userEvent.type(input, '次世代基幹システム開発プロジェクト');
+    await userEvent.type(input, '基幹基盤システム刷新プロジェクト');
     await userEvent.click(submitBtn);
 
     const errorMsg = await screen.findByRole('alert');

@@ -14,12 +14,11 @@ export class LocalStorageCaseAssignmentRepository implements CaseAssignmentRepos
   private initializeSeedData(): void {
     try {
       const data = localStorage.getItem(this.STORAGE_KEY);
-      if (!data) {
+      if (!data || (JSON.parse(data) && JSON.parse(data).length === 0)) {
         const seed = [
-          new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 10.0, 800000, 5242000),
-          new CaseAssignment('PJ001', 'WK002', 'AJ001', '2026-10-01', '2026-11-15', 10.0, 800000, 5215000),
-          new CaseAssignment('PJ001', 'WK003', 'AJ002', '2026-09-13', '2026-09-30', 2.0, 700000, 2490000),
-          new CaseAssignment('PJ001', 'WK004', 'AJ002', '2026-10-01', '2026-10-31', 2.0, 700000, 2490000),
+          new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 10.0, 1200000, 0),
+          new CaseAssignment('PJ001', 'CON002', 'ANK001', '2026-10-01', '2026-11-15', 10.0, 1200000, 0),
+          new CaseAssignment('PJ001', 'CON003', 'ANK002', '2026-10-13', '2027-01-31', 4.0, 1000000, 0),
         ];
         this.saveAll(seed);
       }
@@ -44,7 +43,7 @@ export class LocalStorageCaseAssignmentRepository implements CaseAssignmentRepos
             item.endDate,
             item.contractEffort,
             item.contractPrice,
-            item.cost
+            item.cost || 0
           )
       );
     } catch (e) {
@@ -59,10 +58,6 @@ export class LocalStorageCaseAssignmentRepository implements CaseAssignmentRepos
     } catch (e) {
       console.error('Failed to save case assignments to localStorage:', e);
     }
-  }
-
-  async existsByCaseId(projectId: string, caseId: string): Promise<boolean> {
-    return this.loadAll().some((a) => a.projectId === projectId && a.caseId === caseId);
   }
 
   async findAll(): Promise<readonly CaseAssignment[]> {
@@ -81,7 +76,11 @@ export class LocalStorageCaseAssignmentRepository implements CaseAssignmentRepos
   async findByCaseId(projectId: string, caseId: string): Promise<readonly CaseAssignment[]> {
     return this.loadAll()
       .filter((a) => a.projectId === projectId && a.caseId === caseId)
-      .sort((a, b) => a.startDate.localeCompare(b.startDate));
+      .sort((a, b) => a.id.localeCompare(b.id));
+  }
+
+  async existsByCaseId(projectId: string, caseId: string): Promise<boolean> {
+    return this.loadAll().some((a) => a.projectId === projectId && a.caseId === caseId);
   }
 
   async findById(id: string): Promise<CaseAssignment | null> {
@@ -110,12 +109,12 @@ export class LocalStorageCaseAssignmentRepository implements CaseAssignmentRepos
   async nextIdentity(): Promise<string> {
     const list = this.loadAll();
     if (list.length === 0) {
-      return 'WK001';
+      return 'CON001';
     }
 
     const nums = list
       .map((a) => {
-        const match = a.id.match(/^WK(\d{3})$/);
+        const match = a.id.match(/^CON(\d{3})$/) || a.id.match(/^WK(\d{3})$/);
         return match ? parseInt(match[1], 10) : 0;
       })
       .filter((n) => n > 0);
@@ -127,6 +126,7 @@ export class LocalStorageCaseAssignmentRepository implements CaseAssignmentRepos
       throw new Error('作業契約IDの発行上限に達しました。');
     }
 
-    return `WK${String(nextNum).padStart(3, '0')}`;
+    return `CON${String(nextNum).padStart(3, '0')}`;
   }
+
 }

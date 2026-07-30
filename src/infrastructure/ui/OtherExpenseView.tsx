@@ -115,10 +115,10 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
   const activeAssignment = assignments.find(a => a.id === selectedAssignmentId);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 max-w-5xl mx-auto">
       {/* ヘッダーエリア */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center space-x-4">
+      <div className="page-header flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="flex items-center space-x-4" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {onBack && (
             <button
               onClick={onBack}
@@ -128,9 +128,12 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
               ← 戻る
             </button>
           )}
-          <h2 style={{ fontSize: '24px', fontWeight: 700, margin: 0, color: '#f8fafc', borderBottom: '2px solid #0ea5e9', paddingBottom: '8px' }}>
-            その他経費入力
-          </h2>
+          <div>
+            <h2 className="page-title">その他経費入力</h2>
+            <p className="page-subtitle">
+              アサイン契約に直接紐づくクラウド費用・交通費等の直接経費の登録、編集、および削除を行います。
+            </p>
+          </div>
         </div>
         <button
           onClick={handleCreateClick}

@@ -25,10 +25,6 @@ export class StaffService implements StaffUseCase {
       throw new Error('氏名は必須です。');
     }
 
-    if (typeof command.costPerMonth !== 'number' || isNaN(command.costPerMonth) || command.costPerMonth < 0) {
-      throw new Error('単価は0以上の整数で入力してください。');
-    }
-
     // FK検証: 所属会社IDの存在確認
     const partnerRepo = RepositoryRegistry.getPartnerRepository();
     const partner = await partnerRepo.findById(command.partnerId);
@@ -37,7 +33,7 @@ export class StaffService implements StaffUseCase {
     }
 
     const nextId = await this.getRepository().nextIdentity();
-    const newStaff = new Staff(nextId, command.partnerId, trimmedName, command.costPerMonth);
+    const newStaff = new Staff(nextId, command.partnerId, trimmedName);
     await this.getRepository().save(newStaff);
     return newStaff;
   }
@@ -54,10 +50,6 @@ export class StaffService implements StaffUseCase {
       throw new Error('氏名は必須です。');
     }
 
-    if (typeof command.costPerMonth !== 'number' || isNaN(command.costPerMonth) || command.costPerMonth < 0) {
-      throw new Error('単価は0以上の整数で入力してください。');
-    }
-
     // FK検証: 所属会社IDの存在確認
     const partnerRepo = RepositoryRegistry.getPartnerRepository();
     const partner = await partnerRepo.findById(command.partnerId);
@@ -65,8 +57,8 @@ export class StaffService implements StaffUseCase {
       throw new Error('指定された所属会社（発注先）が存在しません。');
     }
 
-    const updatedStaff = new Staff(command.id, command.partnerId, trimmedName, command.costPerMonth);
-    await repo.save(updatedStaff);
+    const updated = new Staff(command.id, command.partnerId, trimmedName);
+    await repo.save(updated);
   }
 
   async deleteStaff(id: string): Promise<void> {

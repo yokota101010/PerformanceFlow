@@ -20,23 +20,30 @@ export class LocalStorageEmployeeWorkTimeRepository implements EmployeeWorkTimeR
   }
 
   private initSeedData() {
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    if (!data || (JSON.parse(data) && JSON.parse(data).length === 0)) {
       const seed: StorageItem[] = [
-        { caseAssignmentId: 'WK001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160 },
-        { caseAssignmentId: 'WK001', staffId: 'EMP001', targetMonth: '2026-09-01', workHours: 160 },
-        { caseAssignmentId: 'WK002', staffId: 'EMP001', targetMonth: '2026-10-01', workHours: 160 },
-        { caseAssignmentId: 'WK002', staffId: 'EMP001', targetMonth: '2026-11-01', workHours: 160 },
-        { caseAssignmentId: 'WK003', staffId: 'EMP002', targetMonth: '2026-09-01', workHours: 160 },
-        { caseAssignmentId: 'WK004', staffId: 'EMP002', targetMonth: '2026-10-01', workHours: 160 },
+        { caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160 },
+        { caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-09-01', workHours: 160 },
+        { caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-10-01', workHours: 160 },
+        { caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-11-01', workHours: 160 },
+        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-10-01', workHours: 160 },
+        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-11-01', workHours: 160 },
+        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-12-01', workHours: 160 },
+        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2027-01-01', workHours: 160 },
       ];
+
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(seed));
     }
   }
 
-  private async getPrice(staffId: string): Promise<number> {
-    const empRepo = RepositoryRegistry.getEmployeeRepository();
-    const emp = await empRepo.findById(staffId);
-    return emp ? emp.costPerHour : 0;
+  private async getPrice(staffId: string, targetMonth?: string): Promise<number> {
+    const unitPriceRepo = RepositoryRegistry.getEmployeeUnitPriceRepository();
+    const unitPriceObj = await unitPriceRepo.findByEmployeeId(staffId);
+    if (!unitPriceObj) return 0;
+    const ym = targetMonth ? targetMonth.substring(0, 7) : '2026-04';
+    return unitPriceObj.getPriceForMonth(ym);
+
   }
 
   async findAll(): Promise<readonly EmployeeWorkTime[]> {
@@ -45,9 +52,10 @@ export class LocalStorageEmployeeWorkTimeRepository implements EmployeeWorkTimeR
     const rawItems: StorageItem[] = JSON.parse(dataStr);
     const result: EmployeeWorkTime[] = [];
     for (const raw of rawItems) {
-      const price = await this.getPrice(raw.staffId);
+      const price = await this.getPrice(raw.staffId, raw.targetMonth);
       result.push(new EmployeeWorkTime({ ...raw, staffPrice: price }));
     }
+
     return result;
   }
 

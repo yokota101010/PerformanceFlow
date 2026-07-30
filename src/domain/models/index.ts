@@ -1,4 +1,4 @@
-export type { Project as IProject, Employee as IEmployee, Partner as IPartner, Staff as IStaff, Case as ICase, CaseAssignment as ICaseAssignment, PartnerOrder as IPartnerOrder, OrderDetail as IOrderDetail, IEmployeeWorkTime, IEmployeeWorkTimeSummary, OtherExpense as IOtherExpense } from './types';
+export type { Project as IProject, Employee as IEmployee, Partner as IPartner, Staff as IStaff, Case as ICase, CaseAssignment as ICaseAssignment, PartnerOrder as IPartnerOrder, OrderDetail as IOrderDetail, IEmployeeWorkTime, IEmployeeWorkTimeSummary, OtherExpense as IOtherExpense, MonthlyEmployeeUnitPrice, MonthlyStaffUnitPrice } from './types';
 export { Project } from './Project';
 export { Employee } from './Employee';
 export { Partner } from './Partner';
@@ -7,6 +7,7 @@ export { Case } from './Case';
 export { CaseAssignment } from './CaseAssignment';
 export { PartnerOrder, OrderDetail } from './PartnerOrder';
 export { EmployeeWorkTime } from './EmployeeWorkTime';
-export { OtherExpense } from './OtherExpense';
-export { MonthlyMemberWorkHoursSummary } from './MonthlyMemberWorkHoursSummary';
+export { EmployeeUnitPrice } from './EmployeeUnitPrice';
+export { StaffUnitPrice } from './StaffUnitPrice';
+export { QuarterCategory } from './QuarterCategory';
 

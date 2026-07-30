@@ -11,7 +11,8 @@ describe('EmployeeWorkTimeService.update (US3)', () => {
     RepositoryRegistry.clear();
 
     const empRepo = new InMemoryEmployeeRepository();
-    empRepo.save(new Employee('EMP001', 'トム・デマルコ', 9000));
+    empRepo.save(new Employee('EMP001', 'トム・デマルコ'));
+
     RepositoryRegistry.registerEmployeeRepository(empRepo);
   });
 
@@ -30,7 +31,8 @@ describe('EmployeeWorkTimeService.update (US3)', () => {
     );
     expect(record).toBeDefined();
     expect(record!.workHours).toBe(120);
-    expect(record!.laborCost).toBe(1080000); // 9000 * 120
+    expect(record!.laborCost).toBe(1200000); // 10000 * 120
+
   });
 
   it('存在しない複合キーで更新しようとしたとき、エラーが発生すること', async () => {
@@ -41,7 +43,8 @@ describe('EmployeeWorkTimeService.update (US3)', () => {
         targetMonth: '2026-08-01',
         workHours: 120,
       })
-    ).rejects.toThrow('対象の工数実績データが存在しません。');
+    ).rejects.toThrow('指定された工数実績が存在しません。');
+
   });
 
   it('更新後の作業時間が200時間を超える、または0時間未満のとき、エラーが発生すること', async () => {

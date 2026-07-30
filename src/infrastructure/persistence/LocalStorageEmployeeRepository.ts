@@ -4,7 +4,6 @@ import { EmployeeRepository } from '../../domain/repositories';
 interface EmployeeSerialized {
   readonly id: string;
   readonly name: string;
-  readonly costPerHour: number;
 }
 
 /**
@@ -16,11 +15,11 @@ export class LocalStorageEmployeeRepository implements EmployeeRepository {
   constructor() {
     // 初期データの自動投入 (T032)
     const stored = localStorage.getItem(this.storageKey);
-    if (!stored) {
+    if (!stored || (JSON.parse(stored) && JSON.parse(stored).length === 0)) {
       const initialSeed: EmployeeSerialized[] = [
-        { id: 'EMP001', name: 'トム・デマルコ', costPerHour: 9000 },
-        { id: 'EMP002', name: 'ロバート・マーチン', costPerHour: 8000 },
-        { id: 'EMP003', name: 'マーチン・ファウラー', costPerHour: 10000 },
+        { id: 'EMP001', name: 'トム・デマルコ' },
+        { id: 'EMP002', name: 'ロバート・マーチン' },
+        { id: 'EMP003', name: 'マーチン・ファウラー' },
       ];
       localStorage.setItem(this.storageKey, JSON.stringify(initialSeed));
     }
@@ -44,7 +43,7 @@ export class LocalStorageEmployeeRepository implements EmployeeRepository {
     const list = this.loadSerialized();
     // ドメインモデル Employee クラスを再構築して返却
     return list
-      .map((item) => new Employee(item.id, item.name, item.costPerHour))
+      .map((item) => new Employee(item.id, item.name))
       .sort((a, b) => a.id.localeCompare(b.id));
   }
 
@@ -52,7 +51,7 @@ export class LocalStorageEmployeeRepository implements EmployeeRepository {
     const list = this.loadSerialized();
     const item = list.find((e) => e.id === id);
     if (!item) return null;
-    return new Employee(item.id, item.name, item.costPerHour);
+    return new Employee(item.id, item.name);
   }
 
   async save(employee: Employee): Promise<void> {
@@ -60,8 +59,8 @@ export class LocalStorageEmployeeRepository implements EmployeeRepository {
     const serialized: EmployeeSerialized = {
       id: employee.id,
       name: employee.name,
-      costPerHour: employee.costPerHour,
     };
+
 
     const index = list.findIndex((e) => e.id === employee.id);
     if (index >= 0) {
