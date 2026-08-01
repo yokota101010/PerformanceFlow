@@ -66,7 +66,10 @@ describe('EmployeeWorkTimeService.create (US2)', () => {
   });
 
   it('同一の複合キーで重複登録しようとしたとき、エラーが発生すること', async () => {
-    // すでにシードデータに存在する WK001 + EMP001 + 2026-08-01 で重複登録
+    const { EmployeeWorkTime } = await import('../../../src/domain/models/EmployeeWorkTime');
+    const workTimeRepo = RepositoryRegistry.getEmployeeWorkTimeRepository();
+    await workTimeRepo.save(new EmployeeWorkTime({ caseAssignmentId: 'WK001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160, staffPrice: 9000 }));
+
     await expect(
       service.createWorkTime({
         caseAssignmentId: 'WK001',

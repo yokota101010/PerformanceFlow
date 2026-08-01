@@ -6,9 +6,11 @@ import { InMemoryPartnerRepository } from '../../../../src/infrastructure/persis
 import { Partner } from '../../../../src/domain/models';
 
 describe('PartnerForm (編集モード)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
+    const repo = new InMemoryPartnerRepository();
+    await repo.save(new Partner('BP001', 'Ａソフトウェア'));
+    RepositoryRegistry.registerPartnerRepository(repo);
   });
 
   it('編集用発注先データが渡されたとき、フォームに初期値が読み込まれ、タイトルが「発注先編集」になること', () => {

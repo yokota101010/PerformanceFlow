@@ -16,6 +16,18 @@ describe('PartnerOrderView (一覧表示と自動計算 UI)', () => {
 
     // モックリポジトリの登録
     const orderRepo = new InMemoryPartnerOrderRepository();
+    const { PartnerOrder, OrderDetail } = await import('../../../../src/domain/models/PartnerOrder');
+    const d1 = [
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-08-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-08-01', 'BP001', 'BP001')
+    ];
+    await orderRepo.save(new PartnerOrder('ORD001', 'CON001', 'BP001', '2026-08-01', d1));
+
+    const d5 = [
+      new OrderDetail('ORD005', 'MEM003', 1.0, 1050000, '2026-10-01', 'BP002', 'BP002')
+    ];
+    await orderRepo.save(new PartnerOrder('ORD005', 'CON003', 'BP002', '2026-10-01', d5));
+
     RepositoryRegistry.registerPartnerOrderRepository(orderRepo);
 
     // 発注先マスタ
@@ -73,8 +85,8 @@ describe('PartnerOrderView (一覧表示と自動計算 UI)', () => {
     expect(screen.getAllByText('1.3')[0]).toBeInTheDocument();
     expect(screen.getAllByText('1,300,000')[0]).toBeInTheDocument();
 
-    // ORD005: 1人月 (1), 1,050,000円
-    expect(screen.getAllByText('1')[0]).toBeInTheDocument();
+    // ORD005: 1人月 (1.0), 1,050,000円
+    expect(screen.getAllByText('1.0')[0]).toBeInTheDocument();
     expect(screen.getAllByText('1,050,000')[0]).toBeInTheDocument();
   });
 

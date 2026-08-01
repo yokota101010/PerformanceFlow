@@ -9,15 +9,19 @@ import { LocalStorageProjectRepository } from '../../../../src/infrastructure/pe
 describe('CaseView (案件削除フロー)', () => {
   beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerCaseRepository(new InMemoryCaseRepository());
-    RepositoryRegistry.registerCaseAssignmentRepository(new InMemoryCaseAssignmentRepository());
-    
     const projectRepo = new LocalStorageProjectRepository();
-    const { Project } = await import('../../../../src/domain/models');
+    const { Project, Case, CaseAssignment } = await import('../../../../src/domain/models');
     await projectRepo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     RepositoryRegistry.registerProjectRepository(projectRepo);
 
-    // confirm ダイアログをモック
+    const caseRepo = new InMemoryCaseRepository();
+    await caseRepo.save(new Case('PJ001', 'ANK001', '要件定義・設計フェーズ', '2026-08-15', '2026-11-15'));
+    RepositoryRegistry.registerCaseRepository(caseRepo);
+
+    const assignRepo = new InMemoryCaseAssignmentRepository();
+    await assignRepo.save(new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 1.0, 800000, 0));
+    RepositoryRegistry.registerCaseAssignmentRepository(assignRepo);
+    
     vi.spyOn(window, 'confirm').mockImplementation(() => true);
   });
 

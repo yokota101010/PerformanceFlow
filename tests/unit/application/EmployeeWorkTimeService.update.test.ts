@@ -7,13 +7,16 @@ import { Employee } from '../../../src/domain/models';
 describe('EmployeeWorkTimeService.update (US3)', () => {
   const service = new EmployeeWorkTimeService();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
 
     const empRepo = new InMemoryEmployeeRepository();
-    empRepo.save(new Employee('EMP001', 'トム・デマルコ'));
-
+    await empRepo.save(new Employee('EMP001', 'トム・デマルコ'));
     RepositoryRegistry.registerEmployeeRepository(empRepo);
+
+    const { EmployeeWorkTime } = await import('../../../src/domain/models/EmployeeWorkTime');
+    const workTimeRepo = RepositoryRegistry.getEmployeeWorkTimeRepository();
+    await workTimeRepo.save(new EmployeeWorkTime({ caseAssignmentId: 'WK001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160, staffPrice: 10000 }));
   });
 
   it('登録済みのデータに対して、作業時間を変更して更新できること', async () => {

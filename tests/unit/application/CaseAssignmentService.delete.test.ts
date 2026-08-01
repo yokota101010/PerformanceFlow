@@ -31,9 +31,10 @@ describe('CaseAssignmentService.delete (物理削除と制約)', () => {
   });
 
   it('発注実績ORD001等が紐づいているWK001の削除を試みると、削除制限例外がスローされること', async () => {
-    // InMemoryPartnerOrderRepository にて WK001 を参照する発注があるようにモック
-    // （既存のシードデータにおいて WK001 に紐づく発注データが登録されていることを確認）
-    // 削除ブロックを確認
+    const { CaseAssignment } = await import('../../../src/domain/models');
+    await caseAssignmentRepo.save(new CaseAssignment('PJ001', 'WK001', 'ANK001', '2026-08-15', '2026-09-30', 1.0, 800000, 0));
+    orderRepo.setHasCaseAssignmentOrder('PJ001', 'WK001', true);
+
     await expect(service.deleteAssignment('PJ001', 'WK001')).rejects.toThrow(
       'この作業契約は発注実績、工数実績、またはその他経費実績から参照されているため削除できません。'
     );

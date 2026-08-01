@@ -5,9 +5,14 @@ import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/R
 import { InMemoryEmployeeRepository } from '../../../../src/infrastructure/persistence/InMemoryEmployeeRepository';
 
 describe('EmployeeView (社員一覧画面)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerEmployeeRepository(new InMemoryEmployeeRepository());
+    const repo = new InMemoryEmployeeRepository();
+    const { Employee } = await import('../../../../src/domain/models');
+    await repo.save(new Employee('EMP001', 'トム・デマルコ'));
+    await repo.save(new Employee('EMP002', 'ロバート・マーチン'));
+    await repo.save(new Employee('EMP003', 'マーチン・ファウラー'));
+    RepositoryRegistry.registerEmployeeRepository(repo);
   });
 
   it('初期読み込み時に社員一覧がテーブル表示され、シードデータが一覧に表示されること', async () => {

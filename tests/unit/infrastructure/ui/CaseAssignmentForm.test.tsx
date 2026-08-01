@@ -49,8 +49,8 @@ describe('CaseAssignmentForm (新規登録UI)', () => {
     // 登録ボタンをクリック
     fireEvent.click(screen.getByRole('button', { name: '登録' }));
 
-    // 新規登録された WK001 がテーブル上にレンダリングされることを確認
-    const newId = await screen.findByText('WK001');
+    // 新規登録された CON001 がテーブル上にレンダリングされることを確認
+    const newId = await screen.findByText('CON001');
     expect(newId).toBeInTheDocument();
   });
 

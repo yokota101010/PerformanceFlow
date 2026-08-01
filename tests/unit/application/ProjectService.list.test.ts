@@ -13,19 +13,15 @@ describe('ProjectService.getProjects (一覧取得)', () => {
     service = new ProjectService();
   });
 
-  it('初回起動時にシードデータ (PJ001) が自動的に投入されて取得できること', async () => {
+  it('初期状態ではデータ無しの状態（0件）であること', async () => {
     const projects = await service.getProjects();
-    
-    expect(projects).toHaveLength(1);
-    expect(projects[0]).toEqual({
-      id: 'PJ001',
-      name: '基幹基盤システム刷新プロジェクト'
-    });
+    expect(projects).toHaveLength(0);
   });
 
   it('複数登録されている場合、プロジェクトID of 昇順で取得できること', async () => {
     const repo = RepositoryRegistry.getProjectRepository();
     
+    await repo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     await repo.save(new Project('PJ003', 'プロジェクトC'));
     await repo.save(new Project('PJ002', 'プロジェクトB'));
 

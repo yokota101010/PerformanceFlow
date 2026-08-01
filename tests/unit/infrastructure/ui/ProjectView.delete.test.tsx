@@ -9,10 +9,15 @@ import { Project } from '../../../../src/domain/models';
 describe('ProjectView (削除操作統合)', () => {
   beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
-
-    const repo = RepositoryRegistry.getProjectRepository();
+    const repo = new InMemoryProjectRepository();
+    await repo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     await repo.save(new Project('PJ002', '新規製品開発プロジェクト'));
+    RepositoryRegistry.registerProjectRepository(repo);
+
+    const caseRepo = new (await import('../../../../src/infrastructure/persistence/InMemoryCaseRepository')).InMemoryCaseRepository();
+    const { Case } = await import('../../../../src/domain/models');
+    await caseRepo.save(new Case('PJ001', 'ANK001', '案件1', '2026-08-15', '2026-11-15'));
+    RepositoryRegistry.registerCaseRepository(caseRepo);
 
     vi.spyOn(window, 'confirm').mockImplementation(() => true);
   });

@@ -6,10 +6,20 @@ import { InMemoryStaffRepository } from '../../../../src/infrastructure/persiste
 import { InMemoryPartnerRepository } from '../../../../src/infrastructure/persistence/InMemoryPartnerRepository';
 
 describe('StaffView (要員一覧画面)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerStaffRepository(new InMemoryStaffRepository());
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
+    const partnerRepo = new InMemoryPartnerRepository();
+    const { Partner, Staff } = await import('../../../../src/domain/models');
+    await partnerRepo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await partnerRepo.save(new Partner('BP002', 'Ｂエンジニアリング'));
+    RepositoryRegistry.registerPartnerRepository(partnerRepo);
+
+    const staffRepo = new InMemoryStaffRepository();
+    await staffRepo.save(new Staff('MEM001', 'BP001', '坂本龍馬'));
+    await staffRepo.save(new Staff('MEM002', 'BP001', '高杉晋作'));
+    await staffRepo.save(new Staff('MEM003', 'BP002', '西郷隆盛'));
+    await staffRepo.save(new Staff('MEM004', 'BP002', '勝海舟'));
+    RepositoryRegistry.registerStaffRepository(staffRepo);
   });
 
   it('初期読み込み時に要員一覧がテーブル表示され、シードデータおよび所属会社名が正しく表示されること', async () => {

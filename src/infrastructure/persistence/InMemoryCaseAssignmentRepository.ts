@@ -12,14 +12,6 @@ export class InMemoryCaseAssignmentRepository implements CaseAssignmentRepositor
   }
 
   private initializeSeedData(): void {
-    const seeds = [
-      new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 10.0, 1200000, 0),
-      new CaseAssignment('PJ001', 'CON002', 'ANK001', '2026-10-01', '2026-11-15', 10.0, 1200000, 0),
-      new CaseAssignment('PJ001', 'CON003', 'ANK002', '2026-10-13', '2027-01-31', 4.0, 1000000, 0),
-    ];
-    for (const assignment of seeds) {
-      this.assignments.set(assignment.id, assignment);
-    }
   }
 
   async existsByCaseId(projectId: string, caseId: string): Promise<boolean> {

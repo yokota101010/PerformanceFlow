@@ -10,10 +10,13 @@ describe('CaseService.deleteCase (削除)', () => {
   let caseRepo: InMemoryCaseRepository;
   let assignRepo: InMemoryCaseAssignmentRepository;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
     caseRepo = new InMemoryCaseRepository();
     assignRepo = new InMemoryCaseAssignmentRepository();
+    
+    await caseRepo.save(new Case('PJ001', 'AJ001', '要件定義・設計フェーズ', '2026-08-15', '2026-11-15'));
+    assignRepo.setHasAssignment('PJ001', 'AJ001', true);
     
     RepositoryRegistry.registerCaseRepository(caseRepo);
     RepositoryRegistry.registerCaseAssignmentRepository(assignRepo);

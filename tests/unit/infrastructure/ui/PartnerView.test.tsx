@@ -5,9 +5,13 @@ import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/R
 import { InMemoryPartnerRepository } from '../../../../src/infrastructure/persistence/InMemoryPartnerRepository';
 
 describe('PartnerView (発注先一覧画面)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
+    const repo = new InMemoryPartnerRepository();
+    const { Partner } = await import('../../../../src/domain/models');
+    await repo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await repo.save(new Partner('BP002', 'Ｂエンジニアリング'));
+    RepositoryRegistry.registerPartnerRepository(repo);
   });
 
   it('初期読み込み時に発注先一覧がテーブル表示され、シードデータが一覧に表示されること', async () => {

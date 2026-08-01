@@ -5,9 +5,14 @@ import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/R
 import { InMemoryOtherExpenseRepository } from '../../../../src/infrastructure/persistence/InMemoryOtherExpenseRepository';
 
 describe('OtherExpenseForm (US2)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
     RepositoryRegistry.registerOtherExpenseRepository(new InMemoryOtherExpenseRepository());
+
+    const assignRepo = new (await import('../../../../src/infrastructure/persistence/InMemoryCaseAssignmentRepository')).InMemoryCaseAssignmentRepository();
+    const { CaseAssignment } = await import('../../../../src/domain/models');
+    await assignRepo.save(new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 1.0, 800000, 0));
+    RepositoryRegistry.registerCaseAssignmentRepository(assignRepo);
   });
 
   it('新規登録モードでフォームをレンダリングし、有効な入力値を送信すると成功すること', async () => {
@@ -33,7 +38,7 @@ describe('OtherExpenseForm (US2)', () => {
     fireEvent.change(memoInput, { target: { value: '宅急便代' } });
 
     // 送信
-    fireEvent.click(submitButton);
+    fireEvent.submit(submitButton.closest('form')!);
 
     await waitFor(() => {
       expect(handleSuccess).toHaveBeenCalled();
@@ -41,8 +46,8 @@ describe('OtherExpenseForm (US2)', () => {
 
     const repo = RepositoryRegistry.getOtherExpenseRepository();
     const list = await repo.findByCaseAssignmentId('CON001');
-    // シード1件 + 追加1件 = 2件
-    expect(list.length).toBe(2);
+    // 追加1件 = 1件
+    expect(list.length).toBe(1);
 
     expect(list.some(x => x.amount === 8000 && x.memo === '宅急便代')).toBe(true);
   });

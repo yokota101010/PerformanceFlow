@@ -10,19 +10,33 @@ describe('PartnerOrderService - Update (US3)', () => {
   let staffRepo: InMemoryStaffRepository;
   let service: PartnerOrderService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
     repository = new InMemoryPartnerOrderRepository();
     staffRepo = new InMemoryStaffRepository();
+    
+    const { PartnerOrder, OrderDetail } = await import('../../../src/domain/models/PartnerOrder');
+    const details = [
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-08-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-08-01', 'BP001', 'BP001')
+    ];
+    await repository.save(new PartnerOrder('ORD001', 'CON001', 'BP001', '2026-08-01', details));
+
     RepositoryRegistry.registerPartnerOrderRepository(repository);
     RepositoryRegistry.registerStaffRepository(staffRepo);
     service = new PartnerOrderService(repository);
   });
 
   it('既存発注データの明細が正常に更新・追加・削除でき、合計工数・発注額が再計算されて保存されること', async () => {
-    // マスタ要員の登録 (BP001所属)
+    // マスタ要員の登録 (BP001所属) と単価の登録
     await staffRepo.save(new Staff('MEM001', 'BP001', '要員1'));
     await staffRepo.save(new Staff('MEM002', 'BP001', '要員2'));
+
+    const unitPriceRepo = new (await import('../../../src/infrastructure/persistence/LocalStorageStaffUnitPriceRepository')).LocalStorageStaffUnitPriceRepository();
+    const { StaffUnitPrice } = await import('../../../src/domain/models/StaffUnitPrice');
+    await unitPriceRepo.save(new StaffUnitPrice('SUP001', 'MEM001', [{ unitPriceId: 'SUP001', startYearMonth: '2026-08', endYearMonth: '9999-12', price: 1000000 }]));
+    await unitPriceRepo.save(new StaffUnitPrice('SUP002', 'MEM002', [{ unitPriceId: 'SUP002', startYearMonth: '2026-08', endYearMonth: '9999-12', price: 1000000 }]));
+    RepositoryRegistry.registerStaffUnitPriceRepository(unitPriceRepo);
 
 
     // ORD001 (BP001) の明細を MEM001 (0.5), MEM002 (0.2) に更新

@@ -15,12 +15,12 @@ describe('ProjectService.createProject (新規登録)', () => {
   it('正常な名称でプロジェクトを登録でき、IDが自動採番（最大値+1）されること', async () => {
     const newProject = await service.createProject({ name: '新規製品開発プロジェクト' });
 
-    expect(newProject.id).toBe('PJ002');
+    expect(newProject.id).toBe('PJ001');
     expect(newProject.name).toBe('新規製品開発プロジェクト');
 
     const projects = await service.getProjects();
-    expect(projects).toHaveLength(2);
-    expect(projects[1].id).toBe('PJ002');
+    expect(projects).toHaveLength(1);
+    expect(projects[0].id).toBe('PJ001');
   });
 
   it('入力されたプロジェクト名の前後の空白が自動でトリミングされること', async () => {
@@ -42,6 +42,7 @@ describe('ProjectService.createProject (新規登録)', () => {
   });
 
   it('プロジェクト名が既に登録されている名称と重複している場合はエラーになること', async () => {
+    await service.createProject({ name: '基幹基盤システム刷新プロジェクト' });
     await expect(service.createProject({ name: '基幹基盤システム刷新プロジェクト' }))
       .rejects.toThrow('プロジェクト名「基幹基盤システム刷新プロジェクト」は既に登録されています。');
   });

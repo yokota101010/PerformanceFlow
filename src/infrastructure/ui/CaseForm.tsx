@@ -101,7 +101,7 @@ export const CaseForm: React.FC<CaseFormProps> = ({ editingCase, onSuccess, onCa
 
   return (
     <form onSubmit={handleSubmit} className="glass-panel p-6 space-y-4">
-      <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
+      <h3 style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>
         {editingCase ? '案件情報の編集' : '新規案件の登録'}
       </h3>
 

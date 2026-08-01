@@ -72,7 +72,7 @@ describe('PartnerOrderForm (新規登録 UI)', () => {
     const savedOrders = await orderRepo.findAll();
     const newOrder = savedOrders.find(o => o.caseAssignmentId === 'CON005' && o.targetMonth === '2026-12-01');
     expect(newOrder).toBeDefined();
-    expect(newOrder?.id).toBe('ORD009');
+    expect(newOrder?.id).toBe('ORD001');
 
   });
 });

@@ -13,11 +13,7 @@ export class InMemoryOtherExpenseRepository implements OtherExpenseRepository {
   }
 
   resetToSeed(): void {
-    this.items = [
-      new OtherExpense({ caseAssignmentId: 'CON001', lineNo: 1, amount: 15000, memo: '開発環境クラウド利用料' }),
-      new OtherExpense({ caseAssignmentId: 'CON002', lineNo: 1, amount: 20000, memo: '外部打ち合わせ用会議室費' }),
-      new OtherExpense({ caseAssignmentId: 'CON003', lineNo: 1, amount: 12000, memo: '現地調査用交通費' }),
-    ];
+    this.items = [];
   }
 
 

@@ -20,7 +20,6 @@ describe('PartnerOrderService - Create (US2)', () => {
   });
 
   it('正常な入力値で新規発注が自動採番されて登録できること', async () => {
-    // シードに存在しない新しいアサイン WK005 を登録
     await assignmentRepo.save(new CaseAssignment('PJ001', 'WK005', 'AJ001', '2026-08-15', '2026-09-30', 1.3, 1000000, 0));
 
     const command = {
@@ -30,7 +29,7 @@ describe('PartnerOrderService - Create (US2)', () => {
     };
 
     const newId = await service.createOrder(command);
-    expect(newId).toBe('ORD007');
+    expect(newId).toBe('ORD001');
 
     const saved = await repository.findById(newId);
     expect(saved).not.toBeNull();
@@ -40,7 +39,10 @@ describe('PartnerOrderService - Create (US2)', () => {
   });
 
   it('同一のアサイン、年月、発注先で重複して登録しようとするとエラーを投げること (UQ1)', async () => {
-    // WK001, BP001, 2026-08-01 はすでにシード（ORD001）として登録されている
+    const { PartnerOrder } = await import('../../../src/domain/models/PartnerOrder');
+    await repository.save(new PartnerOrder('ORD001', 'WK001', 'BP001', '2026-08-01', []));
+    await assignmentRepo.save(new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 1.3, 1000000, 0));
+
     const command = {
       caseAssignmentId: 'WK001',
       partnerId: 'BP001',

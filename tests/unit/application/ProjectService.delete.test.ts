@@ -10,9 +10,16 @@ describe('ProjectService.deleteProject (物理削除)', () => {
   beforeEach(async () => {
     RepositoryRegistry.clear();
     RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
+
+    const caseRepo = new (await import('../../../src/infrastructure/persistence/InMemoryCaseRepository')).InMemoryCaseRepository();
+    const { Case } = await import('../../../src/domain/models');
+    await caseRepo.save(new Case('PJ001', 'ANK001', '案件1', '2026-08-15', '2026-11-15'));
+    RepositoryRegistry.registerCaseRepository(caseRepo);
+
     service = new ProjectService();
 
     const repo = RepositoryRegistry.getProjectRepository();
+    await repo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     await repo.save(new Project('PJ002', '新規製品開発プロジェクト'));
   });
 

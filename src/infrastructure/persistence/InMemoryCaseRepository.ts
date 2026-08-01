@@ -8,11 +8,6 @@ export class InMemoryCaseRepository implements CaseRepository {
   private cases: Case[] = [];
 
   constructor() {
-    // シードデータの初期投入 (domain-model.md 正本準拠)
-    this.cases = [
-      new Case('PJ001', 'ANK001', '要件定義・設計フェーズ', '2026-08-15', '2026-11-15'),
-      new Case('PJ001', 'ANK002', '開発・テストフェーズ', '2026-10-13', '2027-01-31'),
-    ];
   }
 
   async findAll(): Promise<readonly Case[]> {

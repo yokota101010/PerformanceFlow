@@ -150,46 +150,14 @@ export const ProjectView: React.FC = () => {
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                       <button
                         onClick={() => handleEditClick(project)}
-                        style={{
-                          padding: '6px 12px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                          color: '#4ade80',
-                          border: '1px solid rgba(34, 197, 94, 0.2)',
-                          borderRadius: '6px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(34, 197, 94, 0.1)';
-                        }}
+                        className="btn btn-secondary btn-sm"
                       >
                         編集
                       </button>
                       <button
                         name="delete-btn"
                         onClick={() => handleDeleteClick(project)}
-                        style={{
-                          padding: '6px 12px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                          color: '#f87171',
-                          border: '1px solid rgba(239, 68, 68, 0.2)',
-                          borderRadius: '6px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
-                        }}
+                        className="btn btn-danger btn-sm"
                       >
                         削除
                       </button>

@@ -8,9 +8,11 @@ import { Employee } from '../../../../src/domain/models';
 describe('EmployeeForm (編集モード)', () => {
   const targetEmployee = new Employee('EMP002', 'ロバート・マーチン');
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerEmployeeRepository(new InMemoryEmployeeRepository());
+    const repo = new InMemoryEmployeeRepository();
+    await repo.save(targetEmployee);
+    RepositoryRegistry.registerEmployeeRepository(repo);
   });
 
   it('編集対象が渡された場合、入力欄に初期値がセットされ「保存」「キャンセル」ボタンが表示されること', () => {

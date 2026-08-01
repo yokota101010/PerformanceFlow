@@ -7,12 +7,18 @@ import { InMemoryEmployeeWorkTimeRepository } from '../../../../src/infrastructu
 import { Employee } from '../../../../src/domain/models';
 
 describe('EmployeeView (削除操作とUI制御)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerEmployeeRepository(new InMemoryEmployeeRepository());
-    RepositoryRegistry.registerEmployeeWorkTimeRepository(new InMemoryEmployeeWorkTimeRepository());
+    const repo = new InMemoryEmployeeRepository();
+    await repo.save(new Employee('EMP001', 'トム・デマルコ'));
+    await repo.save(new Employee('EMP002', 'ロバート・マーチン'));
+    await repo.save(new Employee('EMP003', 'マーチン・ファウラー'));
+    RepositoryRegistry.registerEmployeeRepository(repo);
+
+    const workTimeRepo = new InMemoryEmployeeWorkTimeRepository();
+    workTimeRepo.setHasWorkTime('EMP001', true);
+    RepositoryRegistry.registerEmployeeWorkTimeRepository(workTimeRepo);
     
-    // window.confirm をモック化 (常に承認)
     vi.spyOn(window, 'confirm').mockImplementation(() => true);
   });
 

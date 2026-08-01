@@ -15,20 +15,6 @@ export class LocalStorageOtherExpenseRepository implements OtherExpenseRepositor
   private readonly STORAGE_KEY = 'performance_flow_other_expenses';
 
   constructor() {
-    this.initSeedData();
-  }
-
-  private initSeedData() {
-    const data = localStorage.getItem(this.STORAGE_KEY);
-    if (!data || (JSON.parse(data) && JSON.parse(data).length === 0)) {
-      const seed: StorageItem[] = [
-        { caseAssignmentId: 'CON001', lineNo: 1, amount: 15000, memo: '開発環境クラウド利用料' },
-        { caseAssignmentId: 'CON002', lineNo: 1, amount: 20000, memo: '外部打ち合わせ用会議室費' },
-        { caseAssignmentId: 'CON003', lineNo: 1, amount: 12000, memo: '現地調査用交通費' },
-      ];
-
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(seed));
-    }
   }
 
   async existsByCaseAssignmentId(projectId: string, caseAssignmentId: string): Promise<boolean> {

@@ -9,9 +9,6 @@ export class InMemoryPartnerRepository implements PartnerRepository {
   private partners: Partner[] = [];
 
   constructor() {
-    // シードデータの自動投入 (T014)
-    this.partners.push(new Partner('BP001', 'Ａソフトウェア'));
-    this.partners.push(new Partner('BP002', 'Ｂエンジニアリング'));
   }
 
   async findAll(): Promise<readonly Partner[]> {

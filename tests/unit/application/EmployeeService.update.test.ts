@@ -6,9 +6,12 @@ import { InMemoryEmployeeRepository } from '../../../src/infrastructure/persiste
 describe('EmployeeService.updateEmployee (情報更新)', () => {
   let service: EmployeeService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerEmployeeRepository(new InMemoryEmployeeRepository());
+    const repo = new InMemoryEmployeeRepository();
+    const { Employee } = await import('../../../src/domain/models');
+    await repo.save(new Employee('EMP002', 'ロバート・マーチン'));
+    RepositoryRegistry.registerEmployeeRepository(repo);
     service = new EmployeeService();
   });
 

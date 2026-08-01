@@ -7,11 +7,14 @@ import { InMemoryPartnerRepository } from '../../../src/infrastructure/persisten
 describe('StaffService.createStaff (新規登録)', () => {
   let service: StaffService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
     RepositoryRegistry.registerStaffRepository(new InMemoryStaffRepository());
-    // FK検証用に発注先リポジトリにシードデータを登録
+    
     const partnerRepo = new InMemoryPartnerRepository();
+    const { Partner } = await import('../../../src/domain/models');
+    await partnerRepo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await partnerRepo.save(new Partner('BP002', 'Ｂエンジニアリング'));
     RepositoryRegistry.registerPartnerRepository(partnerRepo);
     
     service = new StaffService();
@@ -23,12 +26,12 @@ describe('StaffService.createStaff (新規登録)', () => {
       name: '岡田以蔵',
     });
 
-    expect(staff.id).toBe('MEM005'); // シード4名の次
+    expect(staff.id).toBe('MEM001');
     expect(staff.name).toBe('岡田以蔵');
     expect(staff.partnerId).toBe('BP001');
 
     const list = await service.getStaffs();
-    expect(list).toHaveLength(5);
+    expect(list).toHaveLength(1);
   });
 
   it('正常系: 同姓同名 (同名氏名) の要員の重複登録が正常に許可されること', async () => {
@@ -44,12 +47,12 @@ describe('StaffService.createStaff (新規登録)', () => {
       name: '  岡田以蔵  ', // スペース付き
     });
 
-    expect(staff2.id).toBe('MEM006');
+    expect(staff2.id).toBe('MEM002');
     expect(staff2.name).toBe('岡田以蔵'); // トリミングされていること
     expect(staff2.partnerId).toBe('BP002');
 
     const list = await service.getStaffs();
-    expect(list).toHaveLength(6);
+    expect(list).toHaveLength(2);
   });
 
   it('正常系: 氏名の前後にスペースが含まれる場合、自動トリミングして保存されること', async () => {

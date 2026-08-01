@@ -13,18 +13,17 @@ describe('PartnerService.createPartner (新規登録)', () => {
   });
 
   it('正常な名前で登録され、自動採番 (最大値+1) が機能すること', async () => {
-    // 初期状態は BP001, BP002
     const newPartner = await service.createPartner({
       name: 'Ｃシステムズ'
     });
 
-    expect(newPartner.id).toBe('BP003');
+    expect(newPartner.id).toBe('BP001');
     expect(newPartner.name).toBe('Ｃシステムズ');
 
     // 一覧に反映されていること
     const list = await service.getPartners();
-    expect(list).toHaveLength(3);
-    expect(list[2].id).toBe('BP003');
+    expect(list).toHaveLength(1);
+    expect(list[0].id).toBe('BP001');
   });
 
   it('発注先名に入力された前後の空白 (全角・半角) が自動トリミングされること', async () => {
@@ -46,7 +45,11 @@ describe('PartnerService.createPartner (新規登録)', () => {
   });
 
   it('すでに登録されている発注先名と同名（重複）を登録しようとした場合、エラーをスローすること', async () => {
-    // シードデータ「Ａソフトウェア」はすでに存在
+    const repo = RepositoryRegistry.getPartnerRepository();
+    const { Partner } = await import('../../../src/domain/models');
+    await repo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await repo.save(new Partner('BP002', 'Ｂエンジニアリング'));
+
     await expect(
       service.createPartner({ name: 'Ａソフトウェア' })
     ).rejects.toThrow('この発注先名はすでに登録されています。');

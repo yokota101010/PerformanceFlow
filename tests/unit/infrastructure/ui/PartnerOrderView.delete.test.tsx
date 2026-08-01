@@ -27,29 +27,23 @@ describe('PartnerOrderView (削除操作 UI)', () => {
     const assignmentRepo = new InMemoryCaseAssignmentRepository();
     const { CaseAssignment } = await import('../../../../src/domain/models');
     await assignmentRepo.save(new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 1.3, 1000000, 0));
-    RepositoryRegistry.registerCaseAssignmentRepository(assignmentRepo);
+    const { PartnerOrder } = await import('../../../../src/domain/models/PartnerOrder');
+    await orderRepo.save(new PartnerOrder('ORD001', 'CON001', 'BP001', '2026-08-01', []));
   });
-
 
   it('一覧行の「削除」ボタンをクリックした際、確認ダイアログ確認を経て物理削除が行われること', async () => {
     render(<PartnerOrderView />);
 
-    // ORD006 の存在を確認
-    expect(await screen.findByText('ORD006')).toBeInTheDocument();
+    expect(await screen.findByText('ORD001')).toBeInTheDocument();
 
-    // ORD006 (一覧の最後の行) の削除ボタンをクリック
     const deleteBtns = screen.getAllByRole('button', { name: '削除' });
-    
-    // ORD006 のインデックスは 5 (ORD001〜ORD006)
-    fireEvent.click(deleteBtns[5]);
+    fireEvent.click(deleteBtns[0]);
 
-    // confirm が呼ばれた後、ORD006 が画面から消滅することを検証
     await waitFor(() => {
-      expect(screen.queryByText('ORD006')).toBeNull();
+      expect(screen.queryByText('ORD001')).toBeNull();
     });
 
-    // リポジトリ上からも消えていること
-    const deleted = await orderRepo.findById('ORD006');
+    const deleted = await orderRepo.findById('ORD001');
     expect(deleted).toBeNull();
   });
 });

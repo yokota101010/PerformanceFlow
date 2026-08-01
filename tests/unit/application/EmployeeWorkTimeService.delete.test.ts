@@ -5,8 +5,18 @@ import { EmployeeWorkTimeService } from '../../../src/application/services/Emplo
 describe('EmployeeWorkTimeService.delete (US4)', () => {
   const service = new EmployeeWorkTimeService();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
+    const workTimeRepo = new (await import('../../../src/infrastructure/persistence/InMemoryEmployeeWorkTimeRepository')).InMemoryEmployeeWorkTimeRepository();
+    const { EmployeeWorkTime } = await import('../../../src/domain/models/EmployeeWorkTime');
+    await workTimeRepo.save(new EmployeeWorkTime({
+      caseAssignmentId: 'WK001',
+      staffId: 'EMP001',
+      targetMonth: '2026-08-01',
+      workHours: 160,
+      staffPrice: 9000
+    }));
+    RepositoryRegistry.registerEmployeeWorkTimeRepository(workTimeRepo);
   });
 
   it('登録済みのデータに対して、物理削除が成功し、一覧から消去されること', async () => {

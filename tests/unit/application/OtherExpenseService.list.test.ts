@@ -5,8 +5,14 @@ import { OtherExpenseService } from '../../../src/application/services/OtherExpe
 describe('OtherExpenseService.list (US1)', () => {
   const service = new OtherExpenseService();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
+    const expenseRepo = new (await import('../../../src/infrastructure/persistence/InMemoryOtherExpenseRepository')).InMemoryOtherExpenseRepository();
+    const { OtherExpense } = await import('../../../src/domain/models/OtherExpense');
+    await expenseRepo.save(new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 1, amount: 50000, memo: '旅費交通費' }));
+    await expenseRepo.save(new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 2, amount: 12000, memo: '会議費' }));
+    await expenseRepo.save(new OtherExpense({ caseAssignmentId: 'WK002', lineNo: 1, amount: 35000, memo: '消耗品費' }));
+    RepositoryRegistry.registerOtherExpenseRepository(expenseRepo);
   });
 
   it('初期ロード時、指定の作業契約IDに紐づく経費一覧と合計金額が正しく取得できること', async () => {

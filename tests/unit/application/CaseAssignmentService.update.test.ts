@@ -12,16 +12,17 @@ describe('CaseAssignmentService.update (情報更新とバリデーション)', 
   beforeEach(async () => {
     RepositoryRegistry.clear();
     caseAssignmentRepo = new InMemoryCaseAssignmentRepository();
+    
+    const { CaseAssignment, Project, Case } = await import('../../../src/domain/models');
+    await caseAssignmentRepo.save(new CaseAssignment('PJ001', 'WK001', 'ANK001', '2026-08-15', '2026-11-15', 10.0, 800000, 5242000));
     RepositoryRegistry.registerCaseAssignmentRepository(caseAssignmentRepo);
     
     const projectRepo = new LocalStorageProjectRepository();
-    const { Project } = await import('../../../src/domain/models');
     await projectRepo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     RepositoryRegistry.registerProjectRepository(projectRepo);
 
     const caseRepo = new InMemoryCaseRepository();
-    const { Case } = await import('../../../src/domain/models');
-    await caseRepo.save(new Case('PJ001', 'AJ001', '案件1: Ａソフト開発支援', '2026-08-15', '2026-11-15'));
+    await caseRepo.save(new Case('PJ001', 'ANK001', '案件1: Ａソフト開発支援', '2026-08-15', '2026-11-15'));
     RepositoryRegistry.registerCaseRepository(caseRepo);
 
     service = new CaseAssignmentService();

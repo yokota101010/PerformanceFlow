@@ -8,16 +8,6 @@ export class LocalStorageProjectRepository implements ProjectRepository {
   private readonly STORAGE_KEY = 'performance_flow_projects';
 
   constructor() {
-    // 初回起動時の自動シードデータ投入 (T034)
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const existingData = window.localStorage.getItem(this.STORAGE_KEY);
-      if (!existingData || (JSON.parse(existingData) && JSON.parse(existingData).length === 0)) {
-        const seedData = [
-          new Project('PJ001', '基幹基盤システム刷新プロジェクト')
-        ];
-        window.localStorage.setItem(this.STORAGE_KEY, JSON.stringify(seedData));
-      }
-    }
   }
 
   private loadFromStorage(): Project[] {

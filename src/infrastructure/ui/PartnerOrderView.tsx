@@ -152,13 +152,13 @@ export const PartnerOrderView: React.FC = () => {
                   <td style={{ textAlign: 'right', fontWeight: 600, color: '#38bdf8' }}>{formatCurrency(item.totalAmount)}</td>
                   <td style={{ textAlign: 'center' }}>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                      <button onClick={() => handleDetailClick(item.id)} className="btn btn-secondary" style={{ padding: '6px 12px', fontSize: '12px' }}>
+                      <button onClick={() => handleDetailClick(item.id)} className="btn btn-secondary btn-sm">
                         {isSelected ? '詳細を閉じる' : '詳細'}
                       </button>
-                      <button onClick={() => handleEditClick(item.id)} className="btn btn-warning" style={{ padding: '6px 12px', fontSize: '12px' }}>
+                      <button onClick={() => handleEditClick(item.id)} className="btn btn-warning btn-sm">
                         編集
                       </button>
-                      <button onClick={() => handleDeleteClick(item.id)} className="btn btn-danger" style={{ padding: '6px 12px', fontSize: '12px' }}>
+                      <button onClick={() => handleDeleteClick(item.id)} className="btn btn-danger btn-sm">
                         削除
                       </button>
                     </div>
@@ -179,7 +179,7 @@ export const PartnerOrderView: React.FC = () => {
 
       {selectedOrder && (
         <div className="glass-panel" style={{ borderLeft: '4px solid #38bdf8' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 600, margin: '0 0 20px 0', color: '#ffffff', display: 'flex', justifyContent: 'space-between' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, margin: '0 0 16px 0', color: '#ffffff', display: 'flex', justifyContent: 'space-between' }}>
             <span>注文明細詳細 ({selectedOrder.id})</span>
             <span style={{ fontSize: '14px', color: '#94a3b8', fontWeight: 400 }}>
               年月: {selectedOrder.targetMonth.substring(0, 7)} | 発注先: {partners.get(selectedOrder.partnerId) || selectedOrder.partnerId}

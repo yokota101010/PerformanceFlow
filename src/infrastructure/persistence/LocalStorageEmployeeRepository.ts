@@ -13,16 +13,6 @@ export class LocalStorageEmployeeRepository implements EmployeeRepository {
   private readonly storageKey = 'performance_flow_employees';
 
   constructor() {
-    // 初期データの自動投入 (T032)
-    const stored = localStorage.getItem(this.storageKey);
-    if (!stored || (JSON.parse(stored) && JSON.parse(stored).length === 0)) {
-      const initialSeed: EmployeeSerialized[] = [
-        { id: 'EMP001', name: 'トム・デマルコ' },
-        { id: 'EMP002', name: 'ロバート・マーチン' },
-        { id: 'EMP003', name: 'マーチン・ファウラー' },
-      ];
-      localStorage.setItem(this.storageKey, JSON.stringify(initialSeed));
-    }
   }
 
   private loadSerialized(): EmployeeSerialized[] {

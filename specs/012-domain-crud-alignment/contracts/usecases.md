@@ -41,22 +41,6 @@ export interface SaveQuarterCategoryUseCase {
 ## Query Services (On-Demand Summary Projections)
 
 ```typescript
-// F12: 業績・収支サマリ表示
-export interface GetFinancialSummaryQuery {
-  execute(params: { yearMonth?: string; quarterCode?: string }): Promise<{
-    caseDetails: Array<{
-      caseDetailId: string;
-      caseName: string;
-      salesAmount: number;
-      employeeCost: number;
-      outsourcingCost: number;
-      otherExpenses: number;
-      grossProfit: number;
-    }>;
-    totalSales: number;
-    totalGrossProfit: number;
-  }>;
-}
 
 // F13: 社員別工数サマリ表示
 export interface GetEmployeeWorktimeSummaryQuery {

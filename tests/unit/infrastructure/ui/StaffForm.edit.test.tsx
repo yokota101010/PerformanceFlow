@@ -11,10 +11,17 @@ describe('StaffForm (編集モード)', () => {
   const mockOnSuccess = vi.fn();
   const mockOnCancel = vi.fn();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerStaffRepository(new InMemoryStaffRepository());
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
+    const partnerRepo = new InMemoryPartnerRepository();
+    const { Partner, Staff } = await import('../../../../src/domain/models');
+    await partnerRepo.save(new Partner('BP001', 'Ａソフトウェア'));
+    RepositoryRegistry.registerPartnerRepository(partnerRepo);
+
+    const staffRepo = new InMemoryStaffRepository();
+    await staffRepo.save(new Staff('MEM001', 'BP001', '坂本龍馬'));
+    RepositoryRegistry.registerStaffRepository(staffRepo);
+
     mockOnSuccess.mockClear();
     mockOnCancel.mockClear();
   });

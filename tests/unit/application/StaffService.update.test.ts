@@ -7,11 +7,17 @@ import { InMemoryPartnerRepository } from '../../../src/infrastructure/persisten
 describe('StaffService.updateStaff (要員情報更新)', () => {
   let service: StaffService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerStaffRepository(new InMemoryStaffRepository());
-    
+    const staffRepo = new InMemoryStaffRepository();
     const partnerRepo = new InMemoryPartnerRepository();
+    
+    const { Staff, Partner } = await import('../../../src/domain/models');
+    await partnerRepo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await partnerRepo.save(new Partner('BP002', 'Ｂエンジニアリング'));
+    await staffRepo.save(new Staff('MEM001', 'BP001', '坂本龍馬'));
+
+    RepositoryRegistry.registerStaffRepository(staffRepo);
     RepositoryRegistry.registerPartnerRepository(partnerRepo);
     
     service = new StaffService();

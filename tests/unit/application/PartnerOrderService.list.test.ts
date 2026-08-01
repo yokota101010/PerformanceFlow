@@ -14,32 +14,19 @@ describe('PartnerOrderService - List & Get (US1)', () => {
     service = new PartnerOrderService(repository);
   });
 
-  it('初期状態で6件のシード発注データが取得できること', async () => {
+  it('初期状態ではデータ無しの状態（0件）であること', async () => {
     const orders = await service.getOrders();
-    expect(orders).toHaveLength(6);
-
-    // ORD001 の検証
-    const ord001 = orders.find(o => o.id === 'ORD001');
-    expect(ord001).toBeDefined();
-    expect(ord001?.partnerId).toBe('BP001');
-    expect(ord001?.caseAssignmentId).toBe('WK001');
-    expect(ord001?.targetMonth).toBe('2026-08-01');
-    // 合計工数の検証: MEM001 (0.8) + MEM002 (0.5) = 1.3
-    expect(ord001?.totalEffort).toBe(1.3);
-    // 合計金額の検証: 800,000 + 350,000 = 1,150,000
-    expect(ord001?.totalAmount).toBe(1150000);
-
-    // ORD005 の検証
-    const ord005 = orders.find(o => o.id === 'ORD005');
-    expect(ord005).toBeDefined();
-    expect(ord005?.partnerId).toBe('BP002');
-    expect(ord005?.caseAssignmentId).toBe('WK003');
-    expect(ord005?.targetMonth).toBe('2026-09-01');
-    expect(ord005?.totalEffort).toBe(1.6);
-    expect(ord005?.totalAmount).toBe(1210000);
+    expect(orders).toHaveLength(0);
   });
 
   it('指定したIDの単一発注データが取得できること', async () => {
+    const { PartnerOrder, OrderDetail } = await import('../../../src/domain/models/PartnerOrder');
+    const details = [
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-08-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-08-01', 'BP001', 'BP001')
+    ];
+    await repository.save(new PartnerOrder('ORD001', 'CON001', 'BP001', '2026-08-01', details));
+
     const order = await service.getOrderById('ORD001');
     expect(order).not.toBeNull();
     expect(order?.id).toBe('ORD001');

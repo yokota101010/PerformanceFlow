@@ -9,9 +9,6 @@ export class InMemoryProjectRepository implements ProjectRepository {
   private projects: Project[] = [];
 
   constructor() {
-    // 初期データの自動シード投入 (T012)
-    this.projects.push(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
-
   }
 
   async findAll(): Promise<readonly Project[]> {

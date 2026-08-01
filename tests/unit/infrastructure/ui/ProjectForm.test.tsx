@@ -8,9 +8,12 @@ import { InMemoryProjectRepository } from '../../../../src/infrastructure/persis
 describe('ProjectForm (登録フォーム)', () => {
   const mockOnSuccess = vi.fn();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
+    const repo = new InMemoryProjectRepository();
+    const { Project } = await import('../../../../src/domain/models');
+    await repo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
+    RepositoryRegistry.registerProjectRepository(repo);
     mockOnSuccess.mockClear();
   });
 

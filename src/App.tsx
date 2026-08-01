@@ -8,13 +8,12 @@ import { CaseAssignmentView } from './infrastructure/ui/CaseAssignmentView';
 import { PartnerOrderView } from './infrastructure/ui/PartnerOrderView';
 import { EmployeeWorkTimeView } from './infrastructure/ui/EmployeeWorkTimeView';
 import { OtherExpenseView } from './infrastructure/ui/OtherExpenseView';
-import { FinancialSummaryView } from './infrastructure/ui/FinancialSummaryView';
-import { FinancialSummaryService } from './application/services/FinancialSummaryService';
 import { MonthlyMemberWorkHoursSummaryView } from './infrastructure/ui/MonthlyMemberWorkHoursSummaryView';
 import { MonthlyMemberWorkHoursSummaryService } from './application/services/MonthlyMemberWorkHoursSummaryService';
 import { EmployeeUnitPriceView } from './infrastructure/ui/EmployeeUnitPriceView';
 import { StaffUnitPriceView } from './infrastructure/ui/StaffUnitPriceView';
 import { EmployeeWorkTimeSummaryView } from './infrastructure/ui/EmployeeWorkTimeSummaryView';
+import { DataImportExportView } from './infrastructure/ui/DataImportExportView';
 import { RepositoryRegistry } from './infrastructure/persistence/RepositoryRegistry';
 
 type Tab =
@@ -29,9 +28,9 @@ type Tab =
   | 'orders'
   | 'workTimes'
   | 'otherExpenses'
-  | 'financialSummary'
   | 'employeeWorkTimeSummary'
-  | 'memberWorkTimeSummary';
+  | 'memberWorkTimeSummary'
+  | 'dataIo';
 
 /**
  * アプリケーションのメインコンポーネント。
@@ -39,12 +38,6 @@ type Tab =
  */
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('projects');
-  const [selectedAssignmentId, setSelectedAssignmentId] = useState<string>('');
-
-  const navigateToOtherExpenses = (assignmentId: string) => {
-    setSelectedAssignmentId(assignmentId);
-    setActiveTab('otherExpenses');
-  };
 
   const navButtonStyle = (tab: Tab) => ({
     padding: '8px 14px',
@@ -83,26 +76,11 @@ function App() {
           <button onClick={() => setActiveTab('projects')} style={navButtonStyle('projects')}>
             プロジェクト
           </button>
-          <button onClick={() => setActiveTab('employees')} style={navButtonStyle('employees')}>
-            社員マスタ
-          </button>
-          <button onClick={() => setActiveTab('employeeUnitPrices')} style={navButtonStyle('employeeUnitPrices')} id="nav-employee-unit-price-btn">
-            社員単価設定
-          </button>
-          <button onClick={() => setActiveTab('partners')} style={navButtonStyle('partners')}>
-            発注先マスタ
-          </button>
-          <button onClick={() => setActiveTab('staffs')} style={navButtonStyle('staffs')}>
-            要員マスタ
-          </button>
-          <button onClick={() => setActiveTab('staffUnitPrices')} style={navButtonStyle('staffUnitPrices')} id="nav-staff-unit-price-btn">
-            要員単価設定
-          </button>
           <button onClick={() => setActiveTab('cases')} style={navButtonStyle('cases')}>
             案件管理
           </button>
           <button onClick={() => setActiveTab('assignments')} style={navButtonStyle('assignments')}>
-            アサイン契約
+            案件明細
           </button>
           <button onClick={() => setActiveTab('orders')} style={navButtonStyle('orders')}>
             発注管理
@@ -113,14 +91,29 @@ function App() {
           <button onClick={() => setActiveTab('otherExpenses')} style={navButtonStyle('otherExpenses')} id="nav-other-expenses-btn">
             経費入力
           </button>
-          <button onClick={() => setActiveTab('financialSummary')} style={navButtonStyle('financialSummary')} id="nav-financial-summary-btn">
-            収支サマリ
+          <button onClick={() => setActiveTab('employees')} style={navButtonStyle('employees')}>
+            社員マスタ
+          </button>
+          <button onClick={() => setActiveTab('employeeUnitPrices')} style={navButtonStyle('employeeUnitPrices')} id="nav-employee-unit-price-btn">
+            社員単価設定
           </button>
           <button onClick={() => setActiveTab('employeeWorkTimeSummary')} style={navButtonStyle('employeeWorkTimeSummary')} id="nav-employee-worktime-summary-btn">
             社員工数サマリ
           </button>
+          <button onClick={() => setActiveTab('partners')} style={navButtonStyle('partners')}>
+            発注先マスタ
+          </button>
+          <button onClick={() => setActiveTab('staffs')} style={navButtonStyle('staffs')}>
+            要員マスタ
+          </button>
+          <button onClick={() => setActiveTab('staffUnitPrices')} style={navButtonStyle('staffUnitPrices')} id="nav-staff-unit-price-btn">
+            要員単価設定
+          </button>
           <button onClick={() => setActiveTab('memberWorkTimeSummary')} style={navButtonStyle('memberWorkTimeSummary')} id="nav-member-worktime-summary-btn">
             要員工数サマリ
+          </button>
+          <button onClick={() => setActiveTab('dataIo')} style={navButtonStyle('dataIo')} id="nav-data-io-btn">
+            データ入出力
           </button>
         </nav>
 
@@ -135,31 +128,10 @@ function App() {
         {activeTab === 'staffs' && <StaffView />}
         {activeTab === 'staffUnitPrices' && <StaffUnitPriceView />}
         {activeTab === 'cases' && <CaseView />}
-        {activeTab === 'assignments' && (
-          <CaseAssignmentView onSelectAssignment={navigateToOtherExpenses} />
-        )}
+        {activeTab === 'assignments' && <CaseAssignmentView />}
         {activeTab === 'orders' && <PartnerOrderView />}
         {activeTab === 'workTimes' && <EmployeeWorkTimeView />}
-        {activeTab === 'otherExpenses' && (
-          <OtherExpenseView
-            initialCaseAssignmentId={selectedAssignmentId}
-            onBack={() => setActiveTab('assignments')}
-          />
-        )}
-        {activeTab === 'financialSummary' && (
-          <FinancialSummaryView
-            useCase={
-              new FinancialSummaryService(
-                RepositoryRegistry.getCaseAssignmentRepository(),
-                RepositoryRegistry.getEmployeeWorkTimeRepository(),
-                RepositoryRegistry.getPartnerOrderRepository(),
-                RepositoryRegistry.getOtherExpenseRepository(),
-                RepositoryRegistry.getProjectRepository(),
-                RepositoryRegistry.getCaseRepository()
-              )
-            }
-          />
-        )}
+        {activeTab === 'otherExpenses' && <OtherExpenseView />}
         {activeTab === 'employeeWorkTimeSummary' && <EmployeeWorkTimeSummaryView />}
         {activeTab === 'memberWorkTimeSummary' && (
           <MonthlyMemberWorkHoursSummaryView
@@ -173,6 +145,7 @@ function App() {
             }
           />
         )}
+        {activeTab === 'dataIo' && <DataImportExportView />}
       </main>
     </div>
   );

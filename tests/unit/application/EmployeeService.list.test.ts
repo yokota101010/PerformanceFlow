@@ -14,26 +14,19 @@ describe('EmployeeService.getEmployees (一覧取得)', () => {
     service = new EmployeeService();
   });
 
-  it('初回起動時にシードデータ (3名) が自動的に投入されて取得できること', async () => {
+  it('初期状態ではデータ無しの状態（0件）であること', async () => {
     const list = await service.getEmployees();
-    
-    expect(list).toHaveLength(3);
-    expect(list[0]).toEqual({
-      id: 'EMP001',
-      name: 'トム・デマルコ',
-    });
-
-    expect(list[1].id).toBe('EMP002');
-    expect(list[2].id).toBe('EMP003');
+    expect(list).toHaveLength(0);
   });
 
   it('複数登録されている場合、社員IDの昇順でソートされて取得できること', async () => {
     const repo = RepositoryRegistry.getEmployeeRepository();
     
-    // シードに加えて、順序を入れ替えて追加保存
+    await repo.save(new Employee('EMP001', 'トム・デマルコ'));
+    await repo.save(new Employee('EMP002', 'ロバート・マーチン'));
+    await repo.save(new Employee('EMP003', 'マーチン・ファウラー'));
     await repo.save(new Employee('EMP005', 'ジェラルド・ワインバーグ'));
     await repo.save(new Employee('EMP004', 'デミ・ハリス'));
-
 
     const list = await service.getEmployees();
 

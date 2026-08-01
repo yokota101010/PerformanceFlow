@@ -5,32 +5,6 @@ export class LocalStorageMonthlyMemberWorkHoursSummaryRepository implements Mont
   private readonly STORAGE_KEY = 'PF_MonthlyMemberWorkHoursSummaries';
 
   constructor() {
-    this.initializeSeedData();
-  }
-
-  private initializeSeedData(): void {
-    try {
-      const data = localStorage.getItem(this.STORAGE_KEY);
-      if (!data) {
-        const seed = [
-          new MonthlyMemberWorkHoursSummary('MEM001', '2026-08-01', 0.8),
-          new MonthlyMemberWorkHoursSummary('MEM001', '2026-09-01', 0.8),
-          new MonthlyMemberWorkHoursSummary('MEM001', '2026-10-01', 0.8),
-          new MonthlyMemberWorkHoursSummary('MEM001', '2026-11-01', 0.8),
-          new MonthlyMemberWorkHoursSummary('MEM002', '2026-08-01', 0.5),
-          new MonthlyMemberWorkHoursSummary('MEM002', '2026-09-01', 0.5),
-          new MonthlyMemberWorkHoursSummary('MEM002', '2026-10-01', 0.5),
-          new MonthlyMemberWorkHoursSummary('MEM002', '2026-11-01', 0.5),
-          new MonthlyMemberWorkHoursSummary('MEM003', '2026-09-01', 1.0),
-          new MonthlyMemberWorkHoursSummary('MEM003', '2026-10-01', 1.0),
-          new MonthlyMemberWorkHoursSummary('MEM004', '2026-09-01', 0.6),
-          new MonthlyMemberWorkHoursSummary('MEM004', '2026-10-01', 0.6),
-        ];
-        this.saveAllData(seed);
-      }
-    } catch (e) {
-      console.error('LocalStorage initialization error:', e);
-    }
   }
 
   private loadAllData(): MonthlyMemberWorkHoursSummary[] {

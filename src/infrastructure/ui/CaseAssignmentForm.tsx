@@ -28,7 +28,7 @@ export const CaseAssignmentForm: React.FC<CaseAssignmentFormProps> = ({
 
   const [error, setError] = useState<string | null>(null);
 
-  const usecase = new CaseAssignmentService();
+
 
   useEffect(() => {
     const loadMasters = async () => {
@@ -87,6 +87,7 @@ export const CaseAssignmentForm: React.FC<CaseAssignmentFormProps> = ({
         throw new Error('契約単価は整数を入力してください。');
       }
 
+      const usecase = new CaseAssignmentService();
       if (editTarget) {
         // 更新処理
         await usecase.updateAssignment({
@@ -121,7 +122,7 @@ export const CaseAssignmentForm: React.FC<CaseAssignmentFormProps> = ({
 
   return (
     <div className="glass-panel p-6 mt-6 max-w-xl mx-auto shadow-2xl">
-      <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
+      <h3 style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>
         {editTarget ? `作業契約の編集 (ID: ${editTarget.id})` : '新しい作業契約の追加'}
       </h3>
 

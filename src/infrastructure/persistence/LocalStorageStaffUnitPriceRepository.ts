@@ -18,36 +18,6 @@ export class LocalStorageStaffUnitPriceRepository implements StaffUnitPriceRepos
   private readonly storageKey = 'performance_flow_staff_unit_prices';
 
   constructor() {
-    const stored = localStorage.getItem(this.storageKey);
-    if (!stored || (JSON.parse(stored) && JSON.parse(stored).length === 0)) {
-      const initialSeed: SerializedStaffUnitPrice[] = [
-        {
-          id: 'SUP001',
-          staffId: 'MEM001',
-          monthlyPrices: [
-            { unitPriceId: 'SUP001', startYearMonth: '2026-04', endYearMonth: '2026-09', price: 1000000 },
-            { unitPriceId: 'SUP001', startYearMonth: '2026-10', endYearMonth: '9999-12', price: 1050000 },
-          ],
-        },
-        {
-          id: 'SUP002',
-          staffId: 'MEM002',
-          monthlyPrices: [
-            { unitPriceId: 'SUP002', startYearMonth: '2026-04', endYearMonth: '2026-09', price: 1000000 },
-            { unitPriceId: 'SUP002', startYearMonth: '2026-10', endYearMonth: '9999-12', price: 1050000 },
-          ],
-        },
-        {
-          id: 'SUP003',
-          staffId: 'MEM003',
-          monthlyPrices: [
-            { unitPriceId: 'SUP003', startYearMonth: '2026-04', endYearMonth: '2026-09', price: 1000000 },
-            { unitPriceId: 'SUP003', startYearMonth: '2026-10', endYearMonth: '9999-12', price: 1050000 },
-          ],
-        },
-      ];
-      localStorage.setItem(this.storageKey, JSON.stringify(initialSeed));
-    }
   }
 
   private loadSerialized(): SerializedStaffUnitPrice[] {

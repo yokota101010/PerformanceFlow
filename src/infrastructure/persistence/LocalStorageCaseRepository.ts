@@ -8,22 +8,6 @@ export class LocalStorageCaseRepository implements CaseRepository {
   private readonly STORAGE_KEY = 'performance_flow_cases';
 
   constructor() {
-    this.initializeSeedData();
-  }
-
-  private initializeSeedData(): void {
-    try {
-      const data = localStorage.getItem(this.STORAGE_KEY);
-      if (!data || (JSON.parse(data) && JSON.parse(data).length === 0)) {
-        const seed = [
-          new Case('PJ001', 'ANK001', '要件定義・設計フェーズ', '2026-08-15', '2026-11-15'),
-          new Case('PJ001', 'ANK002', '開発・テストフェーズ', '2026-10-13', '2027-01-31'),
-        ];
-        this.saveAll(seed);
-      }
-    } catch (e) {
-      console.error('LocalStorage initialization error:', e);
-    }
   }
 
   private loadAll(): Case[] {

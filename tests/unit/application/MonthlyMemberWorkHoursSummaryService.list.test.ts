@@ -7,9 +7,41 @@ describe('MonthlyMemberWorkHoursSummaryService List', () => {
   let service: MonthlyMemberWorkHoursSummaryService;
 
   beforeEach(async () => {
-    // 既存リポジトリを一旦クリアしてシードを強制投入する
-    const repo = RepositoryRegistry.getMonthlyMemberWorkHoursSummaryRepository();
-    await repo.deleteAll();
+    RepositoryRegistry.clear();
+    const repo = new (await import('../../../src/infrastructure/persistence/InMemoryMonthlyMemberWorkHoursSummaryRepository')).InMemoryMonthlyMemberWorkHoursSummaryRepository();
+    RepositoryRegistry.registerMonthlyMemberWorkHoursSummaryRepository(repo);
+
+    const staffRepo = new (await import('../../../src/infrastructure/persistence/InMemoryStaffRepository')).InMemoryStaffRepository();
+    const { Staff } = await import('../../../src/domain/models');
+    await staffRepo.save(new Staff('MEM001', 'BP001', '要員1'));
+    await staffRepo.save(new Staff('MEM002', 'BP001', '要員2'));
+    await staffRepo.save(new Staff('MEM003', 'BP001', '要員3'));
+    await staffRepo.save(new Staff('MEM004', 'BP001', '要員4'));
+    RepositoryRegistry.registerStaffRepository(staffRepo);
+
+    const partnerRepo = new (await import('../../../src/infrastructure/persistence/InMemoryPartnerRepository')).InMemoryPartnerRepository();
+    const { Partner } = await import('../../../src/domain/models');
+    await partnerRepo.save(new Partner('BP001', 'Aソフト開発支援'));
+    RepositoryRegistry.registerPartnerRepository(partnerRepo);
+
+    const orderRepo = new (await import('../../../src/infrastructure/persistence/InMemoryPartnerOrderRepository')).InMemoryPartnerOrderRepository();
+    const { PartnerOrder, OrderDetail } = await import('../../../src/domain/models/PartnerOrder');
+    const details = [
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-08-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-09-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-10-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-11-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-08-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-09-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-10-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-11-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM003', 1.0, 1000000, '2026-09-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM003', 1.0, 1000000, '2026-10-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM004', 0.6, 1000000, '2026-09-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM004', 0.6, 1000000, '2026-10-01', 'BP001', 'BP001'),
+    ];
+    await orderRepo.save(new PartnerOrder('ORD001', 'CON001', 'BP001', '2026-08-01', details));
+    RepositoryRegistry.registerPartnerOrderRepository(orderRepo);
 
     // シードデータを登録
     const seeds = [

@@ -8,11 +8,20 @@ import { InMemoryStaffOrderDetailRepository } from '../../../../src/infrastructu
 import { InMemoryStaffMonthlySummaryRepository } from '../../../../src/infrastructure/persistence/InMemoryStaffMonthlySummaryRepository';
 
 describe('StaffView (削除制約UI検証)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerStaffRepository(new InMemoryStaffRepository());
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
-    RepositoryRegistry.registerStaffOrderDetailRepository(new InMemoryStaffOrderDetailRepository());
+    const partnerRepo = new InMemoryPartnerRepository();
+    const { Partner, Staff } = await import('../../../../src/domain/models');
+    await partnerRepo.save(new Partner('BP001', 'Ａソフトウェア'));
+    RepositoryRegistry.registerPartnerRepository(partnerRepo);
+
+    const staffRepo = new InMemoryStaffRepository();
+    await staffRepo.save(new Staff('MEM001', 'BP001', '坂本龍馬'));
+    RepositoryRegistry.registerStaffRepository(staffRepo);
+
+    const detailRepo = new InMemoryStaffOrderDetailRepository();
+    detailRepo.setHasDetails('MEM001', true);
+    RepositoryRegistry.registerStaffOrderDetailRepository(detailRepo);
     RepositoryRegistry.registerStaffMonthlySummaryRepository(new InMemoryStaffMonthlySummaryRepository());
   });
 

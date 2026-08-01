@@ -5,8 +5,13 @@ import { OtherExpenseService } from '../../../src/application/services/OtherExpe
 describe('OtherExpenseService.delete (US4)', () => {
   const service = new OtherExpenseService();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
+    const expenseRepo = new (await import('../../../src/infrastructure/persistence/InMemoryOtherExpenseRepository')).InMemoryOtherExpenseRepository();
+    const { OtherExpense } = await import('../../../src/domain/models/OtherExpense');
+    await expenseRepo.save(new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 1, amount: 50000, memo: '出張旅費' }));
+    await expenseRepo.save(new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 2, amount: 12000, memo: '会議費' }));
+    RepositoryRegistry.registerOtherExpenseRepository(expenseRepo);
   });
 
   it('指定したその他経費レコードが物理削除されること', async () => {

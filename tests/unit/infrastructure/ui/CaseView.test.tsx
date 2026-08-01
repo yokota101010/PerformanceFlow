@@ -6,12 +6,17 @@ import { InMemoryCaseRepository } from '../../../../src/infrastructure/persisten
 import { LocalStorageProjectRepository } from '../../../../src/infrastructure/persistence/LocalStorageProjectRepository';
 
 describe('CaseView (案件一覧画面)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerCaseRepository(new InMemoryCaseRepository());
-    // プロジェクトマスタから親プロジェクト名解決用にモックを設定
-    // LocalStorageProjectRepository にシード PJ001 (Aシステム開発プロジェクト) が入っています
-    RepositoryRegistry.registerProjectRepository(new LocalStorageProjectRepository());
+    const projectRepo = new LocalStorageProjectRepository();
+    const { Project, Case } = await import('../../../../src/domain/models');
+    await projectRepo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
+    RepositoryRegistry.registerProjectRepository(projectRepo);
+
+    const caseRepo = new InMemoryCaseRepository();
+    await caseRepo.save(new Case('PJ001', 'ANK001', '要件定義・設計フェーズ', '2026-08-15', '2026-11-15'));
+    await caseRepo.save(new Case('PJ001', 'ANK002', '開発・テストフェーズ', '2026-10-13', '2027-01-31'));
+    RepositoryRegistry.registerCaseRepository(caseRepo);
   });
 
   it('初期読み込み時に案件一覧がテーブル表示され、シードデータおよびプロジェクト名が正しく表示されること', async () => {

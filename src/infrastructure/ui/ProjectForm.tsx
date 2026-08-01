@@ -73,7 +73,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)',
       }}
     >
-      <h3 style={{ marginTop: 0, marginBottom: '20px', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
+      <h3 style={{ marginTop: 0, marginBottom: '16px', fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>
         {projectToEdit ? 'プロジェクトの編集' : '新しいプロジェクトの追加'}
       </h3>
       

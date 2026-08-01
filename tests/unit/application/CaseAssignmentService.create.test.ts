@@ -42,7 +42,7 @@ describe('CaseAssignmentService.create (新規登録とバリデーション)', 
     };
 
     const assignment = await service.createAssignment(cmd);
-    expect(assignment.id).toBe('WK005');
+    expect(assignment.id).toBe('CON001');
     expect(assignment.endDate).toBe('2026-09-30'); // 案件の終了日に自動設定
     expect(assignment.sales).toBe(500000);
   });

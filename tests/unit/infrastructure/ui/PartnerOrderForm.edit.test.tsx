@@ -41,6 +41,13 @@ describe('PartnerOrderForm (編集・明細追加 UI)', () => {
     await supRepo.save(new StaffUnitPrice('SUP002', 'MEM002', [{ unitPriceId: 'SUP002', startYearMonth: '2026-08', price: 1000000 }]));
 
     RepositoryRegistry.registerStaffUnitPriceRepository(supRepo);
+
+    const { PartnerOrder, OrderDetail } = await import('../../../../src/domain/models/PartnerOrder');
+    const details = [
+      new OrderDetail('ORD001', 'MEM001', 0.8, 1000000, '2026-08-01', 'BP001', 'BP001'),
+      new OrderDetail('ORD001', 'MEM002', 0.5, 1000000, '2026-08-01', 'BP001', 'BP001')
+    ];
+    await orderRepo.save(new PartnerOrder('ORD001', 'CON001', 'BP001', '2026-08-01', details));
   });
 
 

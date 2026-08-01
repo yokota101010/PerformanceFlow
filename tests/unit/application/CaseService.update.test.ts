@@ -17,6 +17,11 @@ describe('CaseService.updateCase (更新)', () => {
     RepositoryRegistry.registerProjectRepository(projectRepo);
     
     service = new CaseService();
+
+    const caseRepo = RepositoryRegistry.getCaseRepository();
+    const { Case } = await import('../../../src/domain/models');
+    await caseRepo.save(new Case('PJ001', 'AJ001', '案件1: Ａソフト開発支援', '2026-08-15', '2026-11-15'));
+    await caseRepo.save(new Case('PJ001', 'AJ002', '案件2: Ｂ金融システム開発', '2026-09-13', '2026-10-31'));
   });
 
   it('正常パラメータで案件情報が更新できること', async () => {

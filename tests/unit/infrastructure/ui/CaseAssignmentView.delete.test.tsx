@@ -12,7 +12,6 @@ import { InMemoryOtherExpenseRepository } from '../../../../src/infrastructure/p
 describe('CaseAssignmentView (削除制限UI)', () => {
   beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerCaseAssignmentRepository(new InMemoryCaseAssignmentRepository());
     
     // window.scrollTo をモック化
     window.scrollTo = vi.fn() as any;
@@ -26,11 +25,18 @@ describe('CaseAssignmentView (削除制限UI)', () => {
     RepositoryRegistry.registerProjectRepository(projectRepo);
 
     const caseRepo = new InMemoryCaseRepository();
-    const { Case } = await import('../../../../src/domain/models');
+    const { Case, CaseAssignment } = await import('../../../../src/domain/models');
     await caseRepo.save(new Case('PJ001', 'AJ001', '案件1: Ａソフト開発支援', '2026-08-15', '2026-11-15'));
     RepositoryRegistry.registerCaseRepository(caseRepo);
 
-    RepositoryRegistry.registerPartnerOrderRepository(new InMemoryPartnerOrderRepository());
+    const assignRepo = new InMemoryCaseAssignmentRepository();
+    await assignRepo.save(new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 10.0, 800000, 5242000));
+    RepositoryRegistry.registerCaseAssignmentRepository(assignRepo);
+
+    const orderRepo = new InMemoryPartnerOrderRepository();
+    orderRepo.setHasCaseAssignmentOrder('PJ001', 'WK001', true);
+    RepositoryRegistry.registerPartnerOrderRepository(orderRepo);
+
     RepositoryRegistry.registerEmployeeWorkTimeRepository(new InMemoryEmployeeWorkTimeRepository());
     RepositoryRegistry.registerOtherExpenseRepository(new InMemoryOtherExpenseRepository());
   });

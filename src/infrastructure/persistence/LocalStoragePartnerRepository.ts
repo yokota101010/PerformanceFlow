@@ -9,23 +9,6 @@ export class LocalStoragePartnerRepository implements PartnerRepository {
   private readonly STORAGE_KEY = 'performance_flow_partners';
 
   constructor() {
-    this.initSeeds();
-  }
-
-  /**
-   * 初回起動時にシードデータをロードする (T036)
-   */
-  private initSeeds(): void {
-    if (typeof window === 'undefined') return; // SSR or テスト環境での窓未定義エラー回避
-
-    const json = localStorage.getItem(this.STORAGE_KEY);
-    if (!json || (JSON.parse(json) && JSON.parse(json).length === 0)) {
-      const seeds = [
-        new Partner('BP001', 'Ａソフトウェア'),
-        new Partner('BP002', 'Ｂエンジニアリング'),
-      ];
-      this.saveAll(seeds);
-    }
   }
 
   private loadAll(): Partner[] {

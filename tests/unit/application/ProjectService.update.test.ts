@@ -13,6 +13,7 @@ describe('ProjectService.updateProject (編集・更新)', () => {
     service = new ProjectService();
 
     const repo = RepositoryRegistry.getProjectRepository();
+    await repo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     await repo.save(new Project('PJ002', '新規製品開発プロジェクト'));
   });
 
@@ -20,7 +21,8 @@ describe('ProjectService.updateProject (編集・更新)', () => {
     await service.updateProject({ id: 'PJ002', name: '更新後のプロジェクト名' });
 
     const projects = await service.getProjects();
-    expect(projects[1].name).toBe('更新後のプロジェクト名');
+    const pj2 = projects.find(p => p.id === 'PJ002');
+    expect(pj2?.name).toBe('更新後のプロジェクト名');
   });
 
   it('自分自身と同じ名称を設定した場合は、重複エラーにならず更新できること', async () => {
@@ -37,7 +39,8 @@ describe('ProjectService.updateProject (編集・更新)', () => {
     await service.updateProject({ id: 'PJ002', name: '   トリミング編集テスト   ' });
 
     const projects = await service.getProjects();
-    expect(projects[1].name).toBe('トリミング編集テスト');
+    const pj2 = projects.find(p => p.id === 'PJ002');
+    expect(pj2?.name).toBe('トリミング編集テスト');
   });
 
   it('変更後の名前が空欄またはスペースのみの場合は更新が拒否されエラーになること', async () => {

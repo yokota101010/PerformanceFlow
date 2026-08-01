@@ -4,9 +4,18 @@ import { EmployeeWorkTimeView } from '../../../../src/infrastructure/ui/Employee
 import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/RepositoryRegistry';
 
 describe('EmployeeWorkTimeView - Delete Action (US4)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    
+    const empRepo = new (await import('../../../../src/infrastructure/persistence/InMemoryEmployeeRepository')).InMemoryEmployeeRepository();
+    const { Employee } = await import('../../../../src/domain/models');
+    await empRepo.save(new Employee('EMP001', 'トム・デマルコ'));
+    RepositoryRegistry.registerEmployeeRepository(empRepo);
+
+    const workTimeRepo = new (await import('../../../../src/infrastructure/persistence/InMemoryEmployeeWorkTimeRepository')).InMemoryEmployeeWorkTimeRepository();
+    const { EmployeeWorkTime } = await import('../../../../src/domain/models/EmployeeWorkTime');
+    await workTimeRepo.save(new EmployeeWorkTime({ caseAssignmentId: 'WK001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160, staffPrice: 9000 }));
+    RepositoryRegistry.registerEmployeeWorkTimeRepository(workTimeRepo);
+
     // confirm のモック
     vi.spyOn(window, 'confirm').mockReturnValue(true);
   });

@@ -212,15 +212,13 @@ export const EmployeeWorkTimeView: React.FC = () => {
                       <div className="flex justify-center space-x-2">
                         <button
                           onClick={() => handleEditClick(item)}
-                          className="btn btn-secondary"
-                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          className="btn btn-secondary btn-sm"
                         >
                           編集
                         </button>
                         <button
                           onClick={() => handleDeleteClick(item)}
-                          className="btn btn-danger"
-                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          className="btn btn-danger btn-sm"
                         >
                           削除
                         </button>

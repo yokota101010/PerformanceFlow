@@ -5,9 +5,12 @@ import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/R
 import { InMemoryPartnerRepository } from '../../../../src/infrastructure/persistence/InMemoryPartnerRepository';
 
 describe('PartnerForm (登録フォーム)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
+    const repo = new InMemoryPartnerRepository();
+    const { Partner } = await import('../../../../src/domain/models');
+    await repo.save(new Partner('BP001', 'Ａソフトウェア'));
+    RepositoryRegistry.registerPartnerRepository(repo);
   });
 
   it('正しい名前を入力して登録ボタンを押すと、登録に成功して onSuccess コールバックが呼ばれること', async () => {

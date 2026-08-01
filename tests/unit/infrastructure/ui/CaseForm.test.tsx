@@ -8,7 +8,10 @@ import { LocalStorageProjectRepository } from '../../../../src/infrastructure/pe
 describe('CaseView (案件登録フロー)', () => {
   beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerCaseRepository(new InMemoryCaseRepository());
+    const caseRepo = new InMemoryCaseRepository();
+    const { Case } = await import('../../../../src/domain/models');
+    await caseRepo.save(new Case('PJ001', 'ANK001', '案件1: Ａソフト開発支援', '2026-08-15', '2026-11-15'));
+    RepositoryRegistry.registerCaseRepository(caseRepo);
     
     const projectRepo = new LocalStorageProjectRepository();
     const { Project } = await import('../../../../src/domain/models');

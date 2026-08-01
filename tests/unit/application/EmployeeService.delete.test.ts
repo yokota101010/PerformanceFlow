@@ -39,4 +39,14 @@ describe('EmployeeService.deleteEmployee (物理削除と制約)', () => {
       service.deleteEmployee('EMP999')
     ).rejects.toThrow('指定された社員が見つかりません。');
   });
+
+  it('工数実績が紐づいている社員は、削除がエラーでブロックされること', async () => {
+    const { Employee } = await import('../../../src/domain/models');
+    await RepositoryRegistry.getEmployeeRepository().save(new Employee('EMP001', 'トム・デマルコ'));
+    workTimeRepo.setHasWorkTime('EMP001', true);
+
+    await expect(service.deleteEmployee('EMP001'))
+      .rejects
+      .toThrow('この社員には案件工数実績が登録されているため削除できません。');
+  });
 });

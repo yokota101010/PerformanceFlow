@@ -13,18 +13,17 @@ describe('EmployeeService.createEmployee (新規登録)', () => {
   });
 
   it('正常な名前で登録され、自動採番 (最大値+1) が機能すること', async () => {
-    // 初期状態は EMP001, EMP002, EMP003
     const newEmp = await service.createEmployee({
       name: 'デミ・ハリス',
     });
 
-    expect(newEmp.id).toBe('EMP004');
+    expect(newEmp.id).toBe('EMP001');
     expect(newEmp.name).toBe('デミ・ハリス');
 
     // 一覧に反映されていること
     const list = await service.getEmployees();
-    expect(list).toHaveLength(4);
-    expect(list[3].id).toBe('EMP004');
+    expect(list).toHaveLength(1);
+    expect(list[0].id).toBe('EMP001');
   });
 
   it('社員名に入力された前後の空白 (全角・半角) が自動トリミングされること', async () => {
@@ -49,8 +48,8 @@ describe('EmployeeService.createEmployee (新規登録)', () => {
     const emp1 = await service.createEmployee({ name: 'デミ・ハリス' });
     const emp2 = await service.createEmployee({ name: 'デミ・ハリス' });
 
-    expect(emp1.id).toBe('EMP004');
-    expect(emp2.id).toBe('EMP005');
+    expect(emp1.id).toBe('EMP001');
+    expect(emp2.id).toBe('EMP002');
     expect(emp1.name).toBe(emp2.name);
   });
 });

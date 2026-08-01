@@ -25,7 +25,6 @@ export class LocalStoragePartnerOrderRepository implements PartnerOrderRepositor
   private readonly STORAGE_KEY = 'performance_flow_partner_orders';
 
   constructor() {
-    this.initializeSeedsIfEmpty();
   }
 
   private loadSerialized(): Map<string, SerializedPartnerOrder> {
@@ -46,95 +45,6 @@ export class LocalStoragePartnerOrderRepository implements PartnerOrderRepositor
   private saveSerialized(map: Map<string, SerializedPartnerOrder>): void {
     const list = Array.from(map.values());
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(list));
-  }
-
-  private initializeSeedsIfEmpty(): void {
-    const json = localStorage.getItem(this.STORAGE_KEY);
-    if (json && JSON.parse(json) && JSON.parse(json).length > 0) {
-      return;
-    }
-
-    const seeds: SerializedPartnerOrder[] = [
-      {
-        id: 'ORD001',
-        caseAssignmentId: 'CON001',
-        partnerId: 'BP001',
-        targetMonth: '2026-08-01',
-        details: [
-          { orderId: 'ORD001', staffId: 'MEM001', orderEffort: 0.8, orderPrice: 1000000, targetMonth: '2026-08-01', partnerId: 'BP001' },
-          { orderId: 'ORD001', staffId: 'MEM002', orderEffort: 0.5, orderPrice: 1000000, targetMonth: '2026-08-01', partnerId: 'BP001' }
-        ]
-      },
-      {
-        id: 'ORD002',
-        caseAssignmentId: 'CON001',
-        partnerId: 'BP001',
-        targetMonth: '2026-09-01',
-        details: [
-          { orderId: 'ORD002', staffId: 'MEM001', orderEffort: 1.0, orderPrice: 1000000, targetMonth: '2026-09-01', partnerId: 'BP001' },
-          { orderId: 'ORD002', staffId: 'MEM002', orderEffort: 1.0, orderPrice: 1000000, targetMonth: '2026-09-01', partnerId: 'BP001' }
-        ]
-      },
-      {
-        id: 'ORD003',
-        caseAssignmentId: 'CON002',
-        partnerId: 'BP001',
-        targetMonth: '2026-10-01',
-        details: [
-          { orderId: 'ORD003', staffId: 'MEM001', orderEffort: 1.0, orderPrice: 1050000, targetMonth: '2026-10-01', partnerId: 'BP001' },
-          { orderId: 'ORD003', staffId: 'MEM002', orderEffort: 1.0, orderPrice: 1050000, targetMonth: '2026-10-01', partnerId: 'BP001' }
-        ]
-      },
-      {
-        id: 'ORD004',
-        caseAssignmentId: 'CON002',
-        partnerId: 'BP001',
-        targetMonth: '2026-11-01',
-        details: [
-          { orderId: 'ORD004', staffId: 'MEM001', orderEffort: 0.8, orderPrice: 1050000, targetMonth: '2026-11-01', partnerId: 'BP001' }
-        ]
-      },
-      {
-        id: 'ORD005',
-        caseAssignmentId: 'CON003',
-        partnerId: 'BP002',
-        targetMonth: '2026-10-01',
-        details: [
-          { orderId: 'ORD005', staffId: 'MEM003', orderEffort: 1.0, orderPrice: 1050000, targetMonth: '2026-10-01', partnerId: 'BP002' }
-        ]
-      },
-      {
-        id: 'ORD006',
-        caseAssignmentId: 'CON003',
-        partnerId: 'BP002',
-        targetMonth: '2026-11-01',
-        details: [
-          { orderId: 'ORD006', staffId: 'MEM003', orderEffort: 1.0, orderPrice: 1050000, targetMonth: '2026-11-01', partnerId: 'BP002' }
-        ]
-      },
-      {
-        id: 'ORD007',
-        caseAssignmentId: 'CON003',
-        partnerId: 'BP002',
-        targetMonth: '2026-12-01',
-        details: [
-          { orderId: 'ORD007', staffId: 'MEM003', orderEffort: 1.0, orderPrice: 1050000, targetMonth: '2026-12-01', partnerId: 'BP002' }
-        ]
-      },
-      {
-        id: 'ORD008',
-        caseAssignmentId: 'CON003',
-        partnerId: 'BP002',
-        targetMonth: '2027-01-01',
-        details: [
-          { orderId: 'ORD008', staffId: 'MEM003', orderEffort: 1.0, orderPrice: 1050000, targetMonth: '2027-01-01', partnerId: 'BP002' }
-        ]
-      }
-    ];
-
-    const map = new Map<string, SerializedPartnerOrder>();
-    seeds.forEach(s => map.set(s.id, s));
-    this.saveSerialized(map);
   }
 
   async findAll(): Promise<readonly PartnerOrder[]> {

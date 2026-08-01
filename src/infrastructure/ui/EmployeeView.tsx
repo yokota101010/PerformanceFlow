@@ -104,15 +104,13 @@ export const EmployeeView: React.FC = () => {
                       <div className="flex justify-center space-x-2" style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                         <button
                           onClick={() => handleEditClick(employee)}
-                          className="btn btn-secondary"
-                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          className="btn btn-secondary btn-sm"
                         >
                           編集
                         </button>
                         <button
                           onClick={() => handleDeleteClick(employee.id)}
-                          className="btn btn-danger"
-                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          className="btn btn-danger btn-sm"
                         >
                           削除
                         </button>

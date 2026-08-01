@@ -7,20 +7,9 @@ import { EmployeeWorkTime } from '../../domain/models/EmployeeWorkTime';
 export class InMemoryEmployeeWorkTimeRepository implements EmployeeWorkTimeRepository {
   private items: EmployeeWorkTime[] = [];
   
-  // 過去テストとの互換用スタブデータ
-  private stubHasWorkTimeIds: Set<string> = new Set(['EMP001', 'EMP002', 'EMP003']);
-  private stubCaseAssignmentWorkTimes: Set<string> = new Set([
-    'PJ001:WK001',
-    'PJ001:WK002',
-    'PJ001:WK003',
-    'PJ001:WK004',
-  ]);
-  private stubCaseAssignmentWorkTimeCosts: Map<string, number> = new Map([
-    ['PJ001:WK001', 2242000],
-    ['PJ001:WK002', 2215000],
-    ['PJ001:WK003', 990000],
-    ['PJ001:WK004', 990000],
-  ]);
+  private stubHasWorkTimeIds: Set<string> = new Set();
+  private stubCaseAssignmentWorkTimes: Set<string> = new Set();
+  private stubCaseAssignmentWorkTimeCosts: Map<string, number> = new Map();
 
   constructor() {
     this.resetToSeed();
@@ -30,16 +19,7 @@ export class InMemoryEmployeeWorkTimeRepository implements EmployeeWorkTimeRepos
    * インメモリの状態を初期のシードデータ状態に戻す。
    */
   resetToSeed() {
-    this.items = [
-      new EmployeeWorkTime({ caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160, staffPrice: 10000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-09-01', workHours: 160, staffPrice: 10000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-10-01', workHours: 160, staffPrice: 11000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-11-01', workHours: 160, staffPrice: 11000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-10-01', workHours: 160, staffPrice: 11000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-11-01', workHours: 160, staffPrice: 11000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-12-01', workHours: 160, staffPrice: 11000 }),
-      new EmployeeWorkTime({ caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2027-01-01', workHours: 160, staffPrice: 11000 }),
-    ];
+    this.items = [];
   }
 
 

@@ -91,7 +91,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({ editingStaff, onSuccess, o
 
   return (
     <form onSubmit={handleSubmit} className="glass-panel p-6 space-y-4">
-      <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
+      <h3 style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>
         {editingStaff ? '要員情報の編集' : '新規要員の登録'}
       </h3>
 

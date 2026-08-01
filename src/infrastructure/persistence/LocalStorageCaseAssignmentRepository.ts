@@ -8,23 +8,6 @@ export class LocalStorageCaseAssignmentRepository implements CaseAssignmentRepos
   private readonly STORAGE_KEY = 'performance_flow_case_assignments';
 
   constructor() {
-    this.initializeSeedData();
-  }
-
-  private initializeSeedData(): void {
-    try {
-      const data = localStorage.getItem(this.STORAGE_KEY);
-      if (!data || (JSON.parse(data) && JSON.parse(data).length === 0)) {
-        const seed = [
-          new CaseAssignment('PJ001', 'CON001', 'ANK001', '2026-08-15', '2026-09-30', 10.0, 1200000, 0),
-          new CaseAssignment('PJ001', 'CON002', 'ANK001', '2026-10-01', '2026-11-15', 10.0, 1200000, 0),
-          new CaseAssignment('PJ001', 'CON003', 'ANK002', '2026-10-13', '2027-01-31', 4.0, 1000000, 0),
-        ];
-        this.saveAll(seed);
-      }
-    } catch (e) {
-      console.error('LocalStorage initialization error:', e);
-    }
   }
 
   private loadAll(): CaseAssignment[] {

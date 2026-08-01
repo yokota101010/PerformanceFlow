@@ -13,12 +13,12 @@ describe('ProjectForm (編集モード)', () => {
 
   beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
+    const repo = new InMemoryProjectRepository();
+    await repo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
+    await repo.save(new Project(testProject.id, testProject.name));
+    RepositoryRegistry.registerProjectRepository(repo);
     mockOnSuccess.mockClear();
     mockOnCancel.mockClear();
-
-    const repo = RepositoryRegistry.getProjectRepository();
-    await repo.save(new Project(testProject.id, testProject.name));
   });
 
   it('編集対象プロジェクトが渡されたとき、初期値がフォームに入力されていること', () => {

@@ -4,14 +4,7 @@ import { RepositoryRegistry } from '../persistence/RepositoryRegistry';
 import { CaseAssignmentService } from '../../application/services/CaseAssignmentService';
 import { CaseAssignmentForm } from './CaseAssignmentForm';
 
-interface CaseAssignmentViewProps {
-  onSelectAssignment?: (id: string) => void;
-}
-
-/**
- * 案件作業契約（アサイン明細）管理の一覧・操作ビューコンポーネント。
- */
-export const CaseAssignmentView: React.FC<CaseAssignmentViewProps> = ({ onSelectAssignment }) => {
+export const CaseAssignmentView: React.FC = () => {
   const [assignments, setAssignments] = useState<readonly CaseAssignment[]>([]);
   const [projects, setProjects] = useState<Map<string, string>>(new Map());
   const [cases, setCases] = useState<Map<string, string>>(new Map());
@@ -20,11 +13,10 @@ export const CaseAssignmentView: React.FC<CaseAssignmentViewProps> = ({ onSelect
   // 編集モードの状態管理
   const [editTarget, setEditTarget] = useState<{ projectId: string; id: string } | null>(null);
 
-  const usecase = new CaseAssignmentService();
-
   const loadData = async () => {
     try {
       setError(null);
+      const usecase = new CaseAssignmentService();
       const list = await usecase.getAssignments();
       setAssignments(list);
 
@@ -65,7 +57,7 @@ export const CaseAssignmentView: React.FC<CaseAssignmentViewProps> = ({ onSelect
     }
     try {
       setError(null);
-      await usecase.deleteAssignment(projectId, id);
+      await new CaseAssignmentService().deleteAssignment(projectId, id);
       await loadData();
     } catch (e: any) {
       setError(e.message || '削除に失敗しました。');
@@ -84,7 +76,7 @@ export const CaseAssignmentView: React.FC<CaseAssignmentViewProps> = ({ onSelect
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
       <div className="page-header">
-        <h2 className="page-title">アサイン契約管理</h2>
+        <h2 className="page-title">案件明細管理</h2>
         <p className="page-subtitle">
           案件に対する契約条件（期間・契約金額・目標工数等）の登録、編集、および削除を行います。
         </p>
@@ -145,27 +137,15 @@ export const CaseAssignmentView: React.FC<CaseAssignmentViewProps> = ({ onSelect
                     <td style={{ textAlign: 'right', fontWeight: 600, color: grossProfitColor }}>{Math.round(item.grossProfitRate * 100)}%</td>
                     <td style={{ textAlign: 'center' }}>
                       <div className="flex justify-center space-x-2">
-                        {onSelectAssignment && (
-                          <button
-                            onClick={() => onSelectAssignment(item.id)}
-                            className="btn btn-secondary"
-                            style={{ padding: '4px 10px', fontSize: '12px', borderColor: 'rgba(56, 189, 248, 0.3)', color: '#38bdf8' }}
-                            id={`input-expense-for-${item.id}-btn`}
-                          >
-                            経費
-                          </button>
-                        )}
                         <button
                           onClick={() => handleEditClick(item.projectId, item.id)}
-                          className="btn btn-secondary"
-                          style={{ padding: '4px 10px', fontSize: '12px' }}
+                          className="btn btn-secondary btn-sm"
                         >
                           編集
                         </button>
                         <button
                           onClick={() => handleDeleteClick(item.projectId, item.id)}
-                          className="btn btn-danger"
-                          style={{ padding: '4px 10px', fontSize: '12px' }}
+                          className="btn btn-danger btn-sm"
                         >
                           削除
                         </button>

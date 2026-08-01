@@ -5,7 +5,7 @@ import { StaffMonthlySummaryRepository } from '../../domain/repositories';
  * デフォルトでシード要員 (MEM001〜MEM004) をサマリあり (true) とする。
  */
 export class InMemoryStaffMonthlySummaryRepository implements StaffMonthlySummaryRepository {
-  private staffIdsWithSummaries: Set<string> = new Set(['MEM001', 'MEM002', 'MEM003', 'MEM004']);
+  private staffIdsWithSummaries: Set<string> = new Set();
 
   async existsByStaffId(staffId: string): Promise<boolean> {
     return this.staffIdsWithSummaries.has(staffId);

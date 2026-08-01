@@ -89,7 +89,7 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
       >
         {/* ヘッダー */}
         <div className="flex justify-between items-center mb-6">
-          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
+          <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>
             {isEdit ? `経費編集 (行No: ${editingItem?.lineNo})` : '新規経費追加'}
           </h3>
           <button

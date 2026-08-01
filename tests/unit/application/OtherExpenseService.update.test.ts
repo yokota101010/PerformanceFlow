@@ -5,8 +5,12 @@ import { OtherExpenseService } from '../../../src/application/services/OtherExpe
 describe('OtherExpenseService.update (US3)', () => {
   const service = new OtherExpenseService();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
+    const repo = new (await import('../../../src/infrastructure/persistence/InMemoryOtherExpenseRepository')).InMemoryOtherExpenseRepository();
+    const { OtherExpense } = await import('../../../src/domain/models/OtherExpense');
+    await repo.save(new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 2, amount: 12000, memo: '会議費' }));
+    RepositoryRegistry.registerOtherExpenseRepository(repo);
   });
 
   it('登録済みのその他経費を正常なデータで更新できること', async () => {

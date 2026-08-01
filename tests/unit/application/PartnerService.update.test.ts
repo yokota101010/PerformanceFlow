@@ -6,9 +6,13 @@ import { InMemoryPartnerRepository } from '../../../src/infrastructure/persisten
 describe('PartnerService.updatePartner (情報更新)', () => {
   let service: PartnerService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
+    const repo = new InMemoryPartnerRepository();
+    const { Partner } = await import('../../../src/domain/models');
+    await repo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await repo.save(new Partner('BP002', 'Ｂエンジニアリング'));
+    RepositoryRegistry.registerPartnerRepository(repo);
     service = new PartnerService();
   });
 

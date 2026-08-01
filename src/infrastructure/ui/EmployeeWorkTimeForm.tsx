@@ -88,7 +88,7 @@ export const EmployeeWorkTimeForm: React.FC<EmployeeWorkTimeFormProps> = ({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="glass-panel max-w-md w-full p-6">
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 600, color: '#f8fafc' }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>
           {editingItem ? '工数実績編集' : '新規工数実績登録'}
         </h3>
 

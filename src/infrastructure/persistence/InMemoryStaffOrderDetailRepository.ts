@@ -5,7 +5,7 @@ import { StaffOrderDetailRepository } from '../../domain/repositories';
  * デフォルトでシード要員 (MEM001〜MEM004) を注文実績あり (true) とする。
  */
 export class InMemoryStaffOrderDetailRepository implements StaffOrderDetailRepository {
-  private staffIdsWithDetails: Set<string> = new Set(['MEM001', 'MEM002', 'MEM003', 'MEM004']);
+  private staffIdsWithDetails: Set<string> = new Set();
 
   async existsByStaffId(staffId: string): Promise<boolean> {
     return this.staffIdsWithDetails.has(staffId);

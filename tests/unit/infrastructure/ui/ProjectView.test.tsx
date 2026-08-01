@@ -5,9 +5,12 @@ import { RepositoryRegistry } from '../../../../src/infrastructure/persistence/R
 import { InMemoryProjectRepository } from '../../../../src/infrastructure/persistence/InMemoryProjectRepository';
 
 describe('ProjectView (一覧画面)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerProjectRepository(new InMemoryProjectRepository());
+    const repo = new InMemoryProjectRepository();
+    const { Project } = await import('../../../../src/domain/models');
+    await repo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
+    RepositoryRegistry.registerProjectRepository(repo);
   });
 
   it('初期読み込み時にプロジェクト一覧がテーブル表示され、シードデータが表示されること', async () => {

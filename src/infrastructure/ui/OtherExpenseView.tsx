@@ -111,9 +111,6 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
   // 合計金額の計算
   const totalAmount = expenses.reduce((sum, item) => sum + item.amount, 0);
 
-  // 選択中のアサイン明細オブジェクト
-  const activeAssignment = assignments.find(a => a.id === selectedAssignmentId);
-
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
       {/* ヘッダーエリア */}
@@ -147,7 +144,7 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
       </div>
 
       {/* セレクターおよびサマリ */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
         <div className="glass-panel flex flex-col justify-between p-4">
           <label className="form-label mb-2">
             作業契約 (アサイン) 選択
@@ -166,19 +163,6 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
             ))}
           </select>
         </div>
-
-        {activeAssignment && (
-          <div className="glass-panel p-4">
-            <span className="form-label mb-1">
-              契約情報
-            </span>
-            <div className="text-sm space-y-1">
-              <p><span className="text-slate-400">案件ID:</span> {activeAssignment.caseId}</p>
-              <p><span className="text-slate-400">売上単価:</span> {activeAssignment.contractPrice.toLocaleString()} 円</p>
-              <p><span className="text-slate-400">アサイン工数:</span> {activeAssignment.contractEffort} 人月</p>
-            </div>
-          </div>
-        )}
 
         <div className="glass-panel p-4 flex flex-col justify-center" style={{ borderLeft: '4px solid #38bdf8' }}>
           <span className="form-label mb-1" style={{ color: '#38bdf8' }}>
@@ -227,16 +211,14 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
                       <div className="flex justify-center space-x-2">
                         <button
                           onClick={() => handleEditClick(item)}
-                          className="btn btn-secondary"
-                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          className="btn btn-secondary btn-sm"
                           id={`edit-expense-${item.lineNo}-btn`}
                         >
                           編集
                         </button>
                         <button
                           onClick={() => handleDeleteClick(item)}
-                          className="btn btn-danger"
-                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          className="btn btn-danger btn-sm"
                           id={`delete-expense-${item.lineNo}-btn`}
                         >
                           削除

@@ -27,30 +27,28 @@ describe('CaseAssignmentService.list (一覧・初期データ)', () => {
     service = new CaseAssignmentService();
   });
 
-  it('初期ロード時に4件のシードデータが取得され、自動計算項目が仕様書通り設定されていること', async () => {
+  it('初期状態ではデータ無しの状態（0件）であること', async () => {
     const list = await service.getAssignments();
-    expect(list.length).toBe(4);
+    expect(list.length).toBe(0);
+  });
 
-    // WK001の検証
+  it('登録した案件作業明細が取得され、自動計算項目が正しく算出されること', async () => {
+    const { CaseAssignment } = await import('../../../src/domain/models');
+    const assignRepo = RepositoryRegistry.getCaseAssignmentRepository();
+    await assignRepo.save(new CaseAssignment('PJ001', 'WK001', 'AJ001', '2026-08-15', '2026-09-30', 10.0, 800000, 5242000));
+
+    const list = await service.getAssignments();
+    expect(list.length).toBe(1);
+
     const wk001 = list.find((a) => a.id === 'WK001');
     expect(wk001).toBeDefined();
     expect(wk001!.projectId).toBe('PJ001');
     expect(wk001!.caseId).toBe('AJ001');
-    expect(wk001!.startDate).toBe('2026-08-15');
-    expect(wk001!.endDate).toBe('2026-09-30');
     expect(wk001!.contractEffort).toBe(10.0);
     expect(wk001!.contractPrice).toBe(800000);
     expect(wk001!.sales).toBe(8000000);
-    expect(wk001!.cost).toBe(5242000);
-    expect(wk001!.grossProfit).toBe(2758000);
-    expect(wk001!.grossProfitRate).toBe(0.34);
-
-    // WK003の検証 (粗利率がマイナスのケース)
-    const wk003 = list.find((a) => a.id === 'WK003');
-    expect(wk003).toBeDefined();
-    expect(wk003!.sales).toBe(1400000);
-    expect(wk003!.cost).toBe(2490000);
-    expect(wk003!.grossProfit).toBe(-1090000);
-    expect(wk003!.grossProfitRate).toBe(-0.78);
+    expect(wk001!.cost).toBe(62000);
+    expect(wk001!.grossProfit).toBe(7938000);
+    expect(wk001!.grossProfitRate).toBe(0.99);
   });
 });

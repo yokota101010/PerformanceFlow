@@ -201,7 +201,7 @@ export const PartnerOrderForm: React.FC<PartnerOrderFormProps> = ({ editOrderId,
   if (!editOrderId) {
     return (
       <div className="glass-panel">
-        <h3 style={{ fontSize: '18px', fontWeight: 600, margin: '0 0 20px 0', color: '#ffffff' }}>新規発注登録</h3>
+        <h3 style={{ fontSize: '14px', fontWeight: 600, margin: '0 0 16px 0', color: '#ffffff' }}>新規発注登録</h3>
         {error && <div className="alert-error">{error}</div>}
         
         <form onSubmit={handleCreateSubmit}>
@@ -286,7 +286,7 @@ export const PartnerOrderForm: React.FC<PartnerOrderFormProps> = ({ editOrderId,
 
   return (
     <div className="glass-panel" style={{ borderLeft: '4px solid #eab308' }}>
-      <h3 style={{ fontSize: '18px', fontWeight: 600, margin: '0 0 20px 0', color: '#ffffff' }}>
+      <h3 style={{ fontSize: '14px', fontWeight: 600, margin: '0 0 16px 0', color: '#ffffff' }}>
         発注編集・明細追加 ({existingOrder.id})
       </h3>
       {error && <div className="alert-error">{error}</div>}

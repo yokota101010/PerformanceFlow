@@ -5,8 +5,19 @@ import { OtherExpenseService } from '../../../src/application/services/OtherExpe
 describe('OtherExpenseService.create (US2)', () => {
   const service = new OtherExpenseService();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
+
+    const assignRepo = new (await import('../../../src/infrastructure/persistence/InMemoryCaseAssignmentRepository')).InMemoryCaseAssignmentRepository();
+    const { CaseAssignment } = await import('../../../src/domain/models');
+    await assignRepo.save(new CaseAssignment('PJ001', 'WK001', 'ANK001', '2026-08-15', '2026-09-30', 1.0, 800000, 0));
+    RepositoryRegistry.registerCaseAssignmentRepository(assignRepo);
+
+    const expenseRepo = new (await import('../../../src/infrastructure/persistence/InMemoryOtherExpenseRepository')).InMemoryOtherExpenseRepository();
+    const { OtherExpense } = await import('../../../src/domain/models/OtherExpense');
+    await expenseRepo.save(new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 1, amount: 50000, memo: '出張旅費' }));
+    await expenseRepo.save(new OtherExpense({ caseAssignmentId: 'WK001', lineNo: 2, amount: 12000, memo: '会議費' }));
+    RepositoryRegistry.registerOtherExpenseRepository(expenseRepo);
   });
 
   it('有効なデータでその他経費を登録した際、自動採番された行Noで正しく保存されること', async () => {

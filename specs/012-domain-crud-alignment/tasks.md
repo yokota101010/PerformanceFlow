@@ -92,16 +92,14 @@
 
 ## Phase 5: User Story 3 - 参照画面におけるプル型オンデマンド算出 (Priority: P3)
 
-**Goal**: Implement pull-based on-demand calculation queries for F12 Financial Summary, F13 Employee Worktime Summary, and F14 Staff Worktime Summary.
+**Goal**: Implement pull-based on-demand calculation queries for F13 Employee Worktime Summary, and F14 Staff Worktime Summary.
 
-**Independent Test**: Modify worktime or price inputs and immediately navigate to Financial Summary (F12) to verify accurate, dynamic calculation of costs and gross profit within 1 second.
+**Independent Test**: Modify worktime or price inputs and immediately navigate to Employee Worktime Summary (F13) to verify accurate, dynamic calculation within 1 second.
 
 ### Implementation for User Story 3
 
-- [x] T026 [P] [US3] Implement Financial Summary Query Service in `src/application/queries/FinancialSummaryQuery.ts`
 - [x] T027 [P] [US3] Implement Employee Worktime Summary Query Service in `src/application/queries/EmployeeWorktimeSummaryQuery.ts`
 - [x] T028 [P] [US3] Implement Staff Worktime Summary Query Service in `src/application/queries/StaffWorktimeSummaryQuery.ts`
-- [x] T029 [US3] Update Financial Summary UI page for on-demand calculation in `src/ui/pages/FinancialSummaryPage.tsx`
 - [x] T030 [US3] Update Employee Worktime Summary UI page for on-demand calculation in `src/ui/pages/EmployeeWorktimeSummaryPage.tsx`
 - [x] T031 [US3] Update Staff Worktime Summary UI page for on-demand calculation in `src/ui/pages/StaffWorktimeSummaryPage.tsx`
 

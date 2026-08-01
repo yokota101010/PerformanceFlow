@@ -11,16 +11,20 @@ describe('PartnerView (削除アクション)', () => {
   let staffRepo: InMemoryPartnerStaffRepository;
   let orderRepo: InMemoryPartnerOrderRepository;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
+    const repo = new InMemoryPartnerRepository();
+    const { Partner } = await import('../../../../src/domain/models');
+    await repo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await repo.save(new Partner('BP002', 'Ｂエンジニアリング'));
+    RepositoryRegistry.registerPartnerRepository(repo);
     
     staffRepo = new InMemoryPartnerStaffRepository();
     orderRepo = new InMemoryPartnerOrderRepository();
+    staffRepo.setHasStaff('BP001', true);
     RepositoryRegistry.registerPartnerStaffRepository(staffRepo);
     RepositoryRegistry.registerPartnerOrderRepository(orderRepo);
 
-    // confirm を常に true (OK) を返すモックにする
     vi.spyOn(window, 'confirm').mockImplementation(() => true);
   });
 

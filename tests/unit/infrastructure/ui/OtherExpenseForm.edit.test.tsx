@@ -21,6 +21,7 @@ describe('OtherExpenseForm.edit (US3)', () => {
       amount: 15000,
       memo: '開発環境クラウド利用料'
     });
+    await RepositoryRegistry.getOtherExpenseRepository().save(existingItem);
 
     render(
       <OtherExpenseForm

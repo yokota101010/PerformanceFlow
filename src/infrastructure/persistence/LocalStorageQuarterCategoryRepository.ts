@@ -13,16 +13,6 @@ export class LocalStorageQuarterCategoryRepository implements QuarterCategoryRep
   private readonly storageKey = 'performance_flow_quarter_categories';
 
   constructor() {
-    const stored = localStorage.getItem(this.storageKey);
-    if (!stored || (JSON.parse(stored) && JSON.parse(stored).length === 0)) {
-      const initialSeed: SerializedQuarterCategory[] = [
-        { quarterCode: '2026-Q1', fiscalYear: 2026, quarterName: 'Q1', startYearMonth: '2026-04', endYearMonth: '2026-06' },
-        { quarterCode: '2026-Q2', fiscalYear: 2026, quarterName: 'Q2', startYearMonth: '2026-07', endYearMonth: '2026-09' },
-        { quarterCode: '2026-Q3', fiscalYear: 2026, quarterName: 'Q3', startYearMonth: '2026-10', endYearMonth: '2026-12' },
-        { quarterCode: '2026-Q4', fiscalYear: 2026, quarterName: 'Q4', startYearMonth: '2027-01', endYearMonth: '2027-03' },
-      ];
-      localStorage.setItem(this.storageKey, JSON.stringify(initialSeed));
-    }
   }
 
   private loadSerialized(): SerializedQuarterCategory[] {

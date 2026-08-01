@@ -9,11 +9,6 @@ export class InMemoryEmployeeRepository implements EmployeeRepository {
   private employees: Employee[] = [];
 
   constructor() {
-    // シードデータの自動投入 (T010)
-    this.employees.push(new Employee('EMP001', 'トム・デマルコ'));
-    this.employees.push(new Employee('EMP002', 'ロバート・マーチン'));
-    this.employees.push(new Employee('EMP003', 'マーチン・ファウラー'));
-
   }
 
   async findAll(): Promise<readonly Employee[]> {

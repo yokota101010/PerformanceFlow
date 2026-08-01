@@ -8,24 +8,6 @@ export class LocalStorageStaffRepository implements StaffRepository {
   private readonly storageKey = 'performance_flow_staffs';
 
   constructor() {
-    this.initSeedDataIfNeeded();
-  }
-
-  private initSeedDataIfNeeded(): void {
-    try {
-      const data = localStorage.getItem(this.storageKey);
-      if (!data || JSON.parse(data).length === 0) {
-        const seed = [
-          new Staff('MEM001', 'BP001', '坂本龍馬'),
-          new Staff('MEM002', 'BP001', '高杉晋作'),
-          new Staff('MEM003', 'BP002', '西郷隆盛'),
-          new Staff('MEM004', 'BP002', '勝海舟'),
-        ];
-        localStorage.setItem(this.storageKey, JSON.stringify(seed));
-      }
-    } catch (e) {
-      console.warn('LocalStorageStaffRepository: シードデータの初期化に失敗しました。', e);
-    }
   }
 
   private loadStaffs(): Staff[] {

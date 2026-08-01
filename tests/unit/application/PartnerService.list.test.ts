@@ -13,24 +13,16 @@ describe('PartnerService.getPartners (一覧取得)', () => {
     service = new PartnerService();
   });
 
-  it('初回起動時にシードデータ (2社) が自動的に投入されて取得できること', async () => {
+  it('初期状態ではデータ無しの状態（0件）であること', async () => {
     const list = await service.getPartners();
-    
-    expect(list).toHaveLength(2);
-    expect(list[0]).toEqual({
-      id: 'BP001',
-      name: 'Ａソフトウェア'
-    });
-    expect(list[1]).toEqual({
-      id: 'BP002',
-      name: 'Ｂエンジニアリング'
-    });
+    expect(list).toHaveLength(0);
   });
 
   it('複数登録されている場合、発注先IDの昇順でソートされて取得できること', async () => {
     const repo = RepositoryRegistry.getPartnerRepository();
     
-    // 順序を入れ替えて追加保存
+    await repo.save(new Partner('BP001', 'Ａソフトウェア'));
+    await repo.save(new Partner('BP002', 'Ｂエンジニアリング'));
     await repo.save(new Partner('BP004', 'Ｄネットワークス'));
     await repo.save(new Partner('BP003', 'Ｃシステムズ'));
 

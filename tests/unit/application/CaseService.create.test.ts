@@ -9,11 +9,14 @@ describe('CaseService.createCase (新規登録)', () => {
 
   beforeEach(async () => {
     RepositoryRegistry.clear();
-    RepositoryRegistry.registerCaseRepository(new InMemoryCaseRepository());
+    const caseRepo = new InMemoryCaseRepository();
+    const { Case, Project } = await import('../../../src/domain/models');
+    await caseRepo.save(new Case('PJ001', 'ANK001', '案件1: Ａソフト開発支援', '2026-08-15', '2026-11-15'));
+    await caseRepo.save(new Case('PJ001', 'ANK002', '案件2: Ｂシステム保守', '2026-10-13', '2027-01-31'));
+    RepositoryRegistry.registerCaseRepository(caseRepo);
     
     const projectRepo = new LocalStorageProjectRepository();
     // テストに必要なプロジェクトデータを明示的に保存
-    const { Project } = await import('../../../src/domain/models');
     await projectRepo.save(new Project('PJ001', '基幹基盤システム刷新プロジェクト'));
     await projectRepo.save(new Project('PJ002', 'プロジェクトB'));
     
@@ -22,7 +25,7 @@ describe('CaseService.createCase (新規登録)', () => {
   });
 
   it('正常パラメータで新規登録が成功し、案件IDがプロジェクト単位で自動採番されること', async () => {
-    // PJ001 の既存最大案件IDは AJ002 (シードデータ)
+    // PJ001 の既存最大案件IDは ANK002 (セットアップデータ)
     // PJ001 に新規追加
     const result1 = await service.createCase({
       projectId: 'PJ001',
@@ -32,7 +35,7 @@ describe('CaseService.createCase (新規登録)', () => {
     });
 
     expect(result1.projectId).toBe('PJ001');
-    expect(result1.id).toBe('AJ003'); // PJ001内最大値 AJ002 + 1
+    expect(result1.id).toBe('ANK003'); // PJ001内最大値 ANK002 + 1
     expect(result1.name).toBe('案件3: Ｃシステム開発支援');
     expect(result1.startDate).toBe('2026-10-01');
     expect(result1.endDate).toBe('2026-12-31');
@@ -46,7 +49,7 @@ describe('CaseService.createCase (新規登録)', () => {
     });
 
     expect(result2.projectId).toBe('PJ002');
-    expect(result2.id).toBe('AJ001'); // PJ002では初めてなので AJ001 から開始
+    expect(result2.id).toBe('ANK001'); // PJ002では初めてなので ANK001 から開始
   });
 
   it('入力された案件名の前後スペース (全角・半角) が自動的にトリミングされて登録されること', async () => {
@@ -103,7 +106,7 @@ describe('CaseService.createCase (新規登録)', () => {
       endDate: '2026-12-31'
     });
 
-    expect(result.id).toBe('AJ001');
+    expect(result.id).toBe('ANK001');
     expect(result.name).toBe('案件1: Ａソフト開発支援');
   });
 });

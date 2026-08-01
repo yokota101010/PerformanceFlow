@@ -10,10 +10,13 @@ describe('StaffForm (要員登録フォーム)', () => {
   const mockOnSuccess = vi.fn();
   const mockOnCancel = vi.fn();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     RepositoryRegistry.clear();
+    const partnerRepo = new InMemoryPartnerRepository();
+    const { Partner } = await import('../../../../src/domain/models');
+    await partnerRepo.save(new Partner('BP001', 'Ａソフトウェア'));
+    RepositoryRegistry.registerPartnerRepository(partnerRepo);
     RepositoryRegistry.registerStaffRepository(new InMemoryStaffRepository());
-    RepositoryRegistry.registerPartnerRepository(new InMemoryPartnerRepository());
     mockOnSuccess.mockClear();
     mockOnCancel.mockClear();
   });
@@ -36,8 +39,8 @@ describe('StaffForm (要員登録フォーム)', () => {
     });
 
     const staffs = await new StaffService().getStaffs();
-    expect(staffs).toHaveLength(5); // 初期4名 + 1名
-    expect(staffs[4].name).toBe('岡田以蔵');
+    expect(staffs).toHaveLength(1);
+    expect(staffs[0].name).toBe('岡田以蔵');
   });
 
   it('氏名が未入力の場合にバリデーションエラーが表示され登録が拒否されること', async () => {

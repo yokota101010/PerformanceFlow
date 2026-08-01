@@ -13,21 +13,18 @@ describe('StaffService.getStaffs (一覧取得)', () => {
     service = new StaffService();
   });
 
-  it('初回起動時にシードデータ (4名) が自動的に投入されて取得できること', async () => {
+  it('初期状態ではデータ無しの状態（0件）であること', async () => {
     const list = await service.getStaffs();
-    
-    expect(list).toHaveLength(4);
-    expect(list[0]).toEqual({
-      id: 'MEM001',
-      partnerId: 'BP001',
-      name: '坂本龍馬',
-    });
+    expect(list).toHaveLength(0);
   });
 
   it('複数登録されている場合、要員IDの昇順でソートされて取得できること', async () => {
     const repo = RepositoryRegistry.getStaffRepository();
     
-    // 順序を入れ替えて追加保存
+    await repo.save(new Staff('MEM001', 'BP001', '坂本龍馬'));
+    await repo.save(new Staff('MEM002', 'BP001', '高杉晋作'));
+    await repo.save(new Staff('MEM003', 'BP002', '西郷隆盛'));
+    await repo.save(new Staff('MEM004', 'BP002', '勝海舟'));
     await repo.save(new Staff('MEM006', 'BP001', '武市半平太'));
     await repo.save(new Staff('MEM005', 'BP001', '岡田以蔵'));
 

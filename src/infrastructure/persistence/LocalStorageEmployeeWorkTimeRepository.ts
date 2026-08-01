@@ -16,25 +16,6 @@ export class LocalStorageEmployeeWorkTimeRepository implements EmployeeWorkTimeR
   private readonly STORAGE_KEY = 'performance_flow_employee_work_times';
 
   constructor() {
-    this.initSeedData();
-  }
-
-  private initSeedData() {
-    const data = localStorage.getItem(this.STORAGE_KEY);
-    if (!data || (JSON.parse(data) && JSON.parse(data).length === 0)) {
-      const seed: StorageItem[] = [
-        { caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-08-01', workHours: 160 },
-        { caseAssignmentId: 'CON001', staffId: 'EMP001', targetMonth: '2026-09-01', workHours: 160 },
-        { caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-10-01', workHours: 160 },
-        { caseAssignmentId: 'CON002', staffId: 'EMP001', targetMonth: '2026-11-01', workHours: 160 },
-        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-10-01', workHours: 160 },
-        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-11-01', workHours: 160 },
-        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2026-12-01', workHours: 160 },
-        { caseAssignmentId: 'CON003', staffId: 'EMP002', targetMonth: '2027-01-01', workHours: 160 },
-      ];
-
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(seed));
-    }
   }
 
   private async getPrice(staffId: string, targetMonth?: string): Promise<number> {

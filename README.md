@@ -1,6 +1,6 @@
 # PerformanceFlow - プロジェクト・収支・工数統括管理システム (F01 - F11)
 
-本プロジェクトは、IT開発における各種マスタ（プロジェクト、社員、発注先、要員、案件）、契約・実績データ（案件アサイン契約、パートナー発注、社員工数実績、その他経費）、および分析・ダッシュボード機能（業績・収支サマリ、要員別工数サマリ）を網羅した、完全ローカル完結型のWebフロントエンドSPAアプリケーションです。
+本プロジェクトは、IT開発における各種マスタ（プロジェクト、社員、発注先、要員、案件）、契約・実績データ（案件アサイン契約、パートナー発注、社員工数実績、その他経費）、および分析・ダッシュボード機能（要員別工数サマリ）を網羅した、完全ローカル完結型のWebフロントエンドSPAアプリケーションです。
 
 ---
 
@@ -57,11 +57,6 @@
 * **その他経費管理 (F09)**:
   * **複合主キー管理**: 作業契約IDと行Noによる一意管理。
   * **製造原価へ即時反映**: 旅費交通費・会議費等の入力結果が案件アサインの製造原価に即座に影響。
-* **業績・収支サマリ表示 (F10)**:
-  * **全社＆プロジェクト別ダッシュボード**: 全社の売上合計・製造原価合計・粗利合計・全体粗利率をサマリカード表示。
-  * **原価ブレイクダウン表示**: 製造原価の内訳（加工費、発注額、その他経費）を常時並列表示。
-  * **赤字・低粗利率警告**: 粗利率マイナスの案件・アサイン契約をハイライト（赤字＆赤背景）表示。
-  * **条件フィルタリング**: プロジェクト名や期間指定による動的絞り込み。
 * **要員別月別工数サマリ表示 (F11)**:
   * **マトリクス表示**: 要員を行、年月を列とした全社の稼働状況グリッド表示。
   * **ライトバック自動同期**: 注文明細データに基づき、画面起動時に集計結果を自動書き戻し（ライトバック永続化）。
@@ -117,9 +112,9 @@ src/
 │   └── repositories/            # リポジトリ契約 (ProjectRepository.ts, EmployeeRepository.ts, PartnerRepository.ts, StaffRepository.ts, CaseRepository.ts, CaseAssignmentRepository.ts, PartnerOrderRepository.ts, EmployeeWorkTimeRepository.ts, OtherExpenseRepository.ts, MonthlyMemberWorkHoursSummaryRepository.ts)
 ├── application/
 │   ├── usecases/                # ユースケース抽象定義 (DTO含む)
-│   └── services/                # 具象ユースケースロジック (ProjectService.ts, EmployeeService.ts, PartnerService.ts, StaffService.ts, CaseService.ts, CaseAssignmentService.ts, PartnerOrderService.ts, EmployeeWorkTimeService.ts, OtherExpenseService.ts, FinancialSummaryService.ts, MonthlyMemberWorkHoursSummaryService.ts)
+│   └── services/                # 具象ユースケースロジック (ProjectService.ts, EmployeeService.ts, PartnerService.ts, StaffService.ts, CaseService.ts, CaseAssignmentService.ts, PartnerOrderService.ts, EmployeeWorkTimeService.ts, OtherExpenseService.ts, MonthlyMemberWorkHoursSummaryService.ts)
 └── infrastructure/
     ├── persistence/             # LocalStorage & インメモリリポジトリ、レジストリ
-    └── ui/                      # React コンポーネント (ProjectView, EmployeeView, PartnerView, StaffView, CaseView, CaseAssignmentView, PartnerOrderView, EmployeeWorkTimeView, OtherExpenseView, FinancialSummaryView, MonthlyMemberWorkHoursSummaryView)
+    └── ui/                      # React コンポーネント (ProjectView, EmployeeView, PartnerView, StaffView, CaseView, CaseAssignmentView, PartnerOrderView, EmployeeWorkTimeView, OtherExpenseView, MonthlyMemberWorkHoursSummaryView)
 ```
 
