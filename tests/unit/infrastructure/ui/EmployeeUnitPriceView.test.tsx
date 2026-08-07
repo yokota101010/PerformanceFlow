@@ -38,7 +38,7 @@ describe('EmployeeUnitPriceView (F08)', () => {
       expect(screen.getByText('社員単価設定')).toBeInTheDocument();
     });
 
-    const priceInput = screen.getByDisplayValue('800000');
+    const priceInput = screen.getByDisplayValue('10000');
     fireEvent.change(priceInput, { target: { value: '850000' } });
 
     const submitBtn = screen.getByRole('button', { name: /単価改定を保存/ });

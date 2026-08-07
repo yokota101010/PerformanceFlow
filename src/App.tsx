@@ -39,17 +39,6 @@ type Tab =
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('projects');
 
-  const navButtonStyle = (tab: Tab) => ({
-    padding: '8px 14px',
-    fontSize: '13px',
-    fontWeight: 500,
-    backgroundColor: activeTab === tab ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-    color: activeTab === tab ? '#3b82f6' : '#94a3b8',
-    border: activeTab === tab ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-  });
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -72,50 +61,57 @@ function App() {
           Performance<span style={{ color: '#3b82f6' }}>Flow</span>
         </h1>
 
-        <nav style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <button onClick={() => setActiveTab('projects')} style={navButtonStyle('projects')}>
-            プロジェクト
-          </button>
-          <button onClick={() => setActiveTab('cases')} style={navButtonStyle('cases')}>
-            案件管理
-          </button>
-          <button onClick={() => setActiveTab('assignments')} style={navButtonStyle('assignments')}>
-            案件明細
-          </button>
-          <button onClick={() => setActiveTab('orders')} style={navButtonStyle('orders')}>
-            発注管理
-          </button>
-          <button onClick={() => setActiveTab('workTimes')} style={navButtonStyle('workTimes')}>
-            社員工数
-          </button>
-          <button onClick={() => setActiveTab('otherExpenses')} style={navButtonStyle('otherExpenses')} id="nav-other-expenses-btn">
-            経費入力
-          </button>
-          <button onClick={() => setActiveTab('employees')} style={navButtonStyle('employees')}>
-            社員マスタ
-          </button>
-          <button onClick={() => setActiveTab('employeeUnitPrices')} style={navButtonStyle('employeeUnitPrices')} id="nav-employee-unit-price-btn">
-            社員単価設定
-          </button>
-          <button onClick={() => setActiveTab('employeeWorkTimeSummary')} style={navButtonStyle('employeeWorkTimeSummary')} id="nav-employee-worktime-summary-btn">
-            社員工数サマリ
-          </button>
-          <button onClick={() => setActiveTab('partners')} style={navButtonStyle('partners')}>
-            発注先マスタ
-          </button>
-          <button onClick={() => setActiveTab('staffs')} style={navButtonStyle('staffs')}>
-            要員マスタ
-          </button>
-          <button onClick={() => setActiveTab('staffUnitPrices')} style={navButtonStyle('staffUnitPrices')} id="nav-staff-unit-price-btn">
-            要員単価設定
-          </button>
-          <button onClick={() => setActiveTab('memberWorkTimeSummary')} style={navButtonStyle('memberWorkTimeSummary')} id="nav-member-worktime-summary-btn">
-            要員工数サマリ
-          </button>
-          <button onClick={() => setActiveTab('dataIo')} style={navButtonStyle('dataIo')} id="nav-data-io-btn">
-            データ入出力
-          </button>
-        </nav>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <label htmlFor="nav-function-select" style={{ fontSize: '13px', fontWeight: 600, color: '#94a3b8' }}>
+            機能選択:
+          </label>
+          <select
+            id="nav-function-select"
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value as Tab)}
+            style={{
+              padding: '8px 16px',
+              fontSize: '14px',
+              fontWeight: 600,
+              color: '#38bdf8',
+              backgroundColor: 'rgba(30, 41, 59, 0.9)',
+              border: '1px solid rgba(56, 189, 248, 0.4)',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              outline: 'none',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              minWidth: '220px',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <optgroup label="―― 案件・契約業務 ――" style={{ backgroundColor: '#0f172a', color: '#94a3b8', fontWeight: 700 }}>
+              <option value="projects" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📁 プロジェクト</option>
+              <option value="cases" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📋 案件管理</option>
+              <option value="assignments" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📄 案件明細</option>
+            </optgroup>
+            <optgroup label="―― 実績・経費入力 ――" style={{ backgroundColor: '#0f172a', color: '#94a3b8', fontWeight: 700 }}>
+              <option value="workTimes" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>⏱️ 社員工数</option>
+              <option value="orders" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>🛒 発注管理</option>
+              <option value="otherExpenses" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>💳 経費入力</option>
+            </optgroup>
+            <optgroup label="―― 社員管理 ――" style={{ backgroundColor: '#0f172a', color: '#94a3b8', fontWeight: 700 }}>
+              <option value="employees" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>👤 社員マスタ</option>
+              <option value="employeeUnitPrices" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>💰 社員単価設定</option>
+              <option value="employeeWorkTimeSummary" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📊 社員工数サマリ</option>
+            </optgroup>
+            <optgroup label="―― 要員・パートナー管理 ――" style={{ backgroundColor: '#0f172a', color: '#94a3b8', fontWeight: 700 }}>
+              <option value="partners" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>🏢 発注先マスタ</option>
+              <option value="staffs" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>👥 要員マスタ</option>
+              <option value="staffUnitPrices" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>💵 要員単価設定</option>
+              <option value="memberWorkTimeSummary" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📈 要員工数サマリ</option>
+            </optgroup>
+            <optgroup label="―― システム管理 ――" style={{ backgroundColor: '#0f172a', color: '#94a3b8', fontWeight: 700 }}>
+              <option value="dataIo" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>💾 データ入出力</option>
+            </optgroup>
+          </select>
+        </div>
 
         <div style={{ fontSize: '14px', color: '#64748b' }}>v0.1.0</div>
       </header>

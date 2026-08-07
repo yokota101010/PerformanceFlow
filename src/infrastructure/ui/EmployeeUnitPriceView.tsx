@@ -7,7 +7,7 @@ export const EmployeeUnitPriceView: React.FC = () => {
   const [unitPrices, setUnitPrices] = useState<readonly EmployeeUnitPrice[]>([]);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
   const [startYearMonth, setStartYearMonth] = useState<string>('2026-04');
-  const [price, setPrice] = useState<number>(800000);
+  const [price, setPrice] = useState<number>(10000);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -180,7 +180,7 @@ export const EmployeeUnitPriceView: React.FC = () => {
           </div>
 
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">月額/標準単価 (円)</label>
+            <label className="form-label">時間単価 (円)</label>
             <input
               type="number"
               value={price}
