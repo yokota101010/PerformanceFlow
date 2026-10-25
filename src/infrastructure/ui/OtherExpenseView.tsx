@@ -7,17 +7,17 @@ import { OtherExpenseForm } from './OtherExpenseForm';
 
 interface OtherExpenseViewProps {
   initialCaseAssignmentId?: string;
-  onBack?: () => void; // 戻るボタンが押された時のコールバック (案件作業明細一覧等へ戻るため)
+  onBack?: () => void; // 戻るボタンが押された時のコールバック
 }
 
 export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
   initialCaseAssignmentId = '',
-  onBack
+  onBack,
 }) => {
   const [assignments, setAssignments] = useState<readonly CaseAssignment[]>([]);
   const [selectedAssignmentId, setSelectedAssignmentId] = useState<string>(initialCaseAssignmentId);
   const [expenses, setExpenses] = useState<readonly OtherExpense[]>([]);
-  
+
   const [loading, setLoading] = useState<boolean>(true);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<OtherExpense | null>(null);
@@ -89,7 +89,7 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
   const handleDeleteClick = async (item: OtherExpense) => {
     if (window.confirm('この経費明細を削除しますか？')) {
       try {
-        await service.deleteOtherExpense(item.caseAssignmentId, item.lineNo);
+        await service.deleteOtherExpense(item.caseAssignmentId, item.occurrenceDate, item.lineNo);
         await loadExpenses();
       } catch (e: any) {
         alert(e.message || '削除に失敗しました。');
@@ -111,6 +111,11 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
   // 合計金額の計算
   const totalAmount = expenses.reduce((sum, item) => sum + item.amount, 0);
 
+  const formatYearMonth = (ym: string) => {
+    if (!ym) return '';
+    return ym.substring(0, 7);
+  };
+
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
       {/* ヘッダーエリア */}
@@ -126,9 +131,9 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
             </button>
           )}
           <div>
-            <h2 className="page-title">その他経費入力</h2>
+            <h2 className="page-title">その他経費入力 (F10)</h2>
             <p className="page-subtitle">
-              アサイン契約に直接紐づくクラウド費用・交通費等の直接経費の登録、編集、および削除を行います。
+              案件明細（契約）ごとの発生日単位での直接経費の登録、編集、および削除を行います（正本 domain-model.md 準拠）。
             </p>
           </div>
         </div>
@@ -156,7 +161,7 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
             id="assignment-selector"
           >
             <option value="">-- 作業契約を選択してください --</option>
-            {assignments.map(a => (
+            {assignments.map((a) => (
               <option key={a.id} value={a.id}>
                 {a.id} ({a.startDate} 〜 {a.endDate})
               </option>
@@ -181,7 +186,7 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
       )}
 
       {/* 経費一覧テーブル */}
-      <div className="glass-panel overflow-hidden">
+      <div className="glass-panel overflow-hidden" style={{ padding: 0 }}>
         {loading ? (
           <div className="p-12 text-center text-slate-400 text-sm">読み込み中...</div>
         ) : expenses.length === 0 ? (
@@ -193,17 +198,34 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
             <table className="modern-table">
               <thead>
                 <tr>
-                  <th>行No</th>
+                  <th style={{ width: '120px' }}>発生日</th>
+                  <th style={{ width: '70px', textAlign: 'center' }}>行No</th>
+                  <th style={{ width: '100px', textAlign: 'center' }}>発生年月</th>
                   <th>摘要</th>
-                  <th style={{ textAlign: 'right' }}>金額 (円)</th>
-                  <th style={{ textAlign: 'center' }}>操作</th>
+                  <th style={{ textAlign: 'right', width: '120px' }}>金額 (円)</th>
+                  <th style={{ textAlign: 'center', width: '130px' }}>操作</th>
                 </tr>
               </thead>
               <tbody>
-                {expenses.map(item => (
-                  <tr key={item.lineNo}>
-                    <td style={{ fontFamily: 'monospace', color: '#cbd5e1' }}>{item.lineNo}</td>
-                    <td style={{ fontWeight: 500, color: '#f8fafc' }}>{item.memo}</td>
+                {expenses.map((item) => (
+                  <tr key={`${item.occurrenceDate}-${item.lineNo}`}>
+                    <td style={{ fontFamily: 'monospace', color: '#38bdf8', fontWeight: 600 }}>
+                      {item.occurrenceDate}
+                      {item.needsReview && (
+                        <span className="ml-2 px-1.5 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                          要確認
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ fontFamily: 'monospace', textAlign: 'center', color: '#cbd5e1' }}>
+                      {item.lineNo}
+                    </td>
+                    <td style={{ fontFamily: 'monospace', textAlign: 'center', color: '#94a3b8' }}>
+                      {formatYearMonth(item.occurrenceYearMonth)}
+                    </td>
+                    <td style={{ fontWeight: 500, color: '#f8fafc' }}>
+                      {item.memo}
+                    </td>
                     <td style={{ textAlign: 'right', fontFamily: 'monospace', color: '#38bdf8', fontWeight: 600 }}>
                       {item.amount.toLocaleString()}
                     </td>
@@ -213,6 +235,7 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
                           onClick={() => handleEditClick(item)}
                           className="btn btn-secondary btn-sm"
                           id={`edit-expense-${item.lineNo}-btn`}
+                          data-testid={`edit-expense-${item.occurrenceDate}-${item.lineNo}`}
                         >
                           編集
                         </button>
@@ -220,6 +243,7 @@ export const OtherExpenseView: React.FC<OtherExpenseViewProps> = ({
                           onClick={() => handleDeleteClick(item)}
                           className="btn btn-danger btn-sm"
                           id={`delete-expense-${item.lineNo}-btn`}
+                          data-testid={`delete-expense-${item.occurrenceDate}-${item.lineNo}`}
                         >
                           削除
                         </button>

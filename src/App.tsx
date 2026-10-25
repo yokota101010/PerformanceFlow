@@ -13,6 +13,8 @@ import { MonthlyMemberWorkHoursSummaryService } from './application/services/Mon
 import { EmployeeUnitPriceView } from './infrastructure/ui/EmployeeUnitPriceView';
 import { StaffUnitPriceView } from './infrastructure/ui/StaffUnitPriceView';
 import { EmployeeWorkTimeSummaryView } from './infrastructure/ui/EmployeeWorkTimeSummaryView';
+import { MonthlyCaseDetailCostView } from './infrastructure/ui/MonthlyCaseDetailCostView';
+import { QuarterlyCaseDetailPerformanceView } from './infrastructure/ui/QuarterlyCaseDetailPerformanceView';
 import { DataImportExportView } from './infrastructure/ui/DataImportExportView';
 import { RepositoryRegistry } from './infrastructure/persistence/RepositoryRegistry';
 
@@ -30,6 +32,8 @@ type Tab =
   | 'otherExpenses'
   | 'employeeWorkTimeSummary'
   | 'memberWorkTimeSummary'
+  | 'caseCosts'
+  | 'casePerformances'
   | 'dataIo';
 
 /**
@@ -107,6 +111,10 @@ function App() {
               <option value="staffUnitPrices" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>💵 要員単価設定</option>
               <option value="memberWorkTimeSummary" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📈 要員工数サマリ</option>
             </optgroup>
+            <optgroup label="―― 原価・業績分析 ――" style={{ backgroundColor: '#0f172a', color: '#94a3b8', fontWeight: 700 }}>
+              <option value="caseCosts" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📊 月別案件原価 (F15)</option>
+              <option value="casePerformances" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>📈 四半期業績 (F16)</option>
+            </optgroup>
             <optgroup label="―― システム管理 ――" style={{ backgroundColor: '#0f172a', color: '#94a3b8', fontWeight: 700 }}>
               <option value="dataIo" style={{ backgroundColor: '#1e293b', color: '#f8fafc' }}>💾 データ入出力</option>
             </optgroup>
@@ -141,6 +149,8 @@ function App() {
             }
           />
         )}
+        {activeTab === 'caseCosts' && <MonthlyCaseDetailCostView />}
+        {activeTab === 'casePerformances' && <QuarterlyCaseDetailPerformanceView />}
         {activeTab === 'dataIo' && <DataImportExportView />}
       </main>
     </div>

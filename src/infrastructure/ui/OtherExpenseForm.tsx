@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { OtherExpense } from '../../domain/models/OtherExpense';
+import { OtherExpense, isValidDateString } from '../../domain/models/OtherExpense';
 import { OtherExpenseService } from '../../application/services/OtherExpenseService';
 
 interface OtherExpenseFormProps {
@@ -15,6 +15,7 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
   onSuccess,
   onCancel,
 }) => {
+  const [occurrenceDate, setOccurrenceDate] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -26,9 +27,11 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
   // 初期値のロード（編集モード時）
   useEffect(() => {
     if (editingItem) {
+      setOccurrenceDate(editingItem.occurrenceDate || '');
       setAmount(editingItem.amount.toString());
       setMemo(editingItem.memo);
     } else {
+      setOccurrenceDate('');
       setAmount('');
       setMemo('');
     }
@@ -39,13 +42,25 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
     e.preventDefault();
     setErrorMsg('');
 
-    // バリデーションチェック
+    // 発生日のバリデーション (FR-003)
+    if (!occurrenceDate.trim()) {
+      setErrorMsg('発生日は必須です。');
+      return;
+    }
+
+    if (!isValidDateString(occurrenceDate.trim())) {
+      setErrorMsg('発生日は YYYY-MM-DD 形式の有効な日付で入力してください。');
+      return;
+    }
+
+    // 金額のバリデーション (FR-007)
     const amountVal = parseInt(amount, 10);
     if (isNaN(amountVal) || amountVal < 0) {
       setErrorMsg('金額は0以上の整数でなければなりません。');
       return;
     }
 
+    // 摘要のバリデーション (FR-008)
     if (!memo.trim()) {
       setErrorMsg('摘要は必須項目です。');
       return;
@@ -62,13 +77,16 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
       if (isEdit && editingItem) {
         await service.updateOtherExpense({
           caseAssignmentId: editingItem.caseAssignmentId,
+          oldOccurrenceDate: editingItem.occurrenceDate,
           lineNo: editingItem.lineNo,
+          occurrenceDate: occurrenceDate.trim(),
           amount: amountVal,
           memo: memo.trim(),
         });
       } else {
         await service.createOtherExpense({
           caseAssignmentId,
+          occurrenceDate: occurrenceDate.trim(),
           amount: amountVal,
           memo: memo.trim(),
         });
@@ -90,7 +108,9 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
         {/* ヘッダー */}
         <div className="flex justify-between items-center mb-6">
           <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>
-            {isEdit ? `経費編集 (行No: ${editingItem?.lineNo})` : '新規経費追加'}
+            {isEdit
+              ? `経費編集 (${editingItem?.occurrenceDate} / 行No: ${editingItem?.lineNo})`
+              : '新規経費追加'}
           </h3>
           <button
             onClick={onCancel}
@@ -102,13 +122,31 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
 
         {/* エラーメッセージ */}
         {errorMsg && (
-          <div className="alert-error">
+          <div className="alert-error mb-4">
             {errorMsg}
           </div>
         )}
 
         {/* フォーム */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="form-group mb-0">
+            <label 
+              htmlFor="expense-occurrence-date-input" 
+              className="form-label"
+            >
+              発生日 (YYYY-MM-DD)
+            </label>
+            <input
+              type="date"
+              id="expense-occurrence-date-input"
+              value={occurrenceDate}
+              onChange={(e) => setOccurrenceDate(e.target.value)}
+              placeholder="YYYY-MM-DD"
+              className="form-input"
+              disabled={submitting}
+            />
+          </div>
+
           <div className="form-group mb-0">
             <label 
               htmlFor="expense-amount-input" 
@@ -139,7 +177,7 @@ export const OtherExpenseForm: React.FC<OtherExpenseFormProps> = ({
               id="expense-memo-input"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              placeholder="例: 旅費交通費（品川〜新大阪）"
+              placeholder="例: 開発環境クラウド利用料"
               className="form-input"
               disabled={submitting}
             />

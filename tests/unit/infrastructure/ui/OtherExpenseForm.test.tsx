@@ -29,11 +29,13 @@ describe('OtherExpenseForm (US2)', () => {
     );
 
     // 要素の存在確認
+    const dateInput = screen.getByLabelText(/発生日/);
     const amountInput = screen.getByLabelText('金額 (円)');
     const memoInput = screen.getByLabelText('摘要');
     const submitButton = screen.getByRole('button', { name: '登録' });
 
     // 値の入力
+    fireEvent.change(dateInput, { target: { value: '2026-08-20' } });
     fireEvent.change(amountInput, { target: { value: '8000' } });
     fireEvent.change(memoInput, { target: { value: '宅急便代' } });
 
@@ -66,10 +68,12 @@ describe('OtherExpenseForm (US2)', () => {
     );
 
 
+    const dateInput = screen.getByLabelText(/発生日/);
     const amountInput = screen.getByLabelText('金額 (円)');
     const submitButton = screen.getByRole('button', { name: '登録' });
 
-    // 負数（マイナス）の入力
+    // 値の入力
+    fireEvent.change(dateInput, { target: { value: '2026-08-20' } });
     fireEvent.change(amountInput, { target: { value: '-500' } });
 
     // 登録ボタンのクリック

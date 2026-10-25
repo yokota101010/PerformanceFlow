@@ -118,13 +118,17 @@ export interface IEmployeeWorkTimeSummary {
 
 /**
  * その他経費（経費データ）のデータ定義。
+ * domain-model.md の「テーブル: その他経費」に準拠。
  * すべてのプロパティに readonly を付与する。
  */
 export interface OtherExpense {
-  readonly caseAssignmentId: string;   // 作業契約ID (案件作業明細.作業契約ID, 複合主キー)
-  readonly lineNo: number;             // 行No (1以上の連番, 複合主キー)
-  readonly amount: number;             // 金額 (0以上の整数)
-  readonly memo: string;               // 摘要 (1〜100文字)
+  readonly caseAssignmentId: string;    // 契約ID (案件明細.契約ID, 複合主キー)
+  readonly occurrenceDate: string;      // 発生日 (YYYY-MM-DD形式, 複合主キー)
+  readonly lineNo: number;              // 行No (同契約・同日内の1以上の連番, 複合主キー)
+  readonly occurrenceYearMonth: string; // 発生年月 (YYYY-MM-01形式, 導出項目)
+  readonly amount: number;              // 金額 (0以上の整数)
+  readonly memo: string;                // 摘要 (1〜100文字)
+  readonly needsReview?: boolean;       // 要確認フラグ (旧形式からの移行時)
 }
 
 /**
@@ -173,34 +177,50 @@ export interface QuarterCategory {
 
 /**
  * 月別要員工数サマリのデータ定義。
+ * すべてのプロパティに readonly を付与する。
  */
 export interface MonthlyStaffWorkHoursSummary {
-  readonly staffId: string;           // 要員ID
-  readonly yearMonth: string;         // 年月
-  readonly totalOrderAmount: number;  // 発注額合計
+  readonly staffId: string;           // 要員ID (主キー)
+  readonly yearMonth: string;         // 年月 (YYYY-MM-01形式, 主キー)
+  readonly totalEffort: number;       // 合計工数 (人月, 導出)
+  readonly totalOrderAmount?: number; // 発注額合計 (互換用)
 }
 
 /**
  * 月別案件明細原価（導出サマリ集約）のデータ定義。
+ * domain-model.md のテーブル「月別案件明細原価」に準拠。
  */
 export interface MonthlyCaseDetailCost {
-  readonly yearMonth: string;         // 対象年月
-  readonly caseDetailId: string;      // 案件明細ID
-  readonly salesAmount: number;       // 売上
-  readonly employeeCost: number;      // 社員原価
-  readonly outsourcingCost: number;   // 外注原価
-  readonly otherExpenses: number;     // 経費
-  readonly grossProfit: number;       // 粗利
+  readonly contractId: string;        // 契約ID (案件明細.契約ID, 複合主キー)
+  readonly yearMonth: string;         // 年月 (YYYY-MM-01形式, 複合主キー)
+  readonly manufacturingCost: number; // 製造原価 (導出: 合計発注額 + 加工費 + その他経費)
+  readonly fiscalYear: string;        // 会計年度 (YYYY-04-01形式, 導出)
+  readonly quarterCategory: string;   // 四半期区分 ("1Q" | "2Q" | "3Q" | "4Q", 導出)
+  readonly outsourcingCost: number;   // 外注原価 (発注合計)
+  readonly employeeCost: number;      // 社員加工費合計
+  readonly otherExpenses: number;     // その他経費合計
+  // 互換用エイリアス
+  readonly caseDetailId?: string;
+  readonly salesAmount?: number;
+  readonly grossProfit?: number;
 }
 
 /**
  * 四半期別案件明細業績（導出サマリ集約）のデータ定義。
+ * domain-model.md のテーブル「四半期別案件明細業績」に準拠。
  */
 export interface QuarterlyCaseDetailPerformance {
-  readonly quarterCode: string;       // 四半期コード
-  readonly caseDetailId: string;      // 案件明細ID
-  readonly totalSales: number;        // 四半期売上
-  readonly totalGrossProfit: number;  // 四半期粗利
+  readonly contractId: string;        // 契約ID (案件明細.契約ID, 複合主キー)
+  readonly fiscalYear: string;        // 会計年度 (YYYY-04-01形式, 複合主キー)
+  readonly quarterCategory: string;   // 四半期区分 ("1Q" | "2Q" | "3Q" | "4Q", 複合主キー)
+  readonly sales: number;             // 売上 (導出: 総売上 × 製造原価 ÷ 総製造原価)
+  readonly manufacturingCost: number; // 製造原価 (導出: 対象四半期の製造原価合計)
+  readonly grossProfit: number;       // 粗利 (導出: 売上 - 製造原価)
+  readonly grossProfitRate: number;   // 粗利率 (導出: 粗利 ÷ 売上, 小数第2位)
+  // 互換用エイリアス
+  readonly caseDetailId?: string;
+  readonly totalSales?: number;
+  readonly totalGrossProfit?: number;
 }
 
 

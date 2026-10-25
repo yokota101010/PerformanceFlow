@@ -2,7 +2,7 @@ import { OtherExpense } from '../models/OtherExpense';
 
 /**
  * その他経費マスタ（経費データ）のデータアクセスを担うリポジトリ契約。
- * 案件作業明細の原価算出および削除制限チェックのために使用される。
+ * 正本 domain-model.md（主キー: 契約ID ＋ 発生日 ＋ 行No）に準拠。
  */
 export interface OtherExpenseRepository {
   /**
@@ -23,7 +23,8 @@ export interface OtherExpenseRepository {
   /**
    * 複合キーを指定して1件のその他経費を取得する
    */
-  findByKeys(caseAssignmentId: string, lineNo: number): Promise<OtherExpense | null>;
+  findByKeys(caseAssignmentId: string, occurrenceDate: string, lineNo: number): Promise<OtherExpense | null>;
+  findByKeys(caseAssignmentId: string, occurrenceDateOrLineNo: string | number, lineNo?: number): Promise<OtherExpense | null>;
 
   /**
    * 新しい、または更新されたその他経費を保存する
@@ -33,7 +34,8 @@ export interface OtherExpenseRepository {
   /**
    * 指定したその他経費を物理削除する
    */
-  delete(caseAssignmentId: string, lineNo: number): Promise<void>;
+  delete(caseAssignmentId: string, occurrenceDate: string, lineNo: number): Promise<void>;
+  delete(caseAssignmentId: string, occurrenceDateOrLineNo: string | number, lineNo?: number): Promise<void>;
 
   /**
    * 指定した作業契約（複合キー）に紐づくその他経費の合計金額を取得する。
@@ -41,7 +43,7 @@ export interface OtherExpenseRepository {
   sumByCaseAssignmentId(projectId: string, caseAssignmentId: string): Promise<number>;
 
   /**
-   * 次の行Noを取得する
+   * 指定した契約および発生日における次の行Noを取得する（同一日は連番、日付が変わると1から）
    */
-  getNextLineNo(caseAssignmentId: string): Promise<number>;
+  getNextLineNo(caseAssignmentId: string, occurrenceDate?: string): Promise<number>;
 }
